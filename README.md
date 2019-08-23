@@ -18,7 +18,7 @@ Please have a compatible version of Android Studio installed
  - open android studio and choose open new project
  
  
- ## Installing the application
+ ## Installing the application ( SDK not uploaded yet)
  
  - download the SDK
  - enable  third part app installations
