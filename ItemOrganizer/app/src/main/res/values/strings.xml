@@ -3,4 +3,6 @@
     <string name="new_fam">New Family</string>
     <string name="join_fam">Join Family</string>
     <string name="fam_token">Family Code:</string>
+    <string name="famname">Family Name:</string>
+    <string name="create_fam">Create Family</string>
 </resources>

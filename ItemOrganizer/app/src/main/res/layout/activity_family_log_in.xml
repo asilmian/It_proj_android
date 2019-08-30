@@ -7,7 +7,7 @@
     tools:context=".FamilyLogIn">
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/newFamily"
         style="@style/Widget.AppCompat.Button"
         android:layout_width="145dp"
         android:layout_height="76dp"
@@ -15,6 +15,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:onClick="goNewFamily"
         android:stateListAnimator="@drawable/ic_launcher_foreground"
         android:text="@string/new_fam"
         android:textAllCaps="false"
@@ -22,17 +23,18 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3"
+        app:layout_constraintTop_toBottomOf="@+id/joinFamily"
         app:layout_constraintVertical_bias="0.214" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/joinFamily"
         android:layout_width="145dp"
         android:layout_height="76dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:onClick="sendToken"
         android:text="@string/join_fam"
         android:textAllCaps="false"
         android:textSize="18sp"
@@ -40,25 +42,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText"
+        app:layout_constraintTop_toBottomOf="@+id/familyToken"
         app:layout_constraintVertical_bias="0.047" />
 
     <EditText
-        android:id="@+id/editText"
-        android:layout_width="239dp"
-        android:layout_height="36dp"
+        android:id="@+id/familyToken"
+        android:layout_width="235dp"
+        android:layout_height="52dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:ems="10"
         android:inputType="textShortMessage|textPersonName"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.948"
+        app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.191" />
+        app:layout_constraintVertical_bias="0.173" />
 
     <TextView
         android:id="@+id/textView2"
@@ -71,7 +74,7 @@
         android:text="@string/fam_token"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/editText"
+        app:layout_constraintEnd_toStartOf="@+id/familyToken"
         app:layout_constraintHorizontal_bias="0.708"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
