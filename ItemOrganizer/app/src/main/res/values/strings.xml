@@ -5,4 +5,5 @@
     <string name="fam_token">Family Code:</string>
     <string name="famname">Family Name:</string>
     <string name="create_fam">Create Family</string>
+    <string name="title_activity_account_login">AccountLogin</string>
 </resources>
