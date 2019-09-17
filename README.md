@@ -24,6 +24,3 @@ Please have a compatible version of Android Studio installed
  - enable  third part app installations
  - Put SDK in your phone
  - Install SDK
-
-# Link to backend github
-https://github.com/grubburg/it_proj_backend
