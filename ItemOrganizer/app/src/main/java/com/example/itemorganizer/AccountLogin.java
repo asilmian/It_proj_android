@@ -24,6 +24,7 @@ public class AccountLogin extends AppCompatActivity {
 
         if (autheticate("name", "password"))
         {
+            //change familyLogIn to ItemHomepage
             Intent intent = new Intent(this, FamilyLogIn.class);
             startActivity(intent);
         }
@@ -31,8 +32,6 @@ public class AccountLogin extends AppCompatActivity {
     }
     public boolean autheticate (String username, String password)
     {
-        //Authentication with backend stuff goes here,
-        // maybe add hashing of passwords etc. for extra security.
 
         return true;
 
