@@ -6,4 +6,9 @@
     <string name="famname">Family Name:</string>
     <string name="create_fam">Create Family</string>
     <string name="title_activity_account_login">AccountLogin</string>
+    <string name="email">E-mail:</string>
+    <string name="password">Password:</string>
+    <string name="login">Login</string>
+    <string name="signup">Sign Up</string>
+    <string name="conf_pass">Confirm Password:</string>
 </resources>

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "906596609294",
+    "firebase_url": "https://it-proj-backend.firebaseio.com",
+    "project_id": "it-proj-backend",
+    "storage_bucket": "it-proj-backend.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:906596609294:android:5f231c2e64824703c4fb5f",
+        "android_client_info": {
+          "package_name": "com.example.itemorganizer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "906596609294-k1gtdob2gdsih1loba9p11bdkvvmdi8n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSLpbZB6HZLTcoa7AKbo6TI2e28WQIu-o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "906596609294-k1gtdob2gdsih1loba9p11bdkvvmdi8n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
