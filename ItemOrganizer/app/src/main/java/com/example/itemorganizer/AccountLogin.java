@@ -32,7 +32,7 @@ public class AccountLogin extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null){
-            goToHomePage();
+            //goToHomePage(currentUser);
         }
     }
 
@@ -62,7 +62,7 @@ public class AccountLogin extends AppCompatActivity {
                             // Sign in success
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            goToHomePage();
+                            //goToHomePage(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -73,8 +73,11 @@ public class AccountLogin extends AppCompatActivity {
                 });
 
     }
-    private void goToHomePage(){
+    private void goToHomePage(FirebaseUser user){
         //goes to MainActivity instead right now.
+
+
+
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
