@@ -3,62 +3,72 @@ package com.example.itemorganizer;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Map;
 
+/***
+ * Class to make Backend item post to url.
+ */
 public class JsonPost {
 
-    private String myUrl;
-    private JSONObject jsonObject;
 
-    public JsonPost(String myUrl, JSONObject jsonObject){
-        this.myUrl = myUrl;
-        this.jsonObject = jsonObject;
-    }
+    public static final Integer FAILED = 777;
 
-    public String execute(){
+
+    public  static BackendItem send_req(BackendItem item){
         try {
-            return new HTTPAsyncTask().execute(this.myUrl).get();
+            return new HTTPAsyncTask().execute(item).get();
         }catch (Exception e){
             Log.d("JsonPost", e.toString());
+            item.setResponse_code(FAILED);
+            return item;
         }
-        return "failed";
     }
 
-    private String httpPost() throws IOException, JSONException {
-        URL url = new URL(this.myUrl);
+    private static BackendItem httpPost(BackendItem item) throws IOException {
+        URL url = new URL(item.getUrl());
 
         //create HttpURLConnection
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/json");
-        conn.setRequestProperty("User-Agent", "Android App");
+
+        conn.setConnectTimeout(10000); //set timeout to 10 secs
+
+        //set the headers
+        for (Map.Entry<String, String> entry : item.getHeaders().entrySet()){
+            conn.setRequestProperty(entry.getKey(), entry.getValue());
+        }
 
 
         //add content to the body
-        setPostRequestContent(conn, this.jsonObject);
-        Log.d("json", this.jsonObject.toString());
+        if (item.getBody() != null) {
+            setPostRequestContent(conn, item.getBody());
+            Log.d("post body:", item.getBody());
+        }
+
+
         //make POST request to the given URL
         conn.connect();
-        //return response message
-        return conn.getResponseMessage()+"";
+
+        item.setResponse_code(conn.getResponseCode());
+        item.setResponse(conn.getResponseMessage());
+
+        return item;
 
     }
 
 
-    private void setPostRequestContent(HttpURLConnection conn, JSONObject jsonObject) throws IOException {
+    private static void setPostRequestContent(HttpURLConnection conn, String body) throws IOException {
 
         OutputStream os = conn.getOutputStream();
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
-        writer.write(jsonObject.toString());
-        Log.i(MainActivity.class.toString(), jsonObject.toString());
+        writer.write(body);
+        Log.i(JsonPost.class.toString(), body);
         writer.flush();
         writer.close();
         os.close();
@@ -66,19 +76,17 @@ public class JsonPost {
 
 
     //fix memory leak
-    private class HTTPAsyncTask extends AsyncTask<String, Void, String> {
+    private static class HTTPAsyncTask extends AsyncTask<BackendItem, Void, BackendItem> {
         @Override
-        protected String doInBackground(String... urls) {
+        protected BackendItem doInBackground(BackendItem... items) {
             // params comes from the execute() call: params[0] is the url.
             try {
-                try {
-                    return httpPost();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    return "Error!";
-                }
+                return httpPost(items[0]);
             } catch (IOException e) {
-                return e.toString();
+                Log.e(JsonPost.class.toString(), e.toString());
+                items[0].setResponse_code(FAILED);
+                items[0].setResponse("Connection Failed");
+                return items[0];
             }
         }
     }

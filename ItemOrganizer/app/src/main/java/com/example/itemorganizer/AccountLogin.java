@@ -21,12 +21,17 @@ public class AccountLogin extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static final String TAG = "AccountLogin";
 
+    private EditText ePass;
+    private EditText eEmail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_login);
 
-        //initialize firebase Auth
+        ePass = findViewById(R.id.password_login);
+        eEmail = findViewById(R.id.email_login);
+        //initialize firebase
         mAuth = FirebaseAuth.getInstance();
     }
 
@@ -34,7 +39,7 @@ public class AccountLogin extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null){
-            //goToHomePage(currentUser);
+            //goToHomePage();
         }
     }
 
@@ -48,11 +53,8 @@ public class AccountLogin extends AppCompatActivity {
     public void openHomepage(View view){
 
         //get password and email from screen
-        EditText editText = findViewById(R.id.password_edit);
-        String password = editText.getText().toString();
-
-        editText = findViewById(R.id.email_edit);
-        String email = editText.getText().toString();
+        String password = ePass.getText().toString();
+        String email = eEmail.getText().toString();
 
         //check if fields are empty
         //not yet implemented
@@ -65,10 +67,8 @@ public class AccountLogin extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success
                             Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //goToHomePage(user);
-                            // not sure if need to send user in a bundle or mAuth will have it from
-                            // mAuth.getInstance()
+                            //goToHomePage();
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -81,11 +81,9 @@ public class AccountLogin extends AppCompatActivity {
                 });
 
     }
-    private void goToHomePage(FirebaseUser user){
-        //goes to MainActivity instead right now.
 
-
-
+    //go to main page
+    private void goToHomePage(){
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

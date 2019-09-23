@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -19,6 +20,8 @@ import com.google.firebase.auth.GetTokenResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 public class AccountSignup extends AppCompatActivity {
 
@@ -40,8 +43,8 @@ public class AccountSignup extends AppCompatActivity {
 
         //get buttons
         eName = findViewById(R.id.name_edit);
-        eEmail = findViewById(R.id.email_edit);
-        ePass = findViewById(R.id.password_edit);
+        eEmail = findViewById(R.id.email_login);
+        ePass = findViewById(R.id.password_login);
         eConfPass = findViewById(R.id.confirm_pass);
     }
 
@@ -82,7 +85,7 @@ public class AccountSignup extends AppCompatActivity {
                             // If sign in fails, display a message to the user.
                             // firebase has 6 letter passwords so add that in the hint
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(AccountSignup.this, "Connection Failed",
+                            Toast.makeText(AccountSignup.this, task.getException().toString(),
                                     Toast.LENGTH_SHORT).show();
                         }
 
@@ -102,11 +105,29 @@ public class AccountSignup extends AppCompatActivity {
                     public void onComplete(@NonNull Task<GetTokenResult> task) {
                         if (task.isSuccessful()) {
                             String idToken = task.getResult().getToken();
-
-                            //if token successfully send to backend
-                            if(sendJsonPost(idToken)){
+                            if(sendBackendSignup(idToken)){
                                 openFamilyPage();
                             }
+                            else{
+
+                                //delete user from firebase
+                                mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task_inner) {
+                                        if (task_inner.isSuccessful()){
+                                            Toast toast = Toast.makeText(AccountSignup.this, "Connection to backend failed",
+                                                    Toast.LENGTH_SHORT);
+                                            toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+                                            toast.show();
+                                        }
+                                        else{
+                                            Exception e = task_inner.getException();
+                                            Log.e(TAG, e.toString());
+                                        }
+                                    }
+                                });
+                            }
+
                         } else {
                             Exception e = task.getException();
                             Log.e(TAG, e.toString());
@@ -122,28 +143,43 @@ public class AccountSignup extends AppCompatActivity {
     }
 
 
-    private Boolean sendJsonPost(String idToken){
-        try {
-            JSONObject data = buildJsonObject(idToken);
-            JsonPost post = new JsonPost(this.url, data);
-            String response = post.execute();
-            Log.d(TAG, "signUp response: "+ response);
-            if (response.equals("Unable to retrieve web page. URL may be invalid.")){
-                return false;
-            }
+    //returns true if successfully connected to backend
+    private Boolean sendBackendSignup(String idToken){
+        BackendItem backendItem = new BackendItem(this.url);
+
+        //create headers
+        HashMap<String,String> headers = new HashMap<>();
+        headers.put("Authorization", "Bearer " + idToken);
+        backendItem.setHeaders(headers);
+
+        //make body
+        makeSignUpBody(backendItem);
+
+        //send request
+        backendItem = JsonPost.send_req(backendItem);
+
+
+        if (backendItem.getResponse_code().equals(200)){
             return true;
+        }
+        else{
+            Log.d(TAG, "signUp response: "+ backendItem.getResponse());
+            return false;
+        }
+
+    }
+
+
+    //create post request body and send store in backendItem
+    private void makeSignUpBody(BackendItem backendItem){
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.accumulate("name", eName.getText().toString());
+            jsonObject.accumulate("email", eEmail.getText().toString());
+            backendItem.setBody(jsonObject.toString());
         }catch (JSONException e){
             Log.e(TAG, e.toString());
         }
-        return false;
     }
 
-    private JSONObject buildJsonObject(String idToken) throws JSONException {
-
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.accumulate("name", eName.getText().toString());
-        jsonObject.accumulate("token", idToken);
-        jsonObject.accumulate("email",  eEmail.getText().toString());
-        return jsonObject;
-    }
 }
