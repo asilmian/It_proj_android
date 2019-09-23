@@ -4,19 +4,19 @@
     tools:showIn = "navigation_view">
     <group android:checkableBehavior="single">
         <!--    Each item is a button on the Navbar Menu -->
-        <item android:id = "@+id/account"
+        <item android:id = "@+id/nav_account"
             android:icon = "@drawable/ic_account"
             android:title="@string/navbar_account"></item>
 
-        <item android:id = "@+id/items"
+        <item android:id = "@+id/nav_items"
             android:icon = "@drawable/ic_items"
             android:title="@string/navbar_items"></item>
 
-        <item android:id = "@+id/houses"
+        <item android:id = "@+id/nav_houses"
             android:icon = "@drawable/ic_houses"
             android:title="@string/navbar_houses"></item>
 
-        <item android:id = "@+id/family"
+        <item android:id = "@+id/nav_family"
             android:icon = "@drawable/ic_family"
             android:title="@string/navbar_family"></item>
 
