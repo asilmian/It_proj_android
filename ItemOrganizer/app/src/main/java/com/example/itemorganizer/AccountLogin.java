@@ -25,6 +25,8 @@ public class AccountLogin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_login);
+
+        //initialize firebase Auth
         mAuth = FirebaseAuth.getInstance();
     }
 
@@ -53,7 +55,9 @@ public class AccountLogin extends AppCompatActivity {
         String email = editText.getText().toString();
 
         //check if fields are empty
+        //not yet implemented
 
+        //create task to sign into firebase Auth
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -63,9 +67,13 @@ public class AccountLogin extends AppCompatActivity {
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             //goToHomePage(user);
+                            // not sure if need to send user in a bundle or mAuth will have it from
+                            // mAuth.getInstance()
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
+
+                            //issue: make toast appear on top
                             Toast.makeText(AccountLogin.this, "Login Failed",
                                     Toast.LENGTH_SHORT).show();
                         }

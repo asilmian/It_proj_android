@@ -48,6 +48,8 @@ public class AccountSignup extends AppCompatActivity {
     @Override
     public void onStart(){
         super.onStart();
+
+        //make sure not logged in
         FirebaseUser currentUser = mAuth.getCurrentUser();
         assert (currentUser == null);
     }
@@ -56,7 +58,6 @@ public class AccountSignup extends AppCompatActivity {
         String password = ePass.getText().toString();
         String conf_pass = eConfPass.getText().toString();
 
-        //name is not handled yet
 
         //if passwords do not match
         if (!password.equals(conf_pass)) {
@@ -68,14 +69,14 @@ public class AccountSignup extends AppCompatActivity {
         }
 
         String email = eEmail.getText().toString();
-
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            //User created successfully
                             Log.d(TAG, "createUserWithEmail:success");
+                            //send to server
                             sendToServer();
                         } else {
                             // If sign in fails, display a message to the user.
@@ -90,21 +91,19 @@ public class AccountSignup extends AppCompatActivity {
                 });
     }
 
-    private void openFamilyPage(){
 
-        Intent intent = new Intent(this, FamilyLogIn.class);
-        startActivity(intent);
-    }
-
-
-    //goes to family page even with failed post to server
-    //also delete user in firebase if connection fails.
+    //issues: goes to family page even with failed post to server
+    //issues: also delete user in firebase if connection fails.
     private void sendToServer(){
+
+        //get user Id Token
         mAuth.getCurrentUser().getIdToken(true)
                 .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                     public void onComplete(@NonNull Task<GetTokenResult> task) {
                         if (task.isSuccessful()) {
                             String idToken = task.getResult().getToken();
+
+                            //if token successfully send to backend
                             if(sendJsonPost(idToken)){
                                 openFamilyPage();
                             }
@@ -115,6 +114,13 @@ public class AccountSignup extends AppCompatActivity {
                     }
                 });
     }
+
+    private void openFamilyPage(){
+
+        Intent intent = new Intent(this, FamilyLogIn.class);
+        startActivity(intent);
+    }
+
 
     private Boolean sendJsonPost(String idToken){
         try {
