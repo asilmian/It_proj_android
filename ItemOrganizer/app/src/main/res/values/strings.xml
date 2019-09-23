@@ -11,4 +11,22 @@
     <string name="login">Login</string>
     <string name="signup">Sign Up</string>
     <string name="conf_pass">Confirm Password:</string>
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
+    <string name="searchbar">Enter an Item your looking for...</string>
+    <string name="search_button">Search</string>
+
+
+    <string name="item_desc">Item_Name. \n \n
+
+    Lorem ipsum dolor sit amet, agam commodo habemus no nec, at per aperiam utroque voluptaria. Ius in imperdiet consetetur instructior, eu sed labore putant moderatius.
+    </string>
+    <!--    Navbar Strings. Username is just a placeholder for now.-->
+    <string name= "navbar_username">John Doe</string>
+
+    <string name="navbar_settings">Settings</string>
+    <string name="navbar_family">Manage Family</string>
+    <string name="navbar_houses">Houses</string>
+    <string name="navbar_account">Account</string>
+    <string name="navbar_items">Items</string>
 </resources>

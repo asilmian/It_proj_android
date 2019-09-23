@@ -3,26 +3,31 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn = "navigation_view">
     <group android:checkableBehavior="single">
+        <!--    Each item is a button on the Navbar Menu -->
+        <item android:id = "@+id/account"
+            android:icon = "@drawable/ic_account"
+            android:title="@string/navbar_account"></item>
 
-        <item android:id = "@+id/nav_message"
-            android:icon = "@drawable/ic_settings"
-            android:title="settings"></item>
+        <item android:id = "@+id/items"
+            android:icon = "@drawable/ic_items"
+            android:title="@string/navbar_items"></item>
 
-        <item android:id = "@+id/nav_message2"
-            android:icon = "@drawable/ic_settings"
-            android:title="settings2"></item>
+        <item android:id = "@+id/houses"
+            android:icon = "@drawable/ic_houses"
+            android:title="@string/navbar_houses"></item>
 
-        <item android:id = "@+id/nav_message3"
-            android:icon = "@drawable/ic_settings"
-            android:title="settings3"></item>
+        <item android:id = "@+id/family"
+            android:icon = "@drawable/ic_family"
+            android:title="@string/navbar_family"></item>
+
     </group>
 
     <item android:title = "Settings">
 
         <menu>
-            <item android:id = "@+id/nav_message4"
+            <item android:id = "@+id/settings"
                 android:icon = "@drawable/ic_settings"
-                android:title="settings4"></item>
+                android:title="@string/navbar_settings"></item>
 
         </menu>
     </item>
