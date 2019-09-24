@@ -30,6 +30,12 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new ItemFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_items);
+        }
+
     }
 
     @Override
@@ -38,7 +44,11 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         {
             //Check for account.
             case R.id.nav_account:
-       //         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
+            break;
+
+            case R.id.nav_items:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ItemFragment()).commit();
                 break;
         }
 
