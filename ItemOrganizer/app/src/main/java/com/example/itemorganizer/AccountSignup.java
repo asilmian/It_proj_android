@@ -33,7 +33,7 @@ public class AccountSignup extends AppCompatActivity {
     private EditText ePass;
     private EditText eConfPass;
     private EditText eEmail;
-    private final String url = "http://167.71.243.144:5000/signup/";
+    private final String url = "http://167.71.243.144:8000/signup/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,7 +156,7 @@ public class AccountSignup extends AppCompatActivity {
         makeSignUpBody(backendItem);
 
         //send request
-        backendItem = JsonPost.send_req(backendItem);
+        backendItem = BackendPost.send_req(backendItem);
 
 
         if (backendItem.getResponse_code().equals(200)){

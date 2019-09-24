@@ -14,7 +14,7 @@ import java.util.Map;
 /***
  * Class to make Backend item post to url.
  */
-public class JsonPost {
+public class BackendPost {
 
 
     public static final Integer FAILED = 777;
@@ -24,7 +24,7 @@ public class JsonPost {
         try {
             return new HTTPAsyncTask().execute(item).get();
         }catch (Exception e){
-            Log.d("JsonPost", e.toString());
+            Log.d("BackendPost", e.toString());
             item.setResponse_code(FAILED);
             return item;
         }
@@ -68,7 +68,7 @@ public class JsonPost {
         OutputStream os = conn.getOutputStream();
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
         writer.write(body);
-        Log.i(JsonPost.class.toString(), body);
+        Log.i(BackendPost.class.toString(), body);
         writer.flush();
         writer.close();
         os.close();
@@ -83,7 +83,7 @@ public class JsonPost {
             try {
                 return httpPost(items[0]);
             } catch (IOException e) {
-                Log.e(JsonPost.class.toString(), e.toString());
+                Log.e(BackendPost.class.toString(), e.toString());
                 items[0].setResponse_code(FAILED);
                 items[0].setResponse("Connection Failed");
                 return items[0];
