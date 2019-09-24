@@ -21,10 +21,17 @@ public class AccountLogin extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private static final String TAG = "AccountLogin";
 
+    private EditText ePass;
+    private EditText eEmail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account_login);
+
+        ePass = findViewById(R.id.password_login);
+        eEmail = findViewById(R.id.email_login);
+        //initialize firebase
         mAuth = FirebaseAuth.getInstance();
     }
 
@@ -32,7 +39,7 @@ public class AccountLogin extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null){
-            goToHomePage();
+            //goToHomePage();
         }
     }
 
@@ -46,14 +53,13 @@ public class AccountLogin extends AppCompatActivity {
     public void openHomepage(View view){
 
         //get password and email from screen
-        EditText editText = findViewById(R.id.password_edit);
-        String password = editText.getText().toString();
-
-        editText = findViewById(R.id.email_edit);
-        String email = editText.getText().toString();
+        String password = ePass.getText().toString();
+        String email = eEmail.getText().toString();
 
         //check if fields are empty
+        //not yet implemented
 
+        //create task to sign into firebase Auth
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -61,11 +67,13 @@ public class AccountLogin extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success
                             Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            goToHomePage();
+                            //goToHomePage();
+
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
+
+                            //issue: make toast appear on top
                             Toast.makeText(AccountLogin.this, "Login Failed",
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -73,8 +81,9 @@ public class AccountLogin extends AppCompatActivity {
                 });
 
     }
+
+    //go to main page
     private void goToHomePage(){
-        //goes to MainActivity instead right now.
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
