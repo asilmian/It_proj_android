@@ -42,14 +42,31 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) //Check which items are clicked.
         {
-            //Check for account.
+            //Account.
             case R.id.nav_account:
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
-            break;
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ProfileFragment()).commit();
+                break;
 
+            //Family
+            case R.id.nav_family:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FamilyFragment()).commit();
+                break;
+
+            //Items
             case R.id.nav_items:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ItemFragment()).commit();
                 break;
+
+            //Settings
+            case R.id.nav_settings:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
+                break;
+
+            //Log Out
+            case R.id.nav_logout:
+                //Log Out Code//
+                break;
+
         }
 
         drawer.closeDrawer(GravityCompat.START);
