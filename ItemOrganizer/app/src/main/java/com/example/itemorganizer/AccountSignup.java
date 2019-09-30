@@ -95,8 +95,7 @@ public class AccountSignup extends AppCompatActivity {
     }
 
 
-    //issues: goes to family page even with failed post to server
-    //issues: also delete user in firebase if connection fails.
+    //sends new user to backend, if backend connection fails, deletes user from firebase
     private void sendToServer(){
 
         //get user Id Token

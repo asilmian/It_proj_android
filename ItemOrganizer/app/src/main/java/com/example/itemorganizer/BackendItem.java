@@ -3,8 +3,7 @@ package com.example.itemorganizer;
 import java.util.HashMap;
 
 
-//backend item used to create request to backenc
-//repoonse
+//backend item used to create request to backend
 
 public class BackendItem {
 
