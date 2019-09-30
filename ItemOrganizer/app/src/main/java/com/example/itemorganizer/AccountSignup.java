@@ -33,7 +33,7 @@ public class AccountSignup extends AppCompatActivity {
     private EditText ePass;
     private EditText eConfPass;
     private EditText eEmail;
-    private final String url = "http://167.71.243.144:8000/signup/";
+    private final String url = "http://167.71.243.144:5000/signup/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

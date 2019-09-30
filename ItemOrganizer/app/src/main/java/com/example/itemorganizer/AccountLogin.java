@@ -41,6 +41,7 @@ public class AccountLogin extends AppCompatActivity {
         if (currentUser != null){
             goToHomePage();
         }
+
     }
 
     public void openSignup(View view){

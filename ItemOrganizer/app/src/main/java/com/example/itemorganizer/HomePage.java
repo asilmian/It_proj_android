@@ -8,13 +8,18 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class HomePage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +41,21 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
             navigationView.setCheckedItem(R.id.nav_items);
         }
 
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if(firebaseAuth.getCurrentUser() == null) {
+                    Log_out();
+                }
+            }
+        };
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
     }
 
     @Override
@@ -64,7 +84,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
 
             //Log Out
             case R.id.nav_logout:
-                //Log Out Code//
+                mAuth.signOut();
                 break;
 
         }
@@ -84,5 +104,10 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         {
             super.onBackPressed();
         }
+    }
+
+    private void Log_out(){
+        Intent intent = new Intent(this, AccountLogin.class);
+        startActivity(intent);
     }
 }
