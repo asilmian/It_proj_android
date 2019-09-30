@@ -53,10 +53,11 @@ public class FamilyLogIn extends AppCompatActivity {
                         if(task.isSuccessful()){
                             //get user token
                             String token = task.getResult().getToken();
-                            if(sendBackend(token)){
+                            Integer result = sendBackend(token);
+                            if(result == 1){
                                 goToHomePage();
                             }
-                            else{
+                            else if (result == 0){
                                 Toast toast = Toast.makeText(FamilyLogIn.this, "Connection to backend failed",
                                         Toast.LENGTH_SHORT);
                                 toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
@@ -72,7 +73,7 @@ public class FamilyLogIn extends AppCompatActivity {
 
 
     //send details to join family
-    private boolean sendBackend(String token){
+    private Integer sendBackend(String token){
         BackendItem backendItem = new BackendItem(URL);
 
         //add required headers
@@ -87,7 +88,7 @@ public class FamilyLogIn extends AppCompatActivity {
 
         //if token is valid
         if (backendItem.getResponse_code().equals(200)){
-            return true;
+            return 1;
         }
 
         //if token is invalid
@@ -97,10 +98,11 @@ public class FamilyLogIn extends AppCompatActivity {
             toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
             toast.show();
             Log.d(TAG, "new_family_response: "+ backendItem.getResponse());
-            return false;
+            return 2;
         }
         else {
-            return false;
+            Log.d(TAG, backendItem.getResponse());
+            return 0;
         }
     }
 
