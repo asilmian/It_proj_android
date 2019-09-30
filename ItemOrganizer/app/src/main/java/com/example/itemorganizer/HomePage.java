@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Set;
+
 public class HomePage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     private FirebaseAuth mAuth;
@@ -23,16 +25,20 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Init
         setContentView(R.layout.activity_home_page);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.draw_layout);
 
-//      Set navigation button listeners.
+        //Set navigation button listeners.
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        //Action Bar (Navbar) Init
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         if (savedInstanceState == null) {
@@ -41,6 +47,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
             navigationView.setCheckedItem(R.id.nav_items);
         }
 
+        //Set Firebase Authentication Token
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -55,6 +62,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     @Override
     public void onStart(){
         super.onStart();
+        //Begin Authentication listener
         mAuth.addAuthStateListener(mAuthListener);
     }
 
@@ -88,7 +96,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                 break;
 
         }
-
+        //Close the Navbar.
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -107,6 +115,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     }
 
     private void Log_out(){
+        //Log out from
         Intent intent = new Intent(this, AccountLogin.class);
         startActivity(intent);
     }
