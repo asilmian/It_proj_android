@@ -16,7 +16,7 @@
         <activity android:name=".AccountSignup"></activity>
         <activity android:name=".AccountLogin" />
         <activity android:name=".NewFamily" />
-        <activity android:name=".HomePage" />
+        <activity android:name=".HomePage.HomePage" />
         <activity android:name=".FamilyLogIn" />
         <activity android:name=".MainActivity">
             <intent-filter>
