@@ -1,7 +1,5 @@
 package com.example.itemorganizer;
 
-import com.example.itemorganizer.HomePage.UserSingleton;
-
 import java.util.HashMap;
 
 

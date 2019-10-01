@@ -1,6 +1,5 @@
-package com.example.itemorganizer;
+package com.example.itemorganizer.Family;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,11 +10,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.itemorganizer.BackendItem;
+import com.example.itemorganizer.BackendReq;
 import com.example.itemorganizer.HomePage.HomePage;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.itemorganizer.R;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GetTokenResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;

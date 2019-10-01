@@ -9,10 +9,9 @@ import android.view.ViewGroup;
 
 import com.example.itemorganizer.BackendItem;
 import com.example.itemorganizer.BackendReq;
-import com.example.itemorganizer.FamilyLogIn;
+import com.example.itemorganizer.Family.FamilyLogIn;
 import com.example.itemorganizer.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

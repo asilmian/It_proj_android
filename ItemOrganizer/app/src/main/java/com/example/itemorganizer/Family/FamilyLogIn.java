@@ -1,4 +1,4 @@
-package com.example.itemorganizer;
+package com.example.itemorganizer.Family;
 
 import android.content.Intent;
 
@@ -10,8 +10,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.itemorganizer.BackendItem;
+import com.example.itemorganizer.BackendReq;
 import com.example.itemorganizer.HomePage.HomePage;
-import com.example.itemorganizer.HomePage.UserSingleton;
+import com.example.itemorganizer.R;
+import com.example.itemorganizer.UserSingleton;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONException;

@@ -1,4 +1,4 @@
-package com.example.itemorganizer.HomePage;
+package com.example.itemorganizer;
 
 
 public class UserSingleton {
