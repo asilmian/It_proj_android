@@ -1,5 +1,7 @@
 package com.example.itemorganizer;
 
+import com.example.itemorganizer.HomePage.UserSingleton;
+
 import java.util.HashMap;
 
 
@@ -13,10 +15,12 @@ public class BackendItem {
 
     private Integer response_code;
     private String response;
+    private String method;
 
 
-    public BackendItem(String url){
-        this.url = url;
+
+    public BackendItem(String url, String method){
+        this.url = url; this.method = method; this.body = null;
     }
 
     //getters and setters
@@ -37,7 +41,7 @@ public class BackendItem {
     }
 
     public void setHeaders(HashMap<String, String> headers) {
-        headers.putIfAbsent("Content-Type", "application/json");
+        headers.putIfAbsent("Authorization", "Bearer " + UserSingleton.getInstance().getUserToken());
         headers.putIfAbsent("User-Agent", "Android App");
         this.headers = headers;
     }
@@ -57,5 +61,10 @@ public class BackendItem {
     public void setResponse(String response) {
         this.response = response;
     }
+
+    public String getMethod() {
+        return method;
+    }
+
 
 }

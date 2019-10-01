@@ -67,7 +67,7 @@ public class AccountSignup extends AppCompatActivity {
             Toast.makeText(AccountSignup.this, "Passwords do not match",
                     Toast.LENGTH_SHORT).show();
 
-            MakeClear.clearView(eConfPass, ePass);
+            UtilityFunctions.clearView(eConfPass, ePass);
             return;
         }
 
@@ -104,7 +104,8 @@ public class AccountSignup extends AppCompatActivity {
                     public void onComplete(@NonNull Task<GetTokenResult> task) {
                         if (task.isSuccessful()) {
                             String idToken = task.getResult().getToken();
-                            if(sendBackendSignup(idToken)){
+                            UtilityFunctions.setUserToken(idToken);
+                            if(sendBackendSignup()){
                                 openFamilyPage();
                             }
                             else{
@@ -143,19 +144,19 @@ public class AccountSignup extends AppCompatActivity {
 
 
     //returns true if successfully connected to backend
-    private Boolean sendBackendSignup(String idToken){
-        BackendItem backendItem = new BackendItem(this.url);
+    private Boolean sendBackendSignup(){
+        BackendItem backendItem = new BackendItem(this.url, BackendReq.POST);
 
         //create headers
         HashMap<String,String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + idToken);
+        headers.putIfAbsent("Content-Type", "application/json");
         backendItem.setHeaders(headers);
 
         //make body
         makeSignUpBody(backendItem);
 
         //send request
-        backendItem = BackendPost.send_req(backendItem);
+        backendItem = BackendReq.send_req(backendItem);
 
 
         if (backendItem.getResponse_code().equals(200)){

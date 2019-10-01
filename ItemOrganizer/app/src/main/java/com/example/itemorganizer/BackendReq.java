@@ -3,8 +3,11 @@ package com.example.itemorganizer;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -14,17 +17,21 @@ import java.util.Map;
 /***
  * Class to make Backend item post to url.
  */
-public class BackendPost {
+public class BackendReq {
 
 
     public static final Integer FAILED = 777;
+    public static final String GET = "GET";
+    public static final String POST = "POST";
+
+    private static final String TAG = BackendReq.class.toString();
 
 
     public  static BackendItem send_req(BackendItem item){
         try {
             return new HTTPAsyncTask().execute(item).get();
         }catch (Exception e){
-            Log.d("BackendPost", e.toString());
+            Log.d("BackendReq", e.toString());
             item.setResponse_code(FAILED);
             return item;
         }
@@ -35,7 +42,7 @@ public class BackendPost {
 
         //create HttpURLConnection
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
+        conn.setRequestMethod(item.getMethod());
 
         conn.setConnectTimeout(10000); //set timeout to 10 secs
 
@@ -56,19 +63,34 @@ public class BackendPost {
         conn.connect();
 
         item.setResponse_code(conn.getResponseCode());
-        item.setResponse(conn.getResponseMessage());
+        item.setResponse(readInputStream(conn.getInputStream()));
 
         return item;
 
     }
 
+    private static String readInputStream(InputStream response){
+        String result = "";
+        String tmp;
+        BufferedReader br = new BufferedReader(new InputStreamReader(response));
+        try {
+            while ((tmp = br.readLine()) != null) {
+                result += tmp + "\n";
+            }
+            br.close();
+            return result;
+        } catch (Exception e){
+            Log.e(TAG, e.toString());
+        }
+        return result;
+    }
 
     private static void setPostRequestContent(HttpURLConnection conn, String body) throws IOException {
 
         OutputStream os = conn.getOutputStream();
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
         writer.write(body);
-        Log.i(BackendPost.class.toString(), body);
+        Log.i(BackendReq.class.toString(), body);
         writer.flush();
         writer.close();
         os.close();
@@ -83,7 +105,7 @@ public class BackendPost {
             try {
                 return httpPost(items[0]);
             } catch (IOException e) {
-                Log.e(BackendPost.class.toString(), e.toString());
+                Log.e(BackendReq.class.toString(), e.toString());
                 items[0].setResponse_code(FAILED);
                 items[0].setResponse("Connection Failed");
                 return items[0];
