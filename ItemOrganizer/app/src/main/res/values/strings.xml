@@ -24,7 +24,7 @@
     Lorem ipsum dolor sit amet, agam commodo habemus no nec, at per aperiam utroque voluptaria. Ius in imperdiet consetetur instructior, eu sed labore putant moderatius.
     </string>
     <!--    Navbar Strings. Username is just a placeholder for now.-->
-    <string name= "navbar_username">John Doe</string>
+    <string name="navbar_username">John Doe</string>
     <string name="navbar_settings">Settings</string>
     <string name="navbar_family">Manage Family</string>
     <string name="navbar_houses">Houses</string>
