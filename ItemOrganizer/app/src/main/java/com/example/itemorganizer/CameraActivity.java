@@ -70,9 +70,7 @@ public class CameraActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
         imageView = (ImageView) findViewById(R.id.image);
-        if (Build.VERSION.SDK_INT >= 23){
-            requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
-        }
+        requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
 
         pictureBtn = (Button) findViewById(R.id.PictureBtn);
         addbtn = (Button) findViewById(R.id.add_item);
@@ -91,7 +89,7 @@ public class CameraActivity extends AppCompatActivity {
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 submitItem(view);
+                 submitItemCheck(view);
             }
         });
     }
@@ -102,12 +100,19 @@ public class CameraActivity extends AppCompatActivity {
         this.id_names = getMembers();
 
         //display members
+
+        //initialize firestore
         fire_storage = FirebaseStorage.getInstance();
         storageRef = fire_storage.getReference();
+
         UtilityFunctions.clearView(item_desc, item_name, item_tags);
+
+        //get new item reference from backend
         ref = getRef();
     }
 
+
+    //returns all members in users current family
     private HashMap<String,String> getMembers(){
         HashMap<String,String> id_names = new HashMap<>();
         BackendItem backendItem = new BackendItem(UserSingleton.IP + URL, BackendReq.GET);
@@ -128,13 +133,15 @@ public class CameraActivity extends AppCompatActivity {
         return id_names;
     }
 
-    public void submitItem(View view) {
+
+    //checks if there is enough information to check items
+    public void submitItemCheck(View view) {
 
         String name = item_name.getText().toString();
         String desc = item_desc.getText().toString();
         String tags = item_tags.getText().toString();
 
-        if( name != null && desc != null && tags!= null){
+        if( !name.equals("") && !desc.equals("") && !tags.equals("") && (image != null)){
             submitItem(name, desc, tags, image);
         }
         else{
@@ -145,30 +152,37 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
+    //submits an item to the backend.
     private void submitItem(final String name, final String desc, final String tags, File image){
+
+        //create backend post request
         final BackendItem backendItem = new BackendItem(UserSingleton.IP + ADD_URL, BackendReq.POST);
         HashMap<String, String> headers = new HashMap<>();
         headers.putIfAbsent("Content-Type", "application/json");
         backendItem.setHeaders(headers);
-        Log.d(TAG, "ref = " + ref);
-        assert(ref != null && ref != "");
 
+        //get new refernce in firebase storage
+        if(BuildConfig.DEBUG && ref.equals("")){
+            throw new AssertionError();
+        }
         final StorageReference newRef = storageRef.child(ref);
         Uri file = Uri.fromFile(image);
-        UploadTask uploadTask = newRef.putFile(file);
 
-// Register observers to listen for when the download is done or if it fails
+        //upload file to storage
+        UploadTask uploadTask = newRef.putFile(file);
+        // Register observers to listen for when the download is done or if it fails
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle unsuccessful uploads
-                Log.e(TAG, "upload failed");
+                Log.e(TAG, "upload failed   " + exception.toString());
+
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                //generate add item body
 
+                //generate add item body
                 try {
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.accumulate("name", name);
@@ -181,6 +195,8 @@ public class CameraActivity extends AppCompatActivity {
                     Log.e(TAG, e.toString());
                 }
                 Log.d(TAG, backendItem.getBody());
+
+                //send item information to flask backend
                 BackendReq.send_req(backendItem);
 
                 if (backendItem.getResponse_code() == 200){
@@ -194,6 +210,8 @@ public class CameraActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // code to implement progress bar.
 //        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
 //            @Override
 //            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
@@ -211,6 +229,7 @@ public class CameraActivity extends AppCompatActivity {
     }
 
 
+    //gets a new reference (item image name) from the backend
     private String getRef(){
         BackendItem item = new BackendItem(UserSingleton.IP + GET_IMAGE_REF, BackendReq.GET);
         item.setHeaders(new HashMap<String, String>());
