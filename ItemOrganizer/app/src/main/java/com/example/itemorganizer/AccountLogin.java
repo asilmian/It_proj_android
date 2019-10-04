@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 
 public class AccountLogin extends AppCompatActivity {
 
@@ -40,7 +42,7 @@ public class AccountLogin extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null){
-            goToHomePage();
+            setUserToken();
         }
 
     }
@@ -69,7 +71,7 @@ public class AccountLogin extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success
                             Log.d(TAG, "signInWithEmail:success");
-                            goToHomePage();
+                            setUserToken();
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -88,5 +90,24 @@ public class AccountLogin extends AppCompatActivity {
     private void goToHomePage(){
         Intent intent = new Intent(this, HomePage.class);
         startActivity(intent);
+    }
+
+    //initializes User singleton and sets/refreshes the user token.
+    private void setUserToken(){
+        mAuth.getCurrentUser().getIdToken(true)
+                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                    public void onComplete(@NonNull Task<GetTokenResult> task) {
+                        if (task.isSuccessful()) {
+                            String idToken = task.getResult().getToken();
+                            UtilityFunctions.setUserToken(idToken);
+                            goToHomePage();
+                        } else {
+                            Toast toast = Toast.makeText(AccountLogin.this, "Connection to firebase failed",
+                                    Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
+                            toast.show();
+                        }
+                    }
+                });
     }
 }
