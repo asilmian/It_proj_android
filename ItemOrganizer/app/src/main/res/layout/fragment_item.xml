@@ -1,226 +1,241 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
 
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
 
-    <LinearLayout
+    <ScrollView
+        android:id="@+id/scrollView3"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_marginTop="49dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tableRow">
 
-        <TableRow
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="49dp">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/searchText"
-                android:layout_width="325dp"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="@string/searchbar"
-                android:textColor="#77888888"
-                android:textStyle="italic" />
 
-            <Button
-                android:id="@+id/search_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/search_button" />
-
-        </TableRow>
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
+            <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-
-                <TableLayout
+                <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="143dp"
+                        android:layout_height="143dp"
+                        app:srcCompat="@mipmap/ic_launcher_round" />
 
-                        <Space
-                            android:layout_width="20dp"
-                            android:layout_height="match_parent" />
+                    <Space
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent" />
 
-                        <TextView
-                            android:id="@+id/description4"
-                            android:layout_width="228dp"
-                            android:layout_height="wrap_content"
-                            android:text="@string/item_desc" />
+                    <Space
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent" />
 
-                        <Space
-                            android:layout_width="20dp"
-                            android:layout_height="match_parent" />
+                    <TextView
+                        android:id="@+id/description3"
+                        android:layout_width="228dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/item_desc" />
 
-                        <ImageView
-                            android:id="@+id/imageView9"
-                            android:layout_width="143dp"
-                            android:layout_height="143dp"
-                            app:srcCompat="@mipmap/ic_launcher_round" />
+                </TableRow>
 
-                    </TableRow>
+            </TableLayout>
 
-                </TableLayout>
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp" />
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                <TableLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <Space
-                            android:layout_width="20dp"
-                            android:layout_height="match_parent" />
-
-                        <TextView
-                            android:id="@+id/description2"
-                            android:layout_width="228dp"
-                            android:layout_height="wrap_content"
-                            android:text="@string/item_desc" />
-
-                        <Space
-                            android:layout_width="20dp"
-                            android:layout_height="match_parent" />
-
-                        <ImageView
-                            android:id="@+id/imageView7"
-                            android:layout_width="143dp"
-                            android:layout_height="143dp"
-                            app:srcCompat="@mipmap/ic_launcher_round" />
-
-                    </TableRow>
-
-                </TableLayout>
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp" />
-
-                <TableLayout
+                <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/imageView7"
+                        android:layout_width="143dp"
+                        android:layout_height="143dp"
+                        app:srcCompat="@mipmap/ic_launcher_round" />
 
-                        <Space
-                            android:layout_width="20dp"
-                            android:layout_height="match_parent" />
+                    <Space
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent" />
 
-                        <TextView
-                            android:id="@+id/textView5"
-                            android:layout_width="228dp"
-                            android:layout_height="wrap_content"
-                            android:text="@string/item_desc" />
+                    <Space
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent" />
 
-                        <Space
-                            android:layout_width="20dp"
-                            android:layout_height="match_parent" />
+                    <TextView
+                        android:id="@+id/description2"
+                        android:layout_width="228dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/item_desc" />
 
-                        <ImageView
-                            android:id="@+id/imageView6"
-                            android:layout_width="143dp"
-                            android:layout_height="143dp"
-                            app:srcCompat="@mipmap/ic_launcher_round" />
+                </TableRow>
 
-                    </TableRow>
+            </TableLayout>
 
-                </TableLayout>
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
 
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp" />
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                <TableLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <Space
-                            android:layout_width="20dp"
-                            android:layout_height="match_parent" />
-
-                        <TextView
-                            android:id="@+id/description3"
-                            android:layout_width="228dp"
-                            android:layout_height="wrap_content"
-                            android:text="@string/item_desc" />
-
-                        <Space
-                            android:layout_width="20dp"
-                            android:layout_height="match_parent" />
-
-                        <ImageView
-                            android:id="@+id/imageView3"
-                            android:layout_width="143dp"
-                            android:layout_height="143dp"
-                            app:srcCompat="@mipmap/ic_launcher_round" />
-
-                    </TableRow>
-
-                </TableLayout>
-
-                <Space
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp" />
-
-                <TableLayout
+                <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <TableRow
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                    <ImageView
+                        android:id="@+id/imageView9"
+                        android:layout_width="143dp"
+                        android:layout_height="143dp"
+                        app:srcCompat="@mipmap/ic_launcher_round" />
 
-                        <Space
-                            android:layout_width="20dp"
-                            android:layout_height="match_parent" />
+                    <Space
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent" />
 
-                        <TextView
-                            android:id="@+id/description5"
-                            android:layout_width="228dp"
-                            android:layout_height="wrap_content"
-                            android:text="@string/item_desc" />
+                    <Space
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent" />
 
-                        <Space
-                            android:layout_width="20dp"
-                            android:layout_height="match_parent" />
+                    <TextView
+                        android:id="@+id/description4"
+                        android:layout_width="228dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/item_desc" />
 
-                        <ImageView
-                            android:id="@+id/imageView5"
-                            android:layout_width="143dp"
-                            android:layout_height="143dp"
-                            app:srcCompat="@mipmap/ic_launcher_round" />
+                </TableRow>
 
-                    </TableRow>
+            </TableLayout>
 
-                </TableLayout>
-            </LinearLayout>
-        </ScrollView>
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
 
-    </LinearLayout>
-</android.support.constraint.ConstraintLayout>
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView6"
+                        android:layout_width="143dp"
+                        android:layout_height="143dp"
+                        app:srcCompat="@mipmap/ic_launcher_round" />
+
+                    <Space
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent" />
+
+                    <Space
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="228dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/item_desc" />
+
+                </TableRow>
+
+            </TableLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageView5"
+                        android:layout_width="143dp"
+                        android:layout_height="143dp"
+                        app:srcCompat="@mipmap/ic_launcher_round" />
+
+                    <Space
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent" />
+
+                    <Space
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent" />
+
+                    <TextView
+                        android:id="@+id/description5"
+                        android:layout_width="228dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/item_desc" />
+
+                </TableRow>
+
+            </TableLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <TableRow
+        android:id="@+id/tableRow"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/search_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_button" />
+
+        <EditText
+            android:id="@+id/searchText"
+            android:layout_width="325dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@string/searchbar"
+            android:textColor="#77888888"
+            android:textStyle="italic" />
+
+    </TableRow>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_new_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimaryDark"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.921"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        app:layout_constraintVertical_bias="0.876"
+        app:rippleColor="@color/colorPrimary"
+        app:srcCompat="@android:drawable/ic_input_add" />
+</androidx.constraintlayout.widget.ConstraintLayout>
