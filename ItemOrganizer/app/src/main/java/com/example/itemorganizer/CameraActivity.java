@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.example.itemorganizer.HomePage.HomePage;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -32,21 +34,38 @@ public class CameraActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
-
-        Button pictureBtn = (Button) findViewById(R.id.PictureBtn);
         imageView = (ImageView) findViewById(R.id.image);
         if (Build.VERSION.SDK_INT >= 23){
             requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
         }
+
+        Button pictureBtn = (Button) findViewById(R.id.PictureBtn);
+        Button addbtn = (Button) findViewById(R.id.add_item);
+
+
+
         pictureBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 takePhoto();
             }
         });
-
+        addbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                 submitItem(view);
+            }
+        });
     }
+    public void submitItem(View view) {
 
+
+        //Check if submittable
+
+
+        Intent intent = new Intent(this, HomePage.class);
+        startActivity(intent);
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
