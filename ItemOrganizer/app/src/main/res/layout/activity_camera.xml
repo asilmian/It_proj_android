@@ -24,76 +24,56 @@
             android:id="@+id/add_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:text="Add Item"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/isPrivate" />
+            tools:layout_editor_absoluteY="567dp" />
 
         <EditText
-            android:id="@+id/editText2"
+            android:id="@+id/add_item_tags"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:autofillHints="add Item Tags"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Tags"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText" />
+            app:layout_constraintTop_toBottomOf="@+id/add_item_name" />
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/add_item_desc"
             android:layout_width="264dp"
             android:layout_height="125dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="20dp"
             android:ems="10"
             android:gravity="start|top"
             android:inputType="textMultiLine"
+            android:autofillHints="Add Item Description"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Description" />
+            app:layout_constraintTop_toBottomOf="@+id/add_item_tags" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/add_item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image" />
+            app:layout_constraintTop_toBottomOf="@+id/image"
+            android:autofillHints="Item name" />
 
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="211dp"
+            android:contentDescription="@string/item_image"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/PictureBtn" />
-
-        <RadioButton
-            android:id="@+id/isPrivate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="160dp"
-            android:layout_marginTop="9dp"
-            android:layout_marginEnd="142dp"
-            android:text="Private Item"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText3" />
-
-        <TextView
-            android:id="@+id/Description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Description"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

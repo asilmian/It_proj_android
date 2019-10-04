@@ -13,16 +13,23 @@ import androidx.core.content.FileProvider;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.itemorganizer.HomePage.HomePage;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
@@ -30,6 +37,18 @@ public class CameraActivity extends AppCompatActivity {
 
     ImageView imageView;
     String pathToFile;
+    Button pictureBtn;
+    Button addbtn;
+    EditText item_name;
+    EditText item_desc;
+    EditText item_tags;
+    File image;
+
+    private final static String TAG = CameraActivity.class.toString();
+    private HashMap<String, String> id_names;
+    private static final String URL = "items/add/";
+
+    private final static String URL = "family/info/members/";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +58,12 @@ public class CameraActivity extends AppCompatActivity {
             requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
         }
 
-        Button pictureBtn = (Button) findViewById(R.id.PictureBtn);
-        Button addbtn = (Button) findViewById(R.id.add_item);
+        pictureBtn = (Button) findViewById(R.id.PictureBtn);
+        addbtn = (Button) findViewById(R.id.add_item);
 
+        item_name = findViewById(R.id.add_item_name);
+        item_desc = findViewById(R.id.add_item_desc);
+        item_tags = findViewById(R.id.add_item_tags);
 
 
         pictureBtn.setOnClickListener(new View.OnClickListener() {
@@ -57,15 +79,73 @@ public class CameraActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onStart(){
+        super.onStart();
+        this.id_names = getMembers();
+
+        //display members
+    }
+
+    private HashMap<String,String> getMembers(){
+        HashMap<String,String> id_names = new HashMap<>();
+        BackendItem backendItem = new BackendItem(UserSingleton.IP + URL, BackendReq.GET);
+        BackendReq.send_req(backendItem);
+
+        try{
+            JSONObject raw_data = new JSONObject(backendItem.getResponse());
+            JSONArray keys  = raw_data.names();
+
+            for (int i=0; i<keys.length(); i++){
+                String key = keys.getString(i);
+                id_names.put(key, raw_data.getJSONObject(key).getString("name"));
+            }
+        } catch (Exception e){
+            Log.e(TAG, e.toString());
+        }
+        return id_names;
+    }
+
     public void submitItem(View view) {
 
+        String name = item_name.getText().toString();
+        String desc = item_desc.getText().toString();
+        String tags = item_tags.getText().toString();
 
-        //Check if submittable
-
-
-        Intent intent = new Intent(this, HomePage.class);
-        startActivity(intent);
+        if( name != null && desc != null && tags!= null && bitmap != null){
+            if(submitItem(name, desc, tags, bitmap)){
+                Log.d(TAG, name + "   " + desc + "   " + tags);
+                Intent intent = new Intent(this, HomePage.class);
+                startActivity(intent);
+            }
+            else{
+                Toast toast = Toast.makeText(CameraActivity.this, "Connection to backend failed",
+                        Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+                toast.show();
+            }
+        }
+        else{
+            Toast toast = Toast.makeText(CameraActivity.this, "Please complete all fields",
+                    Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+            toast.show();
+        }
     }
+
+    private Boolean submitItem(String name, String desc, String tags, Bitmap bitmap){
+        BackendItem backendItem = new BackendItem(UserSingleton.IP + URL, BackendReq.POST);
+
+        if (backendItem.getResponse_code() == 200){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -84,12 +164,12 @@ public class CameraActivity extends AppCompatActivity {
         Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         //Ensure that there is an app that can handle our intent
         if (takePicture.resolveActivity(getPackageManager()) != null) {
-            File Photo = null;
-            Photo = getPhotoFile();
-            if (Photo != null)
+            File photo = null;
+            photo = getPhotoFile();
+            if (photo != null)
             {
-                pathToFile = Photo.getAbsolutePath();
-                Uri photoURI = FileProvider.getUriForFile( CameraActivity.this, "com.example.itemorganizer.fileprovider", Photo);
+                pathToFile = photo.getAbsolutePath();
+                Uri photoURI = FileProvider.getUriForFile( CameraActivity.this, "com.example.itemorganizer.fileprovider", photo);
                 takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePicture,1);
             }
