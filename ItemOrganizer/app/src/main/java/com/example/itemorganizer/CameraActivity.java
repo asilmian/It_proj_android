@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,12 +23,22 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.itemorganizer.HomePage.HomePage;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Ref;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -43,10 +55,14 @@ public class CameraActivity extends AppCompatActivity {
     EditText item_desc;
     EditText item_tags;
     File image;
+    FirebaseStorage fire_storage;
+    StorageReference storageRef;
+    String ref;
 
     private final static String TAG = CameraActivity.class.toString();
     private HashMap<String, String> id_names;
-    private static final String URL = "items/add/";
+    private static final String ADD_URL = "item/add/";
+    private static final String GET_IMAGE_REF = "item/add/ref/";
 
     private final static String URL = "family/info/members/";
     @Override
@@ -86,11 +102,16 @@ public class CameraActivity extends AppCompatActivity {
         this.id_names = getMembers();
 
         //display members
+        fire_storage = FirebaseStorage.getInstance();
+        storageRef = fire_storage.getReference();
+        UtilityFunctions.clearView(item_desc, item_name, item_tags);
+        ref = getRef();
     }
 
     private HashMap<String,String> getMembers(){
         HashMap<String,String> id_names = new HashMap<>();
         BackendItem backendItem = new BackendItem(UserSingleton.IP + URL, BackendReq.GET);
+        backendItem.setHeaders(new HashMap<String, String>());
         BackendReq.send_req(backendItem);
 
         try{
@@ -113,18 +134,8 @@ public class CameraActivity extends AppCompatActivity {
         String desc = item_desc.getText().toString();
         String tags = item_tags.getText().toString();
 
-        if( name != null && desc != null && tags!= null && bitmap != null){
-            if(submitItem(name, desc, tags, bitmap)){
-                Log.d(TAG, name + "   " + desc + "   " + tags);
-                Intent intent = new Intent(this, HomePage.class);
-                startActivity(intent);
-            }
-            else{
-                Toast toast = Toast.makeText(CameraActivity.this, "Connection to backend failed",
-                        Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
-                toast.show();
-            }
+        if( name != null && desc != null && tags!= null){
+            submitItem(name, desc, tags, image);
         }
         else{
             Toast toast = Toast.makeText(CameraActivity.this, "Please complete all fields",
@@ -134,15 +145,89 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean submitItem(String name, String desc, String tags, Bitmap bitmap){
-        BackendItem backendItem = new BackendItem(UserSingleton.IP + URL, BackendReq.POST);
+    private void submitItem(final String name, final String desc, final String tags, File image){
+        final BackendItem backendItem = new BackendItem(UserSingleton.IP + ADD_URL, BackendReq.POST);
+        HashMap<String, String> headers = new HashMap<>();
+        headers.putIfAbsent("Content-Type", "application/json");
+        backendItem.setHeaders(headers);
+        Log.d(TAG, "ref = " + ref);
+        assert(ref != null && ref != "");
 
-        if (backendItem.getResponse_code() == 200){
-            return true;
+        final StorageReference newRef = storageRef.child(ref);
+        Uri file = Uri.fromFile(image);
+        UploadTask uploadTask = newRef.putFile(file);
+
+// Register observers to listen for when the download is done or if it fails
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                Log.e(TAG, "upload failed");
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                //generate add item body
+
+                try {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.accumulate("name", name);
+                    jsonObject.accumulate("description", desc);
+                    jsonObject.accumulate("tags", UtilityFunctions.convert(tags.split(","))); //convert tags to array.
+                    jsonObject.accumulate("image", newRef.getPath());
+                    jsonObject.accumulate("visibility", "global");
+                    backendItem.setBody(jsonObject.toString());
+                }catch (JSONException e){
+                    Log.e(TAG, e.toString());
+                }
+                Log.d(TAG, backendItem.getBody());
+                BackendReq.send_req(backendItem);
+
+                if (backendItem.getResponse_code() == 200){
+                    goToHomePage();
+                }
+                else{
+                    Toast toast = Toast.makeText(CameraActivity.this, "Connection to backend",
+                            Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+                    toast.show();
+                }
+            }
+        });
+//        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                double progress = 100.0 * (taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+//                System.out.println("Upload is " + progress + "% done");
+//                int currentprogress = (int) progress;
+//                progressBar.setProgress(currentprogress);
+//            }
+//        }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+//                System.out.println("Upload is paused");
+//            }
+//        });
+    }
+
+
+    private String getRef(){
+        BackendItem item = new BackendItem(UserSingleton.IP + GET_IMAGE_REF, BackendReq.GET);
+        item.setHeaders(new HashMap<String, String>());
+        BackendReq.send_req(item);
+        String result = "";
+        try{
+            JSONObject raw_data = new JSONObject(item.getResponse());
+            JSONArray keys  = raw_data.names();
+            String key = keys.getString(0);
+            String number = raw_data.getString(key);
+            result = key + "/" + number + ".jpg";
+
+        } catch (Exception e){
+            Log.e(TAG, e.toString());
+            Log.e(TAG, "Reference not returned");
         }
-        else{
-            return false;
-        }
+        return result;
     }
 
 
@@ -166,6 +251,7 @@ public class CameraActivity extends AppCompatActivity {
         if (takePicture.resolveActivity(getPackageManager()) != null) {
             File photo = null;
             photo = getPhotoFile();
+            this.image = photo;
             if (photo != null)
             {
                 pathToFile = photo.getAbsolutePath();
@@ -191,6 +277,11 @@ public class CameraActivity extends AppCompatActivity {
             Log.d("Test","Exception: " + e.toString());
         }
         return image;
+    }
+
+    private void goToHomePage(){
+        Intent intent = new Intent(this, HomePage.class);
+        startActivity(intent);
     }
 
 }
