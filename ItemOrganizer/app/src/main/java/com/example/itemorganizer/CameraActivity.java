@@ -1,6 +1,7 @@
 package com.example.itemorganizer;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,10 +9,16 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -20,7 +27,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.itemorganizer.HomePage.FamilyRAdapter;
 import com.example.itemorganizer.HomePage.HomePage;
+import com.google.api.Distribution;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,6 +37,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -44,26 +55,33 @@ public class CameraActivity extends AppCompatActivity {
     EditText item_tags;
     File image;
 
+    private RecyclerView recyclerView;
+    private MemberRAdapter mAdapter;
+
     private final static String TAG = CameraActivity.class.toString();
     private HashMap<String, String> id_names;
-    private static final String URL = "items/add/";
+//    private static final String URL = "items/add/";
 
     private final static String URL = "family/info/members/";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_camera);
+        initRecyclerView(this.findViewById(android.R.id.content));
+        showMembers();
         imageView = (ImageView) findViewById(R.id.image);
         if (Build.VERSION.SDK_INT >= 23){
             requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
         }
 
-        pictureBtn = (Button) findViewById(R.id.PictureBtn);
+        pictureBtn = (Button) findViewById(R.id);
         addbtn = (Button) findViewById(R.id.add_item);
-
-        item_name = findViewById(R.id.add_item_name);
-        item_desc = findViewById(R.id.add_item_desc);
-        item_tags = findViewById(R.id.add_item_tags);
+//
+//        item_name = findViewById(R.id.add_item_name);
+//        item_desc = findViewById(R.id.add_item_desc);
+//        item_tags = findViewById(R.id.add_item_tags);
 
 
         pictureBtn.setOnClickListener(new View.OnClickListener() {
@@ -106,15 +124,40 @@ public class CameraActivity extends AppCompatActivity {
         }
         return id_names;
     }
+    // Code for Privacy Settings
 
+    private void initRecyclerView(View view){
+        recyclerView = view.findViewById(R.id.family_recycler);
+
+        recyclerView.setHasFixedSize(true);
+        //might be wrong
+        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        this.mAdapter = new MemberRAdapter(new ArrayList<ArrayList<String>>());
+        recyclerView.setAdapter(mAdapter);
+    }
+
+    private void showMembers(){
+        //get
+        HashMap<String, String> allmembers = getMembers();
+        ArrayList<String> member_ids = new ArrayList<String>(allmembers.keySet());
+
+        //put add names
+        for (String id : member_ids){
+            ArrayList<String> tempMember = new ArrayList<>();
+            tempMember.add(id);                 //ID as position [0]
+            tempMember.add(allmembers.get(id)); // Name as position [1] in array
+            this.mAdapter.addAndNotify(tempMember);
+        }
+    }
+    ////////////////////////////////////////
     public void submitItem(View view) {
 
         String name = item_name.getText().toString();
         String desc = item_desc.getText().toString();
         String tags = item_tags.getText().toString();
 
-        if( name != null && desc != null && tags!= null && bitmap != null){
-            if(submitItem(name, desc, tags, bitmap)){
+        if( name != null && desc != null && tags!= null){
+            if(submitItem(name, desc, tags)){
                 Log.d(TAG, name + "   " + desc + "   " + tags);
                 Intent intent = new Intent(this, HomePage.class);
                 startActivity(intent);
@@ -134,7 +177,7 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean submitItem(String name, String desc, String tags, Bitmap bitmap){
+    private Boolean submitItem(String name, String desc, String tags){
         BackendItem backendItem = new BackendItem(UserSingleton.IP + URL, BackendReq.POST);
 
         if (backendItem.getResponse_code() == 200){
