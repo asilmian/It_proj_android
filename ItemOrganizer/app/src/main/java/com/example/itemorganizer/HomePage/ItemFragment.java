@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.itemorganizer.CameraActivity;
-import com.example.itemorganizer.FamilyLogIn;
 import com.example.itemorganizer.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
