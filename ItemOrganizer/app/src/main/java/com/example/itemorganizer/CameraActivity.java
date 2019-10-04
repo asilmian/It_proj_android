@@ -15,7 +15,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.itemorganizer.HomePage.HomePage;
 
@@ -30,6 +32,7 @@ public class CameraActivity extends AppCompatActivity {
 
     ImageView imageView;
     String pathToFile;
+    Bitmap bitImg;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,16 +56,33 @@ public class CameraActivity extends AppCompatActivity {
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 submitItem(view);
+                submitItem(view);
             }
         });
     }
     public void submitItem(View view) {
 
 
-        //Check if submittable
+        //bitImg;
+        EditText nameText = (EditText) findViewById(R.id.item_name);
+        EditText descText = (EditText) findViewById(R.id.item_description);
+        String itemName = nameText.getText().toString();
+        String itemDesc = descText.getText().toString();
+        if (itemName == "" || itemName == null)
+        {
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(getApplicationContext(), "Enter Item Name", duration);
+            toast.show();
+            return;
+        }
 
-
+        if (bitImg == null)
+        {
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(getApplicationContext(), "Take an image of the Item!", duration);
+            toast.show();
+            return;
+        }
         Intent intent = new Intent(this, HomePage.class);
         startActivity(intent);
     }
@@ -73,8 +93,8 @@ public class CameraActivity extends AppCompatActivity {
         {
             if (requestCode == 1)
             {
-                Bitmap bitmap = BitmapFactory.decodeFile(pathToFile);
-                imageView.setImageBitmap(bitmap);
+                bitImg = BitmapFactory.decodeFile(pathToFile);
+                imageView.setImageBitmap(bitImg);
             }
         }
     }
