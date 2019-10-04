@@ -96,7 +96,7 @@ public class ItemFragment extends Fragment {
                 tempData.add(raw_data.getJSONObject(key).getString("name")); // First element
                 tempData.add(raw_data.getJSONObject(key).getString("desc")); // Second Element
                 tempData.add(raw_data.getJSONObject(key).getString("tags")); // Third Element
-                tempData.add(raw_data.getJSONObject(key).getString("tags")); // Third Element
+                tempData.add(raw_data.getJSONObject(key).getString("image")); // Fourth Element
 
                 result.add(tempData);
             }

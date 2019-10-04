@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,13 +27,15 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
         public TextView name;
         public TextView desc;
         public TextView tags;
+        public ImageView image;
         public CardView cardView;
         public ItemViewHolder(View v){
             super(v);
             name = v.findViewById(R.id.item_card_name);
             desc = v.findViewById(R.id.item_card_description);
             tags = v.findViewById(R.id.item_card_tags);
-            cardView = v.findViewById(R.id.item_card_image);
+            image = v.findViewById(R.id.item_card_image);
+            cardView = v.findViewById(R.id.card_view);
         }
     }
 
@@ -61,6 +64,7 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
         viewHolder.name.setText(items.get(i).get(0)); //Name
         viewHolder.desc.setText(items.get(i).get(1)); //Description
         viewHolder.tags.setText(items.get(i).get(2)); //Tags
+        viewHolder.image.setImageURI(items.get(i).get(3)); //Img url
 
 
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
