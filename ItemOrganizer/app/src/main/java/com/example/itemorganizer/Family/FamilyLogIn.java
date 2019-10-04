@@ -1,8 +1,7 @@
-package com.example.itemorganizer;
+package com.example.itemorganizer.Family;
 
 import android.content.Intent;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,11 +10,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.itemorganizer.BackendItem;
+import com.example.itemorganizer.BackendReq;
 import com.example.itemorganizer.HomePage.HomePage;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.itemorganizer.R;
+import com.example.itemorganizer.UserSingleton;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.GetTokenResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -47,35 +47,24 @@ public class FamilyLogIn extends AppCompatActivity {
 
     //send family Token to verify
     public void sendToken(View view){
-        mAuth.getCurrentUser().getIdToken(true)
-                .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<GetTokenResult> task) {
-                        if(task.isSuccessful()){
-                            //get user token
-                            String token = task.getResult().getToken();
-                            Integer result = sendBackend(token);
-                            if(result == 1){
-                                goToHomePage();
-                            }
-                            else if (result == 0){
-                                Toast toast = Toast.makeText(FamilyLogIn.this, "Connection to backend failed",
-                                        Toast.LENGTH_SHORT);
-                                toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
-                                toast.show();
-                            }
-                        }
-                        else{
-                            Log.e(TAG, task.getResult().toString());
-                        }
-                    }
-                });
+        int result = sendBackend(UserSingleton.getInstance().getUserToken());
+
+        if(result == 1){
+            goToHomePage();
+        }
+        else if (result == 0){
+            Toast toast = Toast.makeText(FamilyLogIn.this, "Connection to backend failed",
+                    Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+            toast.show();
+        }
+
     }
 
 
     //send details to join family
-    private Integer sendBackend(String token){
-        BackendItem backendItem = new BackendItem(URL);
+    private int sendBackend(String token){
+        BackendItem backendItem = new BackendItem(URL, BackendReq.POST);
 
         //add required headers
         HashMap<String,String> headers = new HashMap<>();
@@ -85,7 +74,7 @@ public class FamilyLogIn extends AppCompatActivity {
         //make body
         makeSignUpBody(backendItem);
 
-        BackendPost.send_req(backendItem);
+        BackendReq.send_req(backendItem);
 
         //if token is valid
         if (backendItem.getResponse_code().equals(200)){
