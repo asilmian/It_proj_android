@@ -64,7 +64,7 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
         viewHolder.name.setText(items.get(i).get(0)); //Name
         viewHolder.desc.setText(items.get(i).get(1)); //Description
         viewHolder.tags.setText(items.get(i).get(2)); //Tags
-        viewHolder.image.setImageURI(items.get(i).get(3)); //Img url
+//        viewHolder.image.setImageURI(items.get(i).get(3)); //Img url
 
 
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
