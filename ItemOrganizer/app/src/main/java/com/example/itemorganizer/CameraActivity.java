@@ -29,13 +29,24 @@ import android.widget.Toast;
 
 import com.example.itemorganizer.HomePage.FamilyRAdapter;
 import com.example.itemorganizer.HomePage.HomePage;
+
 import com.google.api.Distribution;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Ref;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,16 +65,20 @@ public class CameraActivity extends AppCompatActivity {
     EditText item_desc;
     EditText item_tags;
     File image;
+    FirebaseStorage fire_storage;
+    StorageReference storageRef;
+    String ref;
 
     private RecyclerView recyclerView;
     private MemberRAdapter mAdapter;
 
     private final static String TAG = CameraActivity.class.toString();
     private HashMap<String, String> id_names;
-//    private static final String URL = "items/add/";
 
+    private static final String ADD_URL = "item/add/";
+    private static final String GET_IMAGE_REF = "item/add/ref/";
     private final static String URL = "family/info/members/";
-
+  
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,9 +87,7 @@ public class CameraActivity extends AppCompatActivity {
         initRecyclerView(this.findViewById(android.R.id.content));
         showMembers();
         imageView = (ImageView) findViewById(R.id.image);
-        if (Build.VERSION.SDK_INT >= 23){
-            requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
-        }
+        requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
 
         pictureBtn = (Button) findViewById(R.id);
         addbtn = (Button) findViewById(R.id.add_item);
@@ -93,7 +106,7 @@ public class CameraActivity extends AppCompatActivity {
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 submitItem(view);
+                 submitItemCheck(view);
             }
         });
     }
@@ -104,11 +117,23 @@ public class CameraActivity extends AppCompatActivity {
         this.id_names = getMembers();
 
         //display members
+
+        //initialize firestore
+        fire_storage = FirebaseStorage.getInstance();
+        storageRef = fire_storage.getReference();
+
+        UtilityFunctions.clearView(item_desc, item_name, item_tags);
+
+        //get new item reference from backend
+        ref = getRef();
     }
 
+
+    //returns all members in users current family
     private HashMap<String,String> getMembers(){
         HashMap<String,String> id_names = new HashMap<>();
         BackendItem backendItem = new BackendItem(UserSingleton.IP + URL, BackendReq.GET);
+        backendItem.setHeaders(new HashMap<String, String>());
         BackendReq.send_req(backendItem);
 
         try{
@@ -124,8 +149,8 @@ public class CameraActivity extends AppCompatActivity {
         }
         return id_names;
     }
+  
     // Code for Privacy Settings
-
     private void initRecyclerView(View view){
         recyclerView = view.findViewById(R.id.family_recycler);
 
@@ -149,25 +174,16 @@ public class CameraActivity extends AppCompatActivity {
             this.mAdapter.addAndNotify(tempMember);
         }
     }
-    ////////////////////////////////////////
-    public void submitItem(View view) {
+
+    //checks if there is enough information to check items
+    public void submitItemCheck(View view) {
 
         String name = item_name.getText().toString();
         String desc = item_desc.getText().toString();
         String tags = item_tags.getText().toString();
 
-        if( name != null && desc != null && tags!= null){
-            if(submitItem(name, desc, tags)){
-                Log.d(TAG, name + "   " + desc + "   " + tags);
-                Intent intent = new Intent(this, HomePage.class);
-                startActivity(intent);
-            }
-            else{
-                Toast toast = Toast.makeText(CameraActivity.this, "Connection to backend failed",
-                        Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
-                toast.show();
-            }
+        if( !name.equals("") && !desc.equals("") && !tags.equals("") && (image != null)){
+            submitItem(name, desc, tags, image);
         }
         else{
             Toast toast = Toast.makeText(CameraActivity.this, "Please complete all fields",
@@ -176,16 +192,102 @@ public class CameraActivity extends AppCompatActivity {
             toast.show();
         }
     }
+  
+    //submits an item to the backend.
+    private void submitItem(final String name, final String desc, final String tags, File image){
 
-    private Boolean submitItem(String name, String desc, String tags){
-        BackendItem backendItem = new BackendItem(UserSingleton.IP + URL, BackendReq.POST);
+        //create backend post request
+        final BackendItem backendItem = new BackendItem(UserSingleton.IP + ADD_URL, BackendReq.POST);
+        HashMap<String, String> headers = new HashMap<>();
+        headers.putIfAbsent("Content-Type", "application/json");
+        backendItem.setHeaders(headers);
 
-        if (backendItem.getResponse_code() == 200){
-            return true;
+        //get new refernce in firebase storage
+        if(BuildConfig.DEBUG && ref.equals("")){
+            throw new AssertionError();
         }
-        else{
-            return false;
+        final StorageReference newRef = storageRef.child(ref);
+        Uri file = Uri.fromFile(image);
+
+        //upload file to storage
+        UploadTask uploadTask = newRef.putFile(file);
+        // Register observers to listen for when the download is done or if it fails
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+                Log.e(TAG, "upload failed   " + exception.toString());
+
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                //generate add item body
+                try {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.accumulate("name", name);
+                    jsonObject.accumulate("description", desc);
+                    jsonObject.accumulate("tags", UtilityFunctions.convert(tags.split(","))); //convert tags to array.
+                    jsonObject.accumulate("image", newRef.getPath());
+                    jsonObject.accumulate("visibility", "global");
+                    backendItem.setBody(jsonObject.toString());
+                }catch (JSONException e){
+                    Log.e(TAG, e.toString());
+                }
+                Log.d(TAG, backendItem.getBody());
+
+                //send item information to flask backend
+                BackendReq.send_req(backendItem);
+
+                if (backendItem.getResponse_code() == 200){
+                    goToHomePage();
+                }
+                else{
+                    Toast toast = Toast.makeText(CameraActivity.this, "Connection to backend",
+                            Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+                    toast.show();
+                }
+            }
+        });
+
+        // code to implement progress bar.
+//        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                double progress = 100.0 * (taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+//                System.out.println("Upload is " + progress + "% done");
+//                int currentprogress = (int) progress;
+//                progressBar.setProgress(currentprogress);
+//            }
+//        }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+//                System.out.println("Upload is paused");
+//            }
+//        });
+    }
+
+
+    //gets a new reference (item image name) from the backend
+    private String getRef(){
+        BackendItem item = new BackendItem(UserSingleton.IP + GET_IMAGE_REF, BackendReq.GET);
+        item.setHeaders(new HashMap<String, String>());
+        BackendReq.send_req(item);
+        String result = "";
+        try{
+            JSONObject raw_data = new JSONObject(item.getResponse());
+            JSONArray keys  = raw_data.names();
+            String key = keys.getString(0);
+            String number = raw_data.getString(key);
+            result = key + "/" + number + ".jpg";
+
+        } catch (Exception e){
+            Log.e(TAG, e.toString());
+            Log.e(TAG, "Reference not returned");
         }
+        return result;
     }
 
 
@@ -209,6 +311,7 @@ public class CameraActivity extends AppCompatActivity {
         if (takePicture.resolveActivity(getPackageManager()) != null) {
             File photo = null;
             photo = getPhotoFile();
+            this.image = photo;
             if (photo != null)
             {
                 pathToFile = photo.getAbsolutePath();
@@ -234,6 +337,11 @@ public class CameraActivity extends AppCompatActivity {
             Log.d("Test","Exception: " + e.toString());
         }
         return image;
+    }
+
+    private void goToHomePage(){
+        Intent intent = new Intent(this, HomePage.class);
+        startActivity(intent);
     }
 
 }
