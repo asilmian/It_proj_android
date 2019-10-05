@@ -56,6 +56,7 @@ public class BackendReq {
         if (item.getBody() != null) {
             setPostRequestContent(conn, item.getBody());
             Log.d("post body:", item.getBody());
+            Log.d("conn", conn.getOutputStream().toString());
         }
 
 

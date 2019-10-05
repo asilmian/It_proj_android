@@ -41,6 +41,7 @@ public class BackendItem {
     public void setHeaders(HashMap<String, String> headers) {
         headers.putIfAbsent("Authorization", "Bearer " + UserSingleton.getInstance().getUserToken());
         headers.putIfAbsent("User-Agent", "Android App");
+        headers.putIfAbsent("Connection", "close");
         this.headers = headers;
     }
 

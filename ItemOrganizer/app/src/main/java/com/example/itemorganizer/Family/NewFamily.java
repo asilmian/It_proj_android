@@ -14,6 +14,7 @@ import com.example.itemorganizer.BackendItem;
 import com.example.itemorganizer.BackendReq;
 import com.example.itemorganizer.HomePage.HomePage;
 import com.example.itemorganizer.R;
+import com.example.itemorganizer.UserSingleton;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONException;
@@ -26,7 +27,7 @@ public class NewFamily extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText eFname;
     private final static String TAG = NewFamily.class.toString();
-    private final static String URL = "http://167.71.243.144:5000/family/create/" ;
+    private final static String URL = UserSingleton.IP +  "family/create/" ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

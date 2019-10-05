@@ -11,6 +11,7 @@ import com.example.itemorganizer.BackendItem;
 import com.example.itemorganizer.BackendReq;
 import com.example.itemorganizer.Family.FamilyLogIn;
 import com.example.itemorganizer.R;
+import com.example.itemorganizer.UserSingleton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
@@ -32,7 +33,7 @@ public class FamilyFragment extends Fragment {
     private RecyclerView recyclerView;
     private FamilyRAdapter mAdapter;
 
-    private final static String URL = "http://167.71.243.144:5000/user/info/families";
+    private final static String URL = UserSingleton.IP + "user/info/families";
 
 
     @Nullable
@@ -56,7 +57,7 @@ public class FamilyFragment extends Fragment {
     }
 
     private void initRecyclerView(View view){
-        recyclerView = view.findViewById(R.id.family_recycler);
+        recyclerView = view.findViewById(R.id.privacy_recycler);
 
         recyclerView.setHasFixedSize(true);
 
