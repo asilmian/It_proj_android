@@ -1,11 +1,13 @@
 package com.example.itemorganizer.HomePage;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.example.itemorganizer.BackendItem;
 import com.example.itemorganizer.BackendReq;
@@ -17,6 +19,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -32,8 +35,9 @@ public class FamilyFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private FamilyRAdapter mAdapter;
+    private ProgressBar spinner;
 
-    private final static String URL = UserSingleton.IP + "user/info/families";
+    private final static String URL = UserSingleton.IP + "user/info/families/";
 
 
     @Nullable
@@ -50,7 +54,8 @@ public class FamilyFragment extends Fragment {
                 startActivity(new Intent(getActivity(), FamilyLogIn.class));
             }
         });
-
+        spinner = view.findViewById(R.id.family_frag_prog_bar);
+        spinner.setVisibility(View.VISIBLE);
         initRecyclerView(view);
         showUserFams();
         return view;
@@ -71,14 +76,12 @@ public class FamilyFragment extends Fragment {
         BackendItem get_req = new BackendItem(URL, BackendItem.GET);
         get_req.setHeaders(new HashMap<String, String>());
         Log.d(TAG,get_req.getHeaders().toString());
-        BackendReq.send_req(get_req);
 
-        ArrayList<String> names = getFamNames(get_req);
-
-
-        //put fams on display
-        for (String name : names){
-            this.mAdapter.addAndNotify(name);
+        try{
+            new GetFamilyMembers().execute(get_req);
+        }
+        catch (Exception e){
+            Log.e(TAG, e.toString());
         }
     }
 
@@ -97,5 +100,30 @@ public class FamilyFragment extends Fragment {
             Log.e(TAG, e.toString());
         }
         return result;
+    }
+
+    private class GetFamilyMembers extends AsyncTask<BackendItem, Void, BackendItem> {
+        @Override
+        protected BackendItem doInBackground(BackendItem... items) {
+            // params comes from the execute() call: params[0] is the url.
+            try {
+                return BackendReq.httpReq(items[0]);
+            } catch (IOException e) {
+                Log.e(BackendReq.class.toString(), e.toString());
+                items[0].setResponse_code(777);
+                items[0].setResponse("Connection failed to backend or request is invalid");
+                return items[0];
+            }
+        }
+
+        @Override
+        protected void onPostExecute(BackendItem item) {
+            super.onPostExecute(item);
+            ArrayList<String> famNames = getFamNames(item);
+            for (String names : famNames) {
+                mAdapter.addAndNotify(names);
+            }
+            spinner.setVisibility(View.GONE);
+        }
     }
 }

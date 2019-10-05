@@ -44,6 +44,7 @@ public class BackendItem {
         headers.putIfAbsent("Authorization", "Bearer " + UserSingleton.getInstance().getUserToken());
         headers.putIfAbsent("User-Agent", "Android App");
         headers.putIfAbsent("Connection", "close");
+        headers.putIfAbsent("Content-Type", "application/json");
         this.headers = headers;
     }
 

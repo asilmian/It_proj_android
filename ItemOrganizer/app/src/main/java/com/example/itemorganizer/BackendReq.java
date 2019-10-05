@@ -50,7 +50,11 @@ public class BackendReq {
 
         //add content to the body
         if (item.getBody() != null) {
-            setPostRequestContent(conn, item.getBody());
+            try {
+                setPostRequestContent(conn, item.getBody());
+            }catch (Exception e){
+                Log.e(TAG, "unable to write to body   "+ e.toString());
+            }
             Log.d("post body:", item.getBody());
             Log.d("conn", conn.getOutputStream().toString());
         }
@@ -60,8 +64,12 @@ public class BackendReq {
         conn.connect();
 
         item.setResponse_code(conn.getResponseCode());
-        item.setResponse(readInputStream(conn.getInputStream()));
-
+        if(item.getResponse_code() >= 400){
+            item.setResponse("No response");
+        }
+        else {
+            item.setResponse(readInputStream(conn.getInputStream()));
+        }
         return item;
 
     }

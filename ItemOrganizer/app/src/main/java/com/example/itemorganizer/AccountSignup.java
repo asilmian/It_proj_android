@@ -133,7 +133,6 @@ public class AccountSignup extends AppCompatActivity {
 
         //create headers
         HashMap<String,String> headers = new HashMap<>();
-        headers.putIfAbsent("Content-Type", "application/json");
         backendItem.setHeaders(headers);
 
         //make body

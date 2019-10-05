@@ -45,10 +45,12 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.ScheduledExecutorService;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
@@ -75,6 +77,7 @@ public class AddItemActivity extends AppCompatActivity {
     private static final String ADD_URL = "item/add/";
     private static final String GET_IMAGE_REF = "item/add/ref/";
     private final static String URL = "family/info/members/";
+    private final static String DETECTION = "detection/";
   
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -323,8 +326,37 @@ public class AddItemActivity extends AppCompatActivity {
                 Uri photoURI = FileProvider.getUriForFile( AddItemActivity.this, "com.example.itemorganizer.fileprovider", photo);
                 takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePicture,1);
+
             }
         }
+    }
+
+    public void getDesc(View view){
+        StorageReference newRef = storageRef.child(ref);
+        Uri file = Uri.fromFile(image);
+        UploadTask uploadTask = newRef.putFile(file);
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                BackendItem item = new BackendItem(UserSingleton.IP + DETECTION, BackendItem.POST);
+                item.setHeaders(new HashMap<String, String>());
+
+                //generate add item body
+                try {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.accumulate("image", ref);
+                    item.setBody(jsonObject.toString());
+                }catch (JSONException e){
+                    Log.e(TAG, e.toString());
+                }
+                Log.d(TAG, item.getBody());
+
+                //send item information to flask backend
+                BackendReq.send_req(item);
+
+                Log.d(TAG, item.getResponse());
+            }
+        });
     }
 
     private File getPhotoFile(){

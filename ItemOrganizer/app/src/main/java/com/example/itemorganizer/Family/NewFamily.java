@@ -3,11 +3,13 @@ package com.example.itemorganizer.Family;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.itemorganizer.BackendItem;
@@ -20,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class NewFamily extends AppCompatActivity {
@@ -28,18 +31,22 @@ public class NewFamily extends AppCompatActivity {
     private EditText eFname;
     private final static String TAG = NewFamily.class.toString();
     private final static String URL = UserSingleton.IP +  "family/create/" ;
+    private ProgressBar spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_family);
         eFname = findViewById(R.id.familyName);
+        spinner = findViewById(R.id.newFamilyProgressBar);
+        spinner.setVisibility(View.GONE);
 
         mAuth = FirebaseAuth.getInstance();
     }
 
     //create family
     public void createFamily(View view){
+        spinner.setVisibility(View.VISIBLE);
         if(sendBackend()){
             goToHomePage();
         }
@@ -64,7 +71,11 @@ public class NewFamily extends AppCompatActivity {
         //make body
         makeSignUpBody(backendItem);
 
-        BackendReq.send_req(backendItem);
+        try{
+            backendItem = new NewFamilyTask().execute(backendItem).get();
+        }catch (Exception e){
+            Log.e(TAG, e.toString());
+        }
 
         if (backendItem.getResponse_code().equals(200)){
             return true;
@@ -83,6 +94,26 @@ public class NewFamily extends AppCompatActivity {
             backendItem.setBody(jsonObject.toString());
         }catch (JSONException e){
             Log.e(TAG, e.toString());
+        }
+    }
+
+    private class NewFamilyTask extends AsyncTask<BackendItem, Void, BackendItem> {
+        @Override
+        protected BackendItem doInBackground(BackendItem... items) {
+            // params comes from the execute() call: params[0] is the url.
+            try {
+                BackendReq.httpReq(items[0]);
+            } catch (IOException e) {
+                Log.e(BackendReq.class.toString(), e.toString());
+                items[0].setResponse_code(777);
+                items[0].setResponse("Connection failed to backend or request is invalid");
+            }
+            return items[0];
+        }
+
+        @Override
+        protected void onPostExecute(BackendItem item) {
+            super.onPostExecute(item);
         }
     }
 
