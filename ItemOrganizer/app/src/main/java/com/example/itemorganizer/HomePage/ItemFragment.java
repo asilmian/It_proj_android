@@ -7,13 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-<<<<<<< HEAD
 import com.example.itemorganizer.AddItem.AddItemActivity;
-=======
 import com.example.itemorganizer.BackendItem;
 import com.example.itemorganizer.BackendReq;
-import com.example.itemorganizer.CameraActivity;
->>>>>>> master
 import com.example.itemorganizer.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
