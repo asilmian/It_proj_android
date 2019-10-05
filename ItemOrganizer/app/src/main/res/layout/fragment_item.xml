@@ -13,190 +13,46 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="49dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tableRow">
 
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.24000001">
 
-
-            <TableLayout
+            <TextView
+                android:id="@+id/textView7"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="43dp"
+                android:background="@android:color/holo_green_light"
+                android:text="@string/family_manager"
+                android:textAlignment="center"
+                android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                android:textSize="24sp" />
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/imageView3"
-                        android:layout_width="143dp"
-                        android:layout_height="143dp"
-                        app:srcCompat="@mipmap/ic_launcher_round" />
-
-                    <Space
-                        android:layout_width="20dp"
-                        android:layout_height="match_parent" />
-
-                    <Space
-                        android:layout_width="20dp"
-                        android:layout_height="match_parent" />
-
-                    <TextView
-                        android:id="@+id/description3"
-                        android:layout_width="228dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/item_desc" />
-
-                </TableRow>
-
-            </TableLayout>
-
-            <Space
+            <View
+                android:id="@+id/divider3"
                 android:layout_width="match_parent"
-                android:layout_height="30dp" />
+                android:layout_height="5dp"
+                android:background="?android:attr/listDivider" />
 
-            <TableLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/item_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical">
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+            </androidx.recyclerview.widget.RecyclerView>
 
-                    <ImageView
-                        android:id="@+id/imageView7"
-                        android:layout_width="143dp"
-                        android:layout_height="143dp"
-                        app:srcCompat="@mipmap/ic_launcher_round" />
-
-                    <Space
-                        android:layout_width="20dp"
-                        android:layout_height="match_parent" />
-
-                    <Space
-                        android:layout_width="20dp"
-                        android:layout_height="match_parent" />
-
-                    <TextView
-                        android:id="@+id/description2"
-                        android:layout_width="228dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/item_desc" />
-
-                </TableRow>
-
-            </TableLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="30dp" />
-
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/imageView9"
-                        android:layout_width="143dp"
-                        android:layout_height="143dp"
-                        app:srcCompat="@mipmap/ic_launcher_round" />
-
-                    <Space
-                        android:layout_width="20dp"
-                        android:layout_height="match_parent" />
-
-                    <Space
-                        android:layout_width="20dp"
-                        android:layout_height="match_parent" />
-
-                    <TextView
-                        android:id="@+id/description4"
-                        android:layout_width="228dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/item_desc" />
-
-                </TableRow>
-
-            </TableLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="30dp" />
-
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/imageView6"
-                        android:layout_width="143dp"
-                        android:layout_height="143dp"
-                        app:srcCompat="@mipmap/ic_launcher_round" />
-
-                    <Space
-                        android:layout_width="20dp"
-                        android:layout_height="match_parent" />
-
-                    <Space
-                        android:layout_width="20dp"
-                        android:layout_height="match_parent" />
-
-                    <TextView
-                        android:id="@+id/textView5"
-                        android:layout_width="228dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/item_desc" />
-
-                </TableRow>
-
-            </TableLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="30dp" />
-
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/imageView5"
-                        android:layout_width="143dp"
-                        android:layout_height="143dp"
-                        app:srcCompat="@mipmap/ic_launcher_round" />
-
-                    <Space
-                        android:layout_width="20dp"
-                        android:layout_height="match_parent" />
-
-                    <Space
-                        android:layout_width="20dp"
-                        android:layout_height="match_parent" />
-
-                    <TextView
-                        android:id="@+id/description5"
-                        android:layout_width="228dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/item_desc" />
-
-                </TableRow>
-
-            </TableLayout>
         </LinearLayout>
     </ScrollView>
 
@@ -223,6 +79,7 @@
             android:textStyle="italic" />
 
     </TableRow>
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_new_item"
         android:layout_width="wrap_content"
@@ -234,7 +91,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.921"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.876"
         app:rippleColor="@color/colorPrimary"
         app:srcCompat="@android:drawable/ic_input_add" />
