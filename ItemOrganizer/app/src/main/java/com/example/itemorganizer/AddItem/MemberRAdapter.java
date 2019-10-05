@@ -1,11 +1,13 @@
-package com.example.itemorganizer;
+package com.example.itemorganizer.AddItem;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.example.itemorganizer.R;
 
@@ -23,13 +25,10 @@ public class MemberRAdapter extends RecyclerView.Adapter<MemberRAdapter.MemberVi
     private ArrayList<ArrayList<String>> members;
 
     public static class MemberViewHolder extends RecyclerView.ViewHolder{
-        public TextView tx;
-        public CardView cardView;
-        public String id;
+        public ToggleButton text;
         public MemberViewHolder(View v){
             super(v);
-            tx = v.findViewById(R.id.memberName);
-            cardView = v.findViewById(R.id.card_view);
+            text = v.findViewById(R.id.memberName);
         }
     }
 
@@ -53,15 +52,19 @@ public class MemberRAdapter extends RecyclerView.Adapter<MemberRAdapter.MemberVi
     @Override
     public void onBindViewHolder(@NonNull final MemberViewHolder viewHolder, int i) {
 
+        final ArrayList<String> member = members.get(i);
+
         Log.d(TAG, "onBindViewHolder: called with i: " + i);
 
-        viewHolder.id = (members.get(i).get(0)); //Get and Store ID
-        viewHolder.tx.setText(members.get(i).get(1)); //Set name
+        viewHolder.text.setText(members.get(i).get(1));
+        viewHolder.text.setTextOff(members.get(i).get(1)); //Set name
+        viewHolder.text.setTextOn(members.get(i).get(1)); //Set name
 
-        viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
+
+        viewHolder.text.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), viewHolder.id  , Toast.LENGTH_SHORT).show();
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                member.add(2, Boolean.toString(isChecked));
             }
         });
 
@@ -71,6 +74,17 @@ public class MemberRAdapter extends RecyclerView.Adapter<MemberRAdapter.MemberVi
     public int getItemCount() {
         Log.d(TAG, "getItemCount: size: " + members.size());
         return members.size();
+    }
+
+    public ArrayList<String> getCheckedItems() {
+        ArrayList<String> checkedItems = new ArrayList<>();
+        for (int i = 0; i < getItemCount(); i++) {
+            ArrayList<String> member = members.get(i);
+            if (member.size() > 2 && member.get(2).equals("true")){
+                checkedItems.add(member.get(0));
+            }
+        }
+        return checkedItems;
     }
 
 

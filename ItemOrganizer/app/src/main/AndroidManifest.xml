@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".CameraActivity"></activity>
+        <activity android:name=".AddItem.AddItemActivity"></activity>
         <activity android:name=".AccountSignup" />
         <activity android:name=".AccountLogin" />
         <activity android:name=".Family.NewFamily" />

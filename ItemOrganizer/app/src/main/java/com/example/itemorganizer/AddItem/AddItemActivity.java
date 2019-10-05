@@ -1,12 +1,10 @@
-package com.example.itemorganizer;
+package com.example.itemorganizer.AddItem;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 
@@ -14,11 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -27,16 +25,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.itemorganizer.HomePage.FamilyRAdapter;
+import com.example.itemorganizer.BackendItem;
+import com.example.itemorganizer.BackendReq;
+import com.example.itemorganizer.BuildConfig;
 import com.example.itemorganizer.HomePage.HomePage;
 
-import com.google.api.Distribution;
+import com.example.itemorganizer.R;
+import com.example.itemorganizer.UserSingleton;
+import com.example.itemorganizer.UtilityFunctions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnPausedListener;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -46,16 +45,14 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.Ref;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
-public class CameraActivity extends AppCompatActivity {
+public class AddItemActivity extends AppCompatActivity {
 
     ImageView imageView;
     String pathToFile;
@@ -72,7 +69,7 @@ public class CameraActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MemberRAdapter mAdapter;
 
-    private final static String TAG = CameraActivity.class.toString();
+    private final static String TAG = AddItemActivity.class.toString();
     private HashMap<String, String> id_names;
 
     private static final String ADD_URL = "item/add/";
@@ -83,18 +80,16 @@ public class CameraActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_camera);
-        initRecyclerView(this.findViewById(android.R.id.content));
-        showMembers();
-        imageView = (ImageView) findViewById(R.id.image);
+        setContentView(R.layout.activity_add_item);
+        imageView =  findViewById(R.id.image);
         requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
 
-        pictureBtn = (Button) findViewById(R.id);
-        addbtn = (Button) findViewById(R.id.add_item);
-//
-//        item_name = findViewById(R.id.add_item_name);
-//        item_desc = findViewById(R.id.add_item_desc);
-//        item_tags = findViewById(R.id.add_item_tags);
+        pictureBtn = findViewById(R.id.PictureBtn);
+        addbtn = findViewById(R.id.submit_item_button);
+
+        item_name = findViewById(R.id.add_item_name);
+        item_desc = findViewById(R.id.add_item_desc);
+        item_tags = findViewById(R.id.add_item_tags);
 
 
         pictureBtn.setOnClickListener(new View.OnClickListener() {
@@ -115,6 +110,8 @@ public class CameraActivity extends AppCompatActivity {
     public void onStart(){
         super.onStart();
         this.id_names = getMembers();
+        initRecyclerView(this.findViewById(android.R.id.content));
+        showMembers();
 
         //display members
 
@@ -152,19 +149,26 @@ public class CameraActivity extends AppCompatActivity {
   
     // Code for Privacy Settings
     private void initRecyclerView(View view){
-        recyclerView = view.findViewById(R.id.family_recycler);
+        recyclerView = view.findViewById(R.id.privacy_recycler);
 
         recyclerView.setHasFixedSize(true);
         //might be wrong
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        RecyclerView.LayoutManager mManager = new GridLayoutManager(getApplicationContext(), 3);
+        recyclerView.setLayoutManager(mManager);
         this.mAdapter = new MemberRAdapter(new ArrayList<ArrayList<String>>());
         recyclerView.setAdapter(mAdapter);
     }
 
     private void showMembers(){
+        // add global
+        ArrayList<String> global = new ArrayList<>();
+        global.add("global");
+        global.add("All");
+        this.mAdapter.addAndNotify(global);
+
         //get
         HashMap<String, String> allmembers = getMembers();
-        ArrayList<String> member_ids = new ArrayList<String>(allmembers.keySet());
+        ArrayList<String> member_ids = new ArrayList<>(allmembers.keySet());
 
         //put add names
         for (String id : member_ids){
@@ -182,11 +186,12 @@ public class CameraActivity extends AppCompatActivity {
         String desc = item_desc.getText().toString();
         String tags = item_tags.getText().toString();
 
-        if( !name.equals("") && !desc.equals("") && !tags.equals("") && (image != null)){
+        if( !name.equals("") && !desc.equals("") && !tags.equals("") && (image != null)
+        && mAdapter.getCheckedItems().size()>0){
             submitItem(name, desc, tags, image);
         }
         else{
-            Toast toast = Toast.makeText(CameraActivity.this, "Please complete all fields",
+            Toast toast = Toast.makeText(AddItemActivity.this, "Please complete all fields",
                     Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
             toast.show();
@@ -230,7 +235,7 @@ public class CameraActivity extends AppCompatActivity {
                     jsonObject.accumulate("description", desc);
                     jsonObject.accumulate("tags", UtilityFunctions.convert(tags.split(","))); //convert tags to array.
                     jsonObject.accumulate("image", newRef.getPath());
-                    jsonObject.accumulate("visibility", "global");
+                    jsonObject.accumulate("visibility", UtilityFunctions.convert(mAdapter.getCheckedItems()));
                     backendItem.setBody(jsonObject.toString());
                 }catch (JSONException e){
                     Log.e(TAG, e.toString());
@@ -244,7 +249,7 @@ public class CameraActivity extends AppCompatActivity {
                     goToHomePage();
                 }
                 else{
-                    Toast toast = Toast.makeText(CameraActivity.this, "Connection to backend",
+                    Toast toast = Toast.makeText(AddItemActivity.this, "Connection to backend",
                             Toast.LENGTH_SHORT);
                     toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
                     toast.show();
@@ -315,7 +320,7 @@ public class CameraActivity extends AppCompatActivity {
             if (photo != null)
             {
                 pathToFile = photo.getAbsolutePath();
-                Uri photoURI = FileProvider.getUriForFile( CameraActivity.this, "com.example.itemorganizer.fileprovider", photo);
+                Uri photoURI = FileProvider.getUriForFile( AddItemActivity.this, "com.example.itemorganizer.fileprovider", photo);
                 takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePicture,1);
             }

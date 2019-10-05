@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.itemorganizer.CameraActivity;
+import com.example.itemorganizer.AddItem.AddItemActivity;
 import com.example.itemorganizer.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -26,7 +26,7 @@ public class ItemFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), CameraActivity.class));
+                startActivity(new Intent(getActivity(), AddItemActivity.class));
             }
         });
 

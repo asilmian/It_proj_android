@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
+
 
 //class to contain static usable function
 public class UtilityFunctions {
@@ -24,6 +26,14 @@ public class UtilityFunctions {
     }
 
     public static JSONArray convert(String[] array){
+        JSONArray output = new JSONArray();
+        for (String str : array){
+            output.put(str);
+        }
+        return  output;
+    }
+
+    public static JSONArray convert(ArrayList<String> array){
         JSONArray output = new JSONArray();
         for (String str : array){
             output.put(str);

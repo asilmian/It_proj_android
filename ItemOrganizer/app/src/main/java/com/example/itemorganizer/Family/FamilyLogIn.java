@@ -28,7 +28,7 @@ public class FamilyLogIn extends AppCompatActivity {
     private EditText eToken;
     private FirebaseAuth mAuth;
     private final static String TAG = FamilyLogIn.class.toString();
-    private final static String URL = "http://167.71.243.144:5000/family/join";
+    private final static String URL = UserSingleton.IP + "family/join/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +68,7 @@ public class FamilyLogIn extends AppCompatActivity {
 
         //add required headers
         HashMap<String,String> headers = new HashMap<>();
-        headers.put("Authorization", "Bearer " + token);
+        headers.putIfAbsent("Content-Type", "application/json");
         backendItem.setHeaders(headers);
 
         //make body
@@ -91,7 +91,7 @@ public class FamilyLogIn extends AppCompatActivity {
             return 2;
         }
         else {
-            Log.d(TAG, backendItem.getResponse());
+            Log.d(TAG, backendItem.getResponse_code().toString());
             return 0;
         }
     }
