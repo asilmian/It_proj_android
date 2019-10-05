@@ -18,9 +18,9 @@ Please have a compatible version of Android Studio installed
  - open android studio and choose open new project
  
  
- ## Installing the application ( SDK not uploaded yet)
+ ## Installing the application ( APK not uploaded yet)
  
- - download the SDK
+ - download the APK
  - enable  third part app installations
- - Put SDK in your phone
- - Install SDK
+ - Put APK in your phone
+ - Install APK
