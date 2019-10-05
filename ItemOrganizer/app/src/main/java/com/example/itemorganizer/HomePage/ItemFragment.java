@@ -66,7 +66,7 @@ public class ItemFragment extends Fragment {
 
     private void showItems(){
         //get fams
-        BackendItem get_req = new BackendItem(URL, BackendReq.GET);
+        BackendItem get_req = new BackendItem(URL, BackendItem.GET);
         get_req.setHeaders(new HashMap<String, String>());
         Log.d(TAG,get_req.getHeaders().toString());
         BackendReq.send_req(get_req);

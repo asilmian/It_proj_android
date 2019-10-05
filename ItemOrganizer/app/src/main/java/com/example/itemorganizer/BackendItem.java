@@ -15,6 +15,8 @@ public class BackendItem {
     private String response;
     private String method;
 
+    public static final String GET = "GET";
+    public static final String POST = "POST";
 
 
     public BackendItem(String url, String method){

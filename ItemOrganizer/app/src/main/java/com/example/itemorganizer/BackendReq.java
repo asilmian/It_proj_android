@@ -20,11 +20,7 @@ import java.util.Map;
 public class BackendReq {
 
 
-    public static final Integer FAILED = 777;
-    public static final String GET = "GET";
-    public static final String POST = "POST";
-
-    private static final String TAG = BackendReq.class.toString();
+    private static final String TAG = "BackendReq";
 
 
     public  static BackendItem send_req(BackendItem item){
@@ -32,12 +28,12 @@ public class BackendReq {
             return new HTTPAsyncTask().execute(item).get();
         }catch (Exception e){
             Log.d("BackendReq", e.toString());
-            item.setResponse_code(FAILED);
+            item.setResponse_code(777);
             return item;
         }
     }
 
-    private static BackendItem httpPost(BackendItem item) throws IOException {
+    public static BackendItem httpReq(BackendItem item) throws IOException {
         URL url = new URL(item.getUrl());
 
         //create HttpURLConnection
@@ -104,11 +100,11 @@ public class BackendReq {
         protected BackendItem doInBackground(BackendItem... items) {
             // params comes from the execute() call: params[0] is the url.
             try {
-                return httpPost(items[0]);
+                return httpReq(items[0]);
             } catch (IOException e) {
                 Log.e(BackendReq.class.toString(), e.toString());
-                items[0].setResponse_code(FAILED);
-                items[0].setResponse("Connection Failed");
+                items[0].setResponse_code(777);
+                items[0].setResponse("Connection failed to backend or request is invalid");
                 return items[0];
             }
         }

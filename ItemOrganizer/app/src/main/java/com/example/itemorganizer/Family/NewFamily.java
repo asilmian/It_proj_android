@@ -55,7 +55,7 @@ public class NewFamily extends AppCompatActivity {
 
 
     private boolean sendBackend(){
-        BackendItem backendItem = new BackendItem(URL, BackendReq.POST);
+        BackendItem backendItem = new BackendItem(URL, BackendItem.POST);
 
         HashMap<String,String> headers = new HashMap<>();
         headers.putIfAbsent("Content-Type", "application/json");

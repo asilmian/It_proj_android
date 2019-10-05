@@ -64,7 +64,7 @@ public class FamilyLogIn extends AppCompatActivity {
 
     //send details to join family
     private int sendBackend(String token){
-        BackendItem backendItem = new BackendItem(URL, BackendReq.POST);
+        BackendItem backendItem = new BackendItem(URL, BackendItem.POST);
 
         //add required headers
         HashMap<String,String> headers = new HashMap<>();

@@ -129,7 +129,7 @@ public class AddItemActivity extends AppCompatActivity {
     //returns all members in users current family
     private HashMap<String,String> getMembers(){
         HashMap<String,String> id_names = new HashMap<>();
-        BackendItem backendItem = new BackendItem(UserSingleton.IP + URL, BackendReq.GET);
+        BackendItem backendItem = new BackendItem(UserSingleton.IP + URL, BackendItem.GET);
         backendItem.setHeaders(new HashMap<String, String>());
         BackendReq.send_req(backendItem);
 
@@ -202,7 +202,7 @@ public class AddItemActivity extends AppCompatActivity {
     private void submitItem(final String name, final String desc, final String tags, File image){
 
         //create backend post request
-        final BackendItem backendItem = new BackendItem(UserSingleton.IP + ADD_URL, BackendReq.POST);
+        final BackendItem backendItem = new BackendItem(UserSingleton.IP + ADD_URL, BackendItem.POST);
         HashMap<String, String> headers = new HashMap<>();
         headers.putIfAbsent("Content-Type", "application/json");
         backendItem.setHeaders(headers);
@@ -277,7 +277,7 @@ public class AddItemActivity extends AppCompatActivity {
 
     //gets a new reference (item image name) from the backend
     private String getRef(){
-        BackendItem item = new BackendItem(UserSingleton.IP + GET_IMAGE_REF, BackendReq.GET);
+        BackendItem item = new BackendItem(UserSingleton.IP + GET_IMAGE_REF, BackendItem.GET);
         item.setHeaders(new HashMap<String, String>());
         BackendReq.send_req(item);
         String result = "";
