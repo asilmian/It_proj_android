@@ -65,6 +65,8 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
 
         viewHolder.name.setText(items.get(i).get(0)); //Name
         viewHolder.tags.setText(items.get(i).get(2)); //Tags
+
+        //use glideapp to display image from fire storage
         GlideApp.with(viewHolder.image)
                 .load(storageReference.child(items.get(i).get(3)))
                 .into(viewHolder.image);
