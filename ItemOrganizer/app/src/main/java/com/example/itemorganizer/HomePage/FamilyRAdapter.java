@@ -28,7 +28,7 @@ public class FamilyRAdapter extends RecyclerView.Adapter<FamilyRAdapter.FamViewH
         public FamViewHolder(View v){
             super(v);
             tx = v.findViewById(R.id.famName);
-            cardView = v.findViewById(R.id.card_view);
+            cardView = v.findViewById(R.id.itemViewCardView);
         }
     }
 

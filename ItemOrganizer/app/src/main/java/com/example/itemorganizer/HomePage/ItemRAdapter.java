@@ -8,7 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.itemorganizer.GlideApp;
 import com.example.itemorganizer.R;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 
 import java.util.ArrayList;
@@ -19,28 +22,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHolder> {
 
+    private StorageReference storageReference;
     private static final String TAG = "ItemRAdapater";
-
     private ArrayList<ArrayList<String>> items;
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder{
         public TextView name;
-        public TextView desc;
         public TextView tags;
         public ImageView image;
         public CardView cardView;
         public ItemViewHolder(View v){
             super(v);
-            name = v.findViewById(R.id.item_card_name);
-            desc = v.findViewById(R.id.item_card_description);
-            tags = v.findViewById(R.id.item_card_tags);
-            image = v.findViewById(R.id.item_card_image);
-            cardView = v.findViewById(R.id.card_view);
+            name = v.findViewById(R.id.itemViewName);
+            tags = v.findViewById(R.id.itemViewTags);
+            image = v.findViewById(R.id.itemViewImage);
+            cardView = v.findViewById(R.id.itemViewCardView);
         }
     }
 
     public ItemRAdapter(ArrayList<ArrayList<String>>  items){
         this.items = items;
+        storageReference = FirebaseStorage.getInstance().getReference();
     }
 
     @Override
@@ -62,9 +64,10 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
         Log.d(TAG, "onBindViewHolder: called with i: " + i);
 
         viewHolder.name.setText(items.get(i).get(0)); //Name
-        viewHolder.desc.setText(items.get(i).get(1)); //Description
         viewHolder.tags.setText(items.get(i).get(2)); //Tags
-//        viewHolder.image.setImageURI(items.get(i).get(3)); //Img url
+        GlideApp.with(viewHolder.image)
+                .load(storageReference.child(items.get(i).get(3)))
+                .into(viewHolder.image);
 
 
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {

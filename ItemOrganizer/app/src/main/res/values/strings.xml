@@ -40,4 +40,5 @@
     <string name="enter_item_tags">Enter Item tags</string>
     <string name="togglebutton">ToggleButton</string>
     <string name="suggest_tags">suggest tags</string>
+    <string name="your_items">Your Items</string>
 </resources>

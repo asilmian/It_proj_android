@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -48,12 +47,10 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.concurrent.ScheduledExecutorService;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
@@ -206,7 +203,7 @@ public class AddItemActivity extends AppCompatActivity {
                 Log.d(TAG, item.getBody());
 
                 try{
-                    new GetDescriptionTask().execute(item);
+                    new GetSuggestionsTask().execute(item);
                 }catch (Exception e){
                     Log.e(TAG, "onSuccess: ",e);
                 }
@@ -461,8 +458,8 @@ public class AddItemActivity extends AppCompatActivity {
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private class GetDescriptionTask extends AsyncTask<BackendItem, Void, BackendItem> {
-        private String TAG = "GetReferenceTask";
+    private class GetSuggestionsTask extends AsyncTask<BackendItem, Void, BackendItem> {
+        private String TAG = "GetSuggestionTask";
 
         @Override
         protected BackendItem doInBackground(BackendItem... items) {
@@ -494,9 +491,7 @@ public class AddItemActivity extends AppCompatActivity {
         try{
             JSONObject raw_data = new JSONObject(response);
             JSONArray tags  = raw_data.getJSONArray("tags");
-            for(int i =0; i< tags.length(); i++){
-                tagStr += "," + tags.getString(i);
-            }
+            tagStr = UtilityFunctions.convertTags(tags);
         } catch (Exception e){
             Log.e(TAG, e.toString());
         }
