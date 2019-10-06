@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore;
 
@@ -23,6 +24,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.itemorganizer.BackendItem;
@@ -70,13 +72,17 @@ public class AddItemActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private MemberRAdapter mAdapter;
+    ProgressBar spinner;
+    ProgressBar secondarySpinner;
+
+    private Boolean uploadedPic;
 
     private final static String TAG = AddItemActivity.class.toString();
     private HashMap<String, String> id_names;
 
     private static final String ADD_URL = "item/add/";
     private static final String GET_IMAGE_REF = "item/add/ref/";
-    private final static String URL = "family/info/members/";
+    private final static String MEMBERS_URL = "family/info/members/";
     private final static String DETECTION = "detection/";
   
     @Override
@@ -93,6 +99,9 @@ public class AddItemActivity extends AppCompatActivity {
         item_name = findViewById(R.id.add_item_name);
         item_desc = findViewById(R.id.add_item_desc);
         item_tags = findViewById(R.id.add_item_tags);
+        spinner = findViewById(R.id.addItemProgBar);
+        secondarySpinner = findViewById(R.id.addItemSecondarBar);
+        uploadedPic = false;
 
 
         pictureBtn.setOnClickListener(new View.OnClickListener() {
@@ -107,16 +116,13 @@ public class AddItemActivity extends AppCompatActivity {
                  submitItemCheck(view);
             }
         });
+        //initializes recycler view
+        initRecyclerView(this.findViewById(android.R.id.content));
     }
 
     @Override
     public void onStart(){
         super.onStart();
-        this.id_names = getMembers();
-        initRecyclerView(this.findViewById(android.R.id.content));
-        showMembers();
-
-        //display members
 
         //initialize firestore
         fire_storage = FirebaseStorage.getInstance();
@@ -124,31 +130,16 @@ public class AddItemActivity extends AppCompatActivity {
 
         UtilityFunctions.clearView(item_desc, item_name, item_tags);
 
+        //showMembers
+        showMembers();
         //get new item reference from backend
-        ref = getRef();
+        setRef();
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //returns all members in users current family
-    private HashMap<String,String> getMembers(){
-        HashMap<String,String> id_names = new HashMap<>();
-        BackendItem backendItem = new BackendItem(UserSingleton.IP + URL, BackendItem.GET);
-        backendItem.setHeaders(new HashMap<String, String>());
-        BackendReq.send_req(backendItem);
 
-        try{
-            JSONObject raw_data = new JSONObject(backendItem.getResponse());
-            JSONArray keys  = raw_data.names();
 
-            for (int i=0; i<keys.length(); i++){
-                String key = keys.getString(i);
-                id_names.put(key, raw_data.getJSONObject(key).getString("name"));
-            }
-        } catch (Exception e){
-            Log.e(TAG, e.toString());
-        }
-        return id_names;
-    }
   
     // Code for Privacy Settings
     private void initRecyclerView(View view){
@@ -162,26 +153,64 @@ public class AddItemActivity extends AppCompatActivity {
         recyclerView.setAdapter(mAdapter);
     }
 
+    //returns all members in users current family
     private void showMembers(){
-        // add global
-        ArrayList<String> global = new ArrayList<>();
-        global.add("global");
-        global.add("All");
-        this.mAdapter.addAndNotify(global);
+        BackendItem backendItem = new BackendItem(UserSingleton.IP + MEMBERS_URL, BackendItem.GET);
+        backendItem.setHeaders(new HashMap<String, String>());
 
-        //get
-        HashMap<String, String> allmembers = getMembers();
-        ArrayList<String> member_ids = new ArrayList<>(allmembers.keySet());
-
-        //put add names
-        for (String id : member_ids){
-            ArrayList<String> tempMember = new ArrayList<>();
-            tempMember.add(id);                 //ID as position [0]
-            tempMember.add(allmembers.get(id)); // Name as position [1] in array
-            this.mAdapter.addAndNotify(tempMember);
+        try{
+            new GetMembersTask().execute(backendItem);
+        }catch (Exception e){
+            Log.e(TAG, "showMembers: ",e);
         }
     }
 
+    //gets a new reference (item image name) from the backend
+    private void setRef(){
+        BackendItem item = new BackendItem(UserSingleton.IP + GET_IMAGE_REF, BackendItem.GET);
+        item.setHeaders(new HashMap<String, String>());
+
+        try{
+            new GetReferenceTask().execute(item);
+        }catch (Exception e){
+            Log.e(TAG, "setRef: ", e);
+        }
+
+    }
+
+
+    public void getDesc(View view){
+        if (image == null){
+            return;
+        }
+        StorageReference newRef = storageRef.child(ref);
+        Uri file = Uri.fromFile(image);
+        UploadTask uploadTask = newRef.putFile(file);
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                BackendItem item = new BackendItem(UserSingleton.IP + DETECTION, BackendItem.POST);
+                item.setHeaders(new HashMap<String, String>());
+
+                //generate add item body
+                try {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.accumulate("image", ref);
+                    item.setBody(jsonObject.toString());
+                }catch (JSONException e){
+                    Log.e(TAG, e.toString());
+                }
+                Log.d(TAG, item.getBody());
+
+                //send item information to flask backend
+                BackendReq.send_req(item);
+
+                Log.d(TAG, item.getResponse());
+            }
+        });
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
     //checks if there is enough information to check items
     public void submitItemCheck(View view) {
 
@@ -200,7 +229,8 @@ public class AddItemActivity extends AppCompatActivity {
             toast.show();
         }
     }
-  
+
+
     //submits an item to the backend.
     private void submitItem(final String name, final String desc, final String tags, File image){
 
@@ -276,29 +306,9 @@ public class AddItemActivity extends AppCompatActivity {
 //            }
 //        });
     }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-    //gets a new reference (item image name) from the backend
-    private String getRef(){
-        BackendItem item = new BackendItem(UserSingleton.IP + GET_IMAGE_REF, BackendItem.GET);
-        item.setHeaders(new HashMap<String, String>());
-        BackendReq.send_req(item);
-        String result = "";
-        try{
-            JSONObject raw_data = new JSONObject(item.getResponse());
-            JSONArray keys  = raw_data.names();
-            String key = keys.getString(0);
-            String number = raw_data.getString(key);
-            result = key + "/" + number + ".jpg";
-
-        } catch (Exception e){
-            Log.e(TAG, e.toString());
-            Log.e(TAG, "Reference not returned");
-        }
-        return result;
-    }
-
-
+    /* Camera take photo activity and helper functions */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -331,34 +341,6 @@ public class AddItemActivity extends AppCompatActivity {
         }
     }
 
-    public void getDesc(View view){
-        StorageReference newRef = storageRef.child(ref);
-        Uri file = Uri.fromFile(image);
-        UploadTask uploadTask = newRef.putFile(file);
-        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                BackendItem item = new BackendItem(UserSingleton.IP + DETECTION, BackendItem.POST);
-                item.setHeaders(new HashMap<String, String>());
-
-                //generate add item body
-                try {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.accumulate("image", ref);
-                    item.setBody(jsonObject.toString());
-                }catch (JSONException e){
-                    Log.e(TAG, e.toString());
-                }
-                Log.d(TAG, item.getBody());
-
-                //send item information to flask backend
-                BackendReq.send_req(item);
-
-                Log.d(TAG, item.getResponse());
-            }
-        });
-    }
-
     private File getPhotoFile(){
 
         String name = new SimpleDateFormat( "yyyyMMdd_HHmmss").format(new Date());
@@ -375,10 +357,168 @@ public class AddItemActivity extends AppCompatActivity {
         }
         return image;
     }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
     private void goToHomePage(){
         Intent intent = new Intent(this, HomePage.class);
         startActivity(intent);
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // task to retrieve members from the backend.
+    // displays members to recycler view then,
+    // needs recycler to be already init.
+    private class GetMembersTask extends AsyncTask<BackendItem, Void, BackendItem> {
+        @Override
+        protected BackendItem doInBackground(BackendItem... items) {
+            // params comes from the execute() call: params[0] is the url.
+            try {
+                BackendReq.httpReq(items[0]);
+            } catch (IOException e) {
+                Log.e(BackendReq.class.toString(), e.toString());
+                items[0].setResponse_code(777);
+                items[0].setResponse("Connection failed to backend or request is invalid");
+            }
+            return items[0];
+        }
+
+        @Override
+        protected void onPostExecute(BackendItem backendItem) {
+            super.onPostExecute(backendItem);
+            setMembersToRecycler(getMembers(backendItem.getResponse()));
+        }
+    }
+
+
+    //returns all members in users current family from response body
+    private HashMap<String,String> getMembers(String responseBody){
+        HashMap<String,String> id_names = new HashMap<>();
+
+        try{
+            JSONObject raw_data = new JSONObject(responseBody);
+            JSONArray keys  = raw_data.names();
+
+            for (int i=0; i<keys.length(); i++){
+                String key = keys.getString(i);
+                id_names.put(key, raw_data.getJSONObject(key).getString("name"));
+            }
+        } catch (Exception e){
+            Log.e(TAG, e.toString());
+        }
+        return id_names;
+    }
+
+    //sets members to recycler view along with global option
+    private void setMembersToRecycler(HashMap<String, String> id_names){
+        // add global
+        ArrayList<String> global = new ArrayList<>();
+        global.add("global");
+        global.add("All");
+        this.mAdapter.addAndNotify(global);
+
+        //get
+        ArrayList<String> member_ids = new ArrayList<>(id_names.keySet());
+
+        //put add names
+        for (String id : member_ids){
+            ArrayList<String> tempMember = new ArrayList<>();
+            tempMember.add(id);                 //ID as position [0]
+            tempMember.add(id_names.get(id)); // Name as position [1] in array
+            this.mAdapter.addAndNotify(tempMember);
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private static class GetDescriptionTask extends AsyncTask<BackendItem, Void, BackendItem> {
+        private String TAG = "GetReferenceTask";
+
+        @Override
+        protected BackendItem doInBackground(BackendItem... items) {
+            // params comes from the execute() call: params[0] is the url.
+            try {
+                BackendReq.httpReq(items[0]);
+            } catch (IOException e) {
+                Log.e(TAG, "doInBackground: ",e);
+                items[0].setResponse_code(777);
+                items[0].setResponse("Connection failed to backend or request is invalid");
+            }
+            return items[0];
+        }
+
+        @Override
+        protected void onPostExecute(BackendItem backendItem) {
+            super.onPostExecute(backendItem);
+
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    /***
+     * Task to get a new reference from the backend to store the image
+     * in firebase storage
+     */
+    private class GetReferenceTask extends AsyncTask<BackendItem, Void, BackendItem> {
+        private String TAG = "GetReferenceTask";
+
+        @Override
+        protected BackendItem doInBackground(BackendItem... items) {
+            // params comes from the execute() call: params[0] is the url.
+            try {
+                BackendReq.httpReq(items[0]);
+            } catch (IOException e) {
+                Log.e(TAG, "doInBackground: ", e);
+                items[0].setResponse_code(777);
+                items[0].setResponse("Connection failed to backend or request is invalid");
+            }
+            return items[0];
+        }
+
+        @Override
+        protected void onPostExecute(BackendItem backendItem) {
+            super.onPostExecute(backendItem);
+            secondarySpinner.setVisibility(View.GONE);
+            updateReference(backendItem.getResponse());
+        }
+    }
+
+    private void updateReference(String raw_data){
+        String result = "";
+        try{
+            JSONObject jsonObject = new JSONObject(raw_data);
+            JSONArray keys  = jsonObject.names();
+            String key = keys.getString(0);
+            String number = jsonObject.getString(key);
+            result = key + "/" + number + ".jpg";
+
+        } catch (Exception e){
+            Log.e(TAG, e.toString());
+            Log.e(TAG, "Reference not returned");
+        }
+        this.ref = result;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    private class AddItemTask extends AsyncTask<BackendItem, Void, BackendItem> {
+        private String TAG = "AddItemTask";
+
+        @Override
+        protected BackendItem doInBackground(BackendItem... items) {
+            // params comes from the execute() call: params[0] is the url.
+            try {
+                BackendReq.httpReq(items[0]);
+            } catch (IOException e) {
+                Log.e(TAG, "doInBackground: ",e);
+                items[0].setResponse_code(777);
+                items[0].setResponse("Connection failed to backend or request is invalid");
+            }
+            return items[0];
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
 }

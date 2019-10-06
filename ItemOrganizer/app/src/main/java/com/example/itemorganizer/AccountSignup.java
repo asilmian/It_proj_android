@@ -1,10 +1,6 @@
 package com.example.itemorganizer;
 
-import android.accounts.Account;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 

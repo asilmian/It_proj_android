@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Map;
 
@@ -27,18 +28,23 @@ public class BackendReq {
         try {
             return new HTTPAsyncTask().execute(item).get();
         }catch (Exception e){
-            Log.d("BackendReq", e.toString());
-            item.setResponse_code(777);
+            Log.e(TAG, "send_req: ", e);
             return item;
         }
     }
 
-    public static BackendItem httpReq(BackendItem item) throws IOException {
+    public static BackendItem httpReq(BackendItem item) throws IOException{
         URL url = new URL(item.getUrl());
 
         //create HttpURLConnection
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod(item.getMethod());
+
+
+        try {
+            conn.setRequestMethod(item.getMethod());
+        }catch (ProtocolException e){
+            Log.e(TAG, "httpReq: ",e);
+        }
 
         conn.setConnectTimeout(10000); //set timeout to 10 secs
 
@@ -74,6 +80,8 @@ public class BackendReq {
 
     }
 
+
+    //throws protcol exception sometimes, debug with johno
     private static String readInputStream(InputStream response){
         String result = "";
         String tmp;
@@ -85,7 +93,7 @@ public class BackendReq {
             br.close();
             return result;
         } catch (Exception e){
-            Log.e(TAG, e.toString());
+            Log.e(TAG, "readInputStream: ",e);
         }
         return result;
     }
