@@ -33,7 +33,7 @@ public class BackendReq {
         }
     }
 
-    public static BackendItem httpReq(BackendItem item) throws IOException{
+    public static void httpReq(BackendItem item) throws IOException{
         URL url = new URL(item.getUrl());
 
         //create HttpURLConnection
@@ -76,7 +76,7 @@ public class BackendReq {
         else {
             item.setResponse(readInputStream(conn.getInputStream()));
         }
-        return item;
+        conn.disconnect();
 
     }
 
@@ -110,19 +110,19 @@ public class BackendReq {
     }
 
 
-    //fix memory leak
+    //Only use when want UI to hang, or wait for request.
     private static class HTTPAsyncTask extends AsyncTask<BackendItem, Void, BackendItem> {
         @Override
         protected BackendItem doInBackground(BackendItem... items) {
             // params comes from the execute() call: params[0] is the url.
             try {
-                return httpReq(items[0]);
+                httpReq(items[0]);
             } catch (IOException e) {
                 Log.e(BackendReq.class.toString(), e.toString());
                 items[0].setResponse_code(777);
                 items[0].setResponse("Connection failed to backend or request is invalid");
-                return items[0];
             }
+            return items[0];
         }
     }
 

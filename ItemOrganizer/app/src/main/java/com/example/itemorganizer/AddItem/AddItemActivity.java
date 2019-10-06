@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.itemorganizer.BackendItem;
@@ -118,6 +119,9 @@ public class AddItemActivity extends AppCompatActivity {
         });
         //initializes recycler view
         initRecyclerView(this.findViewById(android.R.id.content));
+        showMembers();
+        //get new item reference from backend
+        setRef();
     }
 
     @Override
@@ -129,11 +133,6 @@ public class AddItemActivity extends AppCompatActivity {
         storageRef = fire_storage.getReference();
 
         UtilityFunctions.clearView(item_desc, item_name, item_tags);
-
-        //showMembers
-        showMembers();
-        //get new item reference from backend
-        setRef();
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -178,17 +177,21 @@ public class AddItemActivity extends AppCompatActivity {
 
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
 
+    //functions to access the backedn ML object recognition model
     public void getDesc(View view){
         if (image == null){
             return;
         }
+        spinner.setVisibility(View.VISIBLE);
         StorageReference newRef = storageRef.child(ref);
         Uri file = Uri.fromFile(image);
         UploadTask uploadTask = newRef.putFile(file);
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                uploadedPic = true;
                 BackendItem item = new BackendItem(UserSingleton.IP + DETECTION, BackendItem.POST);
                 item.setHeaders(new HashMap<String, String>());
 
@@ -202,10 +205,12 @@ public class AddItemActivity extends AppCompatActivity {
                 }
                 Log.d(TAG, item.getBody());
 
-                //send item information to flask backend
-                BackendReq.send_req(item);
+                try{
+                    new GetDescriptionTask().execute(item);
+                }catch (Exception e){
+                    Log.e(TAG, "onSuccess: ",e);
+                }
 
-                Log.d(TAG, item.getResponse());
             }
         });
     }
@@ -219,8 +224,8 @@ public class AddItemActivity extends AppCompatActivity {
         String tags = item_tags.getText().toString();
 
         if( !name.equals("") && !desc.equals("") && !tags.equals("") && (image != null)
-        && mAdapter.getCheckedItems().size()>0){
-            submitItem(name, desc, tags, image);
+        && mAdapter.getCheckedItems().size()>0 && !ref.equals("")){
+            submitItem();
         }
         else{
             Toast toast = Toast.makeText(AddItemActivity.this, "Please complete all fields",
@@ -232,63 +237,45 @@ public class AddItemActivity extends AppCompatActivity {
 
 
     //submits an item to the backend.
-    private void submitItem(final String name, final String desc, final String tags, File image){
-
-        //create backend post request
-        final BackendItem backendItem = new BackendItem(UserSingleton.IP + ADD_URL, BackendItem.POST);
-        HashMap<String, String> headers = new HashMap<>();
-        headers.putIfAbsent("Content-Type", "application/json");
-        backendItem.setHeaders(headers);
+    private void submitItem(){
+        spinner.setVisibility(View.VISIBLE);
+        //give time to set spinner visible
+        try{
+            Thread.sleep(100);
+        }catch (Exception e){
+            Log.e(TAG, "submitItem: ",e);
+        }
 
         //get new refernce in firebase storage
         if(BuildConfig.DEBUG && ref.equals("")){
             throw new AssertionError();
         }
-        final StorageReference newRef = storageRef.child(ref);
-        Uri file = Uri.fromFile(image);
 
-        //upload file to storage
-        UploadTask uploadTask = newRef.putFile(file);
-        // Register observers to listen for when the download is done or if it fails
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-                Log.e(TAG, "upload failed   " + exception.toString());
+        if(uploadedPic){
+            sendItemInfo();
+        }
+        else{
+            final StorageReference newRef = storageRef.child(ref);
+            Uri file = Uri.fromFile(image);
 
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+            //upload file to storage
+            UploadTask uploadTask = newRef.putFile(file);
+            // Register observers to listen for when the download is done or if it fails
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                    Log.e(TAG, "upload failed   " + exception.toString());
 
-                //generate add item body
-                try {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.accumulate("name", name);
-                    jsonObject.accumulate("description", desc);
-                    jsonObject.accumulate("tags", UtilityFunctions.convert(tags.split(","))); //convert tags to array.
-                    jsonObject.accumulate("image", newRef.getPath());
-                    jsonObject.accumulate("visibility", UtilityFunctions.convert(mAdapter.getCheckedItems()));
-                    backendItem.setBody(jsonObject.toString());
-                }catch (JSONException e){
-                    Log.e(TAG, e.toString());
                 }
-                Log.d(TAG, backendItem.getBody());
-
-                //send item information to flask backend
-                BackendReq.send_req(backendItem);
-
-                if (backendItem.getResponse_code() == 200){
-                    goToHomePage();
-                }
-                else{
-                    Toast toast = Toast.makeText(AddItemActivity.this, "Connection to backend",
-                            Toast.LENGTH_SHORT);
-                    toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
-                    toast.show();
-                }
-            }
-        });
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                        @Override
+                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                            //send info to backend
+                                            sendItemInfo();
+                                        }
+                                        });
+        }
 
         // code to implement progress bar.
 //        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -306,6 +293,50 @@ public class AddItemActivity extends AppCompatActivity {
 //            }
 //        });
     }
+
+    //send item add information to the backend
+    private void sendItemInfo(){
+
+        //get needed info
+        String name = item_name.getText().toString();
+        String desc = item_desc.getText().toString();
+        String tags = item_tags.getText().toString();
+
+        //create backend item for POST
+        BackendItem backendItem = new BackendItem(UserSingleton.IP + ADD_URL, BackendItem.POST);
+        HashMap<String, String> headers = new HashMap<>();
+        backendItem.setHeaders(headers);
+
+        //create POST body
+        try {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.accumulate("name", name);
+            jsonObject.accumulate("description", desc);
+            jsonObject.accumulate("tags", UtilityFunctions.convert(tags.split(","))); //convert tags to array.
+            jsonObject.accumulate("image", ref);
+            jsonObject.accumulate("visibility", UtilityFunctions.convert(mAdapter.getCheckedItems()));
+            backendItem.setBody(jsonObject.toString());
+        }catch (JSONException e){
+            Log.e(TAG, "sendItemInfo: ",e);
+        }
+
+        Log.d(TAG, backendItem.getBody());
+
+        BackendReq.send_req(backendItem);
+
+        if (backendItem.getResponse_code() == 200){
+            goToHomePage();
+        }
+        else{
+            Toast toast = Toast.makeText(AddItemActivity.this, "Connection to backend failed",
+                    Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+            toast.show();
+        }
+    }
+
+
+
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     /* Camera take photo activity and helper functions */
@@ -430,7 +461,7 @@ public class AddItemActivity extends AppCompatActivity {
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private static class GetDescriptionTask extends AsyncTask<BackendItem, Void, BackendItem> {
+    private class GetDescriptionTask extends AsyncTask<BackendItem, Void, BackendItem> {
         private String TAG = "GetReferenceTask";
 
         @Override
@@ -449,8 +480,28 @@ public class AddItemActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(BackendItem backendItem) {
             super.onPostExecute(backendItem);
+            setSuggestedTags(backendItem.getResponse());
+            spinner.setVisibility(View.GONE);
 
         }
+    }
+
+
+    private void setSuggestedTags(String response){
+        String tagStr = "";
+
+        //get tags from response
+        try{
+            JSONObject raw_data = new JSONObject(response);
+            JSONArray tags  = raw_data.getJSONArray("tags");
+            for(int i =0; i< tags.length(); i++){
+                tagStr += "," + tags.getString(i);
+            }
+        } catch (Exception e){
+            Log.e(TAG, e.toString());
+        }
+
+        item_tags.setText(tagStr, TextView.BufferType.EDITABLE);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
@@ -496,27 +547,6 @@ public class AddItemActivity extends AppCompatActivity {
             Log.e(TAG, "Reference not returned");
         }
         this.ref = result;
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-    private class AddItemTask extends AsyncTask<BackendItem, Void, BackendItem> {
-        private String TAG = "AddItemTask";
-
-        @Override
-        protected BackendItem doInBackground(BackendItem... items) {
-            // params comes from the execute() call: params[0] is the url.
-            try {
-                BackendReq.httpReq(items[0]);
-            } catch (IOException e) {
-                Log.e(TAG, "doInBackground: ",e);
-                items[0].setResponse_code(777);
-                items[0].setResponse("Connection failed to backend or request is invalid");
-            }
-            return items[0];
-        }
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////

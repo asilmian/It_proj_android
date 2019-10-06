@@ -107,13 +107,13 @@ public class FamilyFragment extends Fragment {
         protected BackendItem doInBackground(BackendItem... items) {
             // params comes from the execute() call: params[0] is the url.
             try {
-                return BackendReq.httpReq(items[0]);
+                BackendReq.httpReq(items[0]);
             } catch (IOException e) {
                 Log.e(BackendReq.class.toString(), e.toString());
                 items[0].setResponse_code(777);
                 items[0].setResponse("Connection failed to backend or request is invalid");
-                return items[0];
             }
+            return items[0];
         }
 
         @Override
