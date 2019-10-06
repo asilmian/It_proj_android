@@ -16,6 +16,7 @@
         android:background="@drawable/togglebutton_selector"
         android:gravity="center"
         android:text="@string/togglebutton"
+        android:elevation="2dp"
         android:useDefaultMargins="true" />
 
 </LinearLayout>

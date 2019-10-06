@@ -10,13 +10,10 @@
         android:id="@+id/signup_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="161dp"
-        android:layout_marginEnd="162dp"
         android:onClick="createUser"
         android:text="@string/signup"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/confirm_pass"
         app:layout_constraintVertical_bias="0.377" />
@@ -25,13 +22,9 @@
         android:id="@+id/name_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="99dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="99dp"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name_text" />
 
@@ -39,12 +32,9 @@
         android:id="@+id/password_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="99dp"
-        android:layout_marginEnd="99dp"
         android:ems="10"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_text" />
 
@@ -52,13 +42,9 @@
         android:id="@+id/email_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="99dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="99dp"
         android:ems="10"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email_text" />
 
@@ -76,12 +62,10 @@
         android:id="@+id/name_text"
         android:layout_width="80dp"
         android:layout_height="22dp"
-        android:layout_marginStart="99dp"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="232dp"
+        android:layout_marginTop="44dp"
         android:text="Name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.271"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -89,12 +73,10 @@
         android:id="@+id/email_text"
         android:layout_width="80dp"
         android:layout_height="22dp"
-        android:layout_marginStart="99dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="232dp"
+        android:layout_marginTop="28dp"
         android:text="@string/email"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.271"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/name_edit" />
 
@@ -102,10 +84,10 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28sp"
         android:text="@string/conf_pass"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.341"
+        app:layout_constraintHorizontal_bias="0.31"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_login" />
 
@@ -113,12 +95,10 @@
         android:id="@+id/password_text"
         android:layout_width="80dp"
         android:layout_height="22dp"
-        android:layout_marginStart="99dp"
-        android:layout_marginTop="36dp"
-        android:layout_marginEnd="232dp"
+        android:layout_marginTop="28sp"
         android:text="@string/password"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.271"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/email_login" />
 
