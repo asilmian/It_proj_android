@@ -1,17 +1,26 @@
 package com.example.itemorganizer.HomePage;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 
+import com.example.itemorganizer.AccountLogin;
 import com.example.itemorganizer.AddItem.AddItemActivity;
 import com.example.itemorganizer.BackendItem;
 import com.example.itemorganizer.BackendReq;
 import com.example.itemorganizer.R;
+import com.example.itemorganizer.UserSingleton;
+import com.example.itemorganizer.UtilityFunctions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +31,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -32,14 +42,24 @@ public class ItemFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private ItemRAdapter mAdapter;
+    private Button searchButton;
+    private EditText eSearchT;
+    private ProgressBar spinner;
 
-    private final static String URL = "http://167.71.243.144:5000/user/info/families";
+    private final static String ITEM_URL = "item/list/";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item, container, false);
+        if(UserSingleton.getInstance().getUserToken() == null){
+            Intent intent = new Intent(view.getContext(), AccountLogin.class);
+            startActivity(intent);
+        }
 
+        searchButton = view.findViewById(R.id.search_btn);
+        eSearchT = view.findViewById(R.id.searchText);
+        spinner = view.findViewById(R.id.itemViewProgBar);
 
         FloatingActionButton fab = view.findViewById(R.id.add_new_item);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -65,28 +85,54 @@ public class ItemFragment extends Fragment {
     }
 
     private void showItems(){
-        //get fams
-        BackendItem get_req = new BackendItem(URL, BackendReq.GET);
+        spinner.setVisibility(View.VISIBLE);
+        BackendItem get_req = new BackendItem(UserSingleton.IP + ITEM_URL, BackendItem.GET);
         get_req.setHeaders(new HashMap<String, String>());
         Log.d(TAG,get_req.getHeaders().toString());
-        BackendReq.send_req(get_req);
-        //Items = []
-        ArrayList<ArrayList<String>> items = getItemData(get_req);
 
 
-        //put items on display
-        for (ArrayList<String> item : items){
-            this.mAdapter.addAndNotify(item);
+        try{
+            new GetItemInfoTask().execute(get_req);
+        } catch (Exception e){
+            Log.e(TAG, "showItems: ",e);
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    private class GetItemInfoTask extends AsyncTask<BackendItem, Void, BackendItem> {
+        @Override
+        protected BackendItem doInBackground(BackendItem... items) {
+            // params comes from the execute() call: params[0] is the url.
+            try {
+                BackendReq.httpReq(items[0]);
+            } catch (IOException e) {
+                Log.e(BackendReq.class.toString(), e.toString());
+                items[0].setResponse_code(777);
+                items[0].setResponse("Connection failed to backend or request is invalid");
+            }
+            return items[0];
+        }
 
-    private ArrayList<ArrayList<String>> getItemData(BackendItem req){
+        @Override
+        protected void onPostExecute(BackendItem item) {
+            super.onPostExecute(item);
+            ArrayList<ArrayList<String>> viewItems = getItemData(item.getResponse());
+            //put items on display
+            for (ArrayList<String> viewItem : viewItems){
+                mAdapter.addAndNotify(viewItem);
+            }
+
+            spinner.setVisibility(View.GONE);
+        }
+    }
+
+    //uses response to get item data
+    private ArrayList<ArrayList<String>> getItemData(String data){
         //Array of Data
         ArrayList<ArrayList<String>> result = new ArrayList<>();
 
         try{
-            JSONObject raw_data = new JSONObject(req.getResponse());
+            JSONObject raw_data = new JSONObject(data);
             JSONArray keys  = raw_data.names();
 
             for (int i=0; i<keys.length(); i++){
@@ -94,8 +140,8 @@ public class ItemFragment extends Fragment {
                 ArrayList<String> tempData = new ArrayList<>();
 
                 tempData.add(raw_data.getJSONObject(key).getString("name")); // First element
-                tempData.add(raw_data.getJSONObject(key).getString("desc")); // Second Element
-                tempData.add(raw_data.getJSONObject(key).getString("tags")); // Third Element
+                tempData.add(raw_data.getJSONObject(key).getString("description")); // Second Element
+                tempData.add(UtilityFunctions.convertTags(raw_data.getJSONObject(key).getJSONArray("tags"))); // Third Element
                 tempData.add(raw_data.getJSONObject(key).getString("image")); // Fourth Element
 
                 result.add(tempData);
@@ -105,4 +151,6 @@ public class ItemFragment extends Fragment {
         }
         return result;
     }
+
+
 }

@@ -1,14 +1,16 @@
 package com.example.itemorganizer;
 
 import android.content.Intent;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.itemorganizer.Family.FamilyLogIn;
@@ -22,6 +24,7 @@ import com.google.firebase.auth.GetTokenResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class AccountSignup extends AppCompatActivity {
@@ -34,6 +37,7 @@ public class AccountSignup extends AppCompatActivity {
     private EditText ePass;
     private EditText eConfPass;
     private EditText eEmail;
+    private ProgressBar spinner;
     private final String url =  UserSingleton.IP + "user/signup/";
 
     @Override
@@ -47,6 +51,7 @@ public class AccountSignup extends AppCompatActivity {
         eEmail = findViewById(R.id.email_login);
         ePass = findViewById(R.id.password_login);
         eConfPass = findViewById(R.id.confirm_pass);
+        spinner = findViewById(R.id.signup_prog);
     }
 
     @Override
@@ -59,6 +64,7 @@ public class AccountSignup extends AppCompatActivity {
     }
 
     public void createUser(View view) {
+        spinner.setVisibility(View.VISIBLE);
         String password = ePass.getText().toString();
         String conf_pass = eConfPass.getText().toString();
 
@@ -106,28 +112,7 @@ public class AccountSignup extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             String idToken = task.getResult().getToken();
                             UtilityFunctions.setUserToken(idToken);
-                            if(sendBackendSignup()){
-                                openFamilyPage();
-                            }
-                            else{
-
-                                //delete user from firebase
-                                mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task_inner) {
-                                        if (task_inner.isSuccessful()){
-                                            Toast toast = Toast.makeText(AccountSignup.this, "Connection to backend failed",
-                                                    Toast.LENGTH_SHORT);
-                                            toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
-                                            toast.show();
-                                        }
-                                        else{
-                                            Exception e = task_inner.getException();
-                                            Log.e(TAG, e.toString());
-                                        }
-                                    }
-                                });
-                            }
+                                sendBackendSignup();
 
                         } else {
                             Exception e = task.getException();
@@ -137,35 +122,30 @@ public class AccountSignup extends AppCompatActivity {
                 });
     }
 
-    private void openFamilyPage(){
-
-        Intent intent = new Intent(this, FamilyLogIn.class);
-        startActivity(intent);
-    }
-
 
     //returns true if successfully connected to backend
-    private Boolean sendBackendSignup(){
-        BackendItem backendItem = new BackendItem(this.url, BackendReq.POST);
+    private void sendBackendSignup(){
+        BackendItem backendItem = new BackendItem(this.url, BackendItem.POST);
 
         //create headers
         HashMap<String,String> headers = new HashMap<>();
-        headers.putIfAbsent("Content-Type", "application/json");
         backendItem.setHeaders(headers);
 
         //make body
         makeSignUpBody(backendItem);
 
-        //send request
-        backendItem = BackendReq.send_req(backendItem);
+        try{
+            backendItem = new AccountSignUpTask().execute(backendItem).get();
 
-
-        if (backendItem.getResponse_code().equals(200)){
-            return true;
-        }
-        else{
-            Log.d(TAG, "signUp response: "+ backendItem.getResponse());
-            return false;
+            if (backendItem.getResponse_code().equals(200)){
+                openFamilyPage();
+            }
+            else{
+                Log.d(TAG, "signUp response: "+ backendItem.getResponse());
+                deleteUserFailure();
+            }
+        } catch (Exception e){
+            Log.e(TAG, e.toString());
         }
 
     }
@@ -181,6 +161,58 @@ public class AccountSignup extends AppCompatActivity {
         }catch (JSONException e){
             Log.e(TAG, e.toString());
         }
+    }
+
+
+    private class AccountSignUpTask extends AsyncTask<BackendItem, Void, BackendItem> {
+
+        //set progress onPrexecute
+
+        @Override
+        protected BackendItem doInBackground(BackendItem... items) {
+            // params comes from the execute() call: params[0] is the url.
+            try {
+                BackendReq.httpReq(items[0]);
+            } catch (IOException e) {
+                Log.e(BackendReq.class.toString(), e.toString());
+                items[0].setResponse_code(777);
+                items[0].setResponse("Request is invalid, never sent to server");
+            }
+            return items[0];
+        }
+
+        @Override
+        protected void onPostExecute(BackendItem item) {
+            super.onPostExecute(item);
+            spinner.setVisibility(View.GONE);
+        }
+    }
+
+
+    //deletes user in case of failure
+    public void deleteUserFailure(){
+
+        mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task_inner) {
+                if (task_inner.isSuccessful()){
+                    Toast toast = Toast.makeText(AccountSignup.this, "Connection to backend failed",
+                            Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+                    toast.show();
+                }
+                else{
+                    Exception e = task_inner.getException();
+                    Log.e(TAG, e.toString());
+                }
+            }
+        });
+    }
+
+    private void openFamilyPage(){
+
+        Intent intent = new Intent(this, FamilyLogIn.class);
+        startActivity(intent);
     }
 
 }

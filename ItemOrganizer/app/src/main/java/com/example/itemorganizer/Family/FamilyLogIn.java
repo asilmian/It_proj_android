@@ -3,11 +3,14 @@ package com.example.itemorganizer.Family;
 import android.content.Intent;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.itemorganizer.BackendItem;
@@ -20,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 
@@ -30,11 +34,14 @@ public class FamilyLogIn extends AppCompatActivity {
     private final static String TAG = FamilyLogIn.class.toString();
     private final static String URL = UserSingleton.IP + "family/join/";
 
+    private ProgressBar spinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_family_log_in);
         eToken= findViewById(R.id.familyToken);
+        spinner = findViewById(R.id.famLogInProg);
 
         mAuth = FirebaseAuth.getInstance();
     }
@@ -47,7 +54,9 @@ public class FamilyLogIn extends AppCompatActivity {
 
     //send family Token to verify
     public void sendToken(View view){
-        int result = sendBackend(UserSingleton.getInstance().getUserToken());
+        spinner.setVisibility(View.VISIBLE);
+        int result = sendBackend();
+        spinner.setVisibility(View.GONE);
 
         if(result == 1){
             goToHomePage();
@@ -63,8 +72,8 @@ public class FamilyLogIn extends AppCompatActivity {
 
 
     //send details to join family
-    private int sendBackend(String token){
-        BackendItem backendItem = new BackendItem(URL, BackendReq.POST);
+    private int sendBackend(){
+        BackendItem backendItem = new BackendItem(URL, BackendItem.POST);
 
         //add required headers
         HashMap<String,String> headers = new HashMap<>();
@@ -73,26 +82,50 @@ public class FamilyLogIn extends AppCompatActivity {
 
         //make body
         makeSignUpBody(backendItem);
+        try{
 
-        BackendReq.send_req(backendItem);
+            backendItem = new FamilyLoginTask().execute(backendItem).get();
 
-        //if token is valid
-        if (backendItem.getResponse_code().equals(200)){
-            return 1;
+
+            if (backendItem.getResponse_code().equals(200)){
+                return 1;
+            }
+
+            //if token is invalid
+            else if (backendItem.getResponse_code().equals((404))){
+                Toast toast = Toast.makeText(FamilyLogIn.this, "Invalid Token",
+                        Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+                toast.show();
+                Log.d(TAG, "new_family_response: "+ backendItem.getResponse());
+                return 2;
+            }
+            else {
+                Log.d(TAG, backendItem.getResponse_code().toString());
+                return 0;
+            }
+        }catch (Exception e){
+            Log.e(FamilyLogIn.TAG, e.toString());
+        }
+        return 0;
+    }
+
+    private class FamilyLoginTask extends AsyncTask<BackendItem, Void, BackendItem> {
+        @Override
+        protected BackendItem doInBackground(BackendItem... items) {
+            // params comes from the execute() call: params[0] is the url.
+            try {
+                BackendReq.httpReq(items[0]);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            return items[0];
         }
 
-        //if token is invalid
-        else if (backendItem.getResponse_code().equals((404))){
-            Toast toast = Toast.makeText(FamilyLogIn.this, "Invalid Token",
-                    Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
-            toast.show();
-            Log.d(TAG, "new_family_response: "+ backendItem.getResponse());
-            return 2;
-        }
-        else {
-            Log.d(TAG, backendItem.getResponse_code().toString());
-            return 0;
+        @Override
+        protected void onPostExecute(BackendItem item) {
+            super.onPostExecute(item);
+
         }
     }
 

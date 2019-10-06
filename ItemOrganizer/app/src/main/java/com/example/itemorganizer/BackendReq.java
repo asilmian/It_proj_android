@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Map;
 
@@ -20,29 +21,30 @@ import java.util.Map;
 public class BackendReq {
 
 
-    public static final Integer FAILED = 777;
-    public static final String GET = "GET";
-    public static final String POST = "POST";
-
-    private static final String TAG = BackendReq.class.toString();
+    private static final String TAG = "BackendReq";
 
 
     public  static BackendItem send_req(BackendItem item){
         try {
             return new HTTPAsyncTask().execute(item).get();
         }catch (Exception e){
-            Log.d("BackendReq", e.toString());
-            item.setResponse_code(FAILED);
+            Log.e(TAG, "send_req: ", e);
             return item;
         }
     }
 
-    private static BackendItem httpPost(BackendItem item) throws IOException {
+    public static void httpReq(BackendItem item) throws IOException{
         URL url = new URL(item.getUrl());
 
         //create HttpURLConnection
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod(item.getMethod());
+
+
+        try {
+            conn.setRequestMethod(item.getMethod());
+        }catch (ProtocolException e){
+            Log.e(TAG, "httpReq: ",e);
+        }
 
         conn.setConnectTimeout(10000); //set timeout to 10 secs
 
@@ -54,7 +56,11 @@ public class BackendReq {
 
         //add content to the body
         if (item.getBody() != null) {
-            setPostRequestContent(conn, item.getBody());
+            try {
+                setPostRequestContent(conn, item.getBody());
+            }catch (Exception e){
+                Log.e(TAG, "unable to write to body   "+ e.toString());
+            }
             Log.d("post body:", item.getBody());
             Log.d("conn", conn.getOutputStream().toString());
         }
@@ -64,12 +70,18 @@ public class BackendReq {
         conn.connect();
 
         item.setResponse_code(conn.getResponseCode());
-        item.setResponse(readInputStream(conn.getInputStream()));
-
-        return item;
+        if(item.getResponse_code() >= 400){
+            item.setResponse("No response");
+        }
+        else {
+            item.setResponse(readInputStream(conn.getInputStream()));
+        }
+        conn.disconnect();
 
     }
 
+
+    //throws protcol exception sometimes, debug with johno
     private static String readInputStream(InputStream response){
         String result = "";
         String tmp;
@@ -81,7 +93,7 @@ public class BackendReq {
             br.close();
             return result;
         } catch (Exception e){
-            Log.e(TAG, e.toString());
+            Log.e(TAG, "readInputStream: ",e);
         }
         return result;
     }
@@ -98,19 +110,19 @@ public class BackendReq {
     }
 
 
-    //fix memory leak
+    //Only use when want UI to hang, or wait for request.
     private static class HTTPAsyncTask extends AsyncTask<BackendItem, Void, BackendItem> {
         @Override
         protected BackendItem doInBackground(BackendItem... items) {
             // params comes from the execute() call: params[0] is the url.
             try {
-                return httpPost(items[0]);
+                httpReq(items[0]);
             } catch (IOException e) {
                 Log.e(BackendReq.class.toString(), e.toString());
-                items[0].setResponse_code(FAILED);
-                items[0].setResponse("Connection Failed");
-                return items[0];
+                items[0].setResponse_code(777);
+                items[0].setResponse("Connection failed to backend or request is invalid");
             }
+            return items[0];
         }
     }
 
