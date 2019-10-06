@@ -64,7 +64,6 @@ public class AccountSignup extends AppCompatActivity {
     }
 
     public void createUser(View view) {
-        spinner.setVisibility(View.VISIBLE);
         String password = ePass.getText().toString();
         String conf_pass = eConfPass.getText().toString();
 
@@ -77,7 +76,7 @@ public class AccountSignup extends AppCompatActivity {
             UtilityFunctions.clearView(eConfPass, ePass);
             return;
         }
-
+        spinner.setVisibility(View.VISIBLE);
         String email = eEmail.getText().toString();
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {

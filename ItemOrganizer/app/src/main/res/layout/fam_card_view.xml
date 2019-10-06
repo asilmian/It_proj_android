@@ -1,20 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout3"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:tag="cards main container">
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="10dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="@color/common_google_signin_btn_text_dark_default" />
-
     <androidx.cardview.widget.CardView
         android:id="@+id/itemViewCardView"
-        android:layout_width="372dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:animationCache="false"
         android:clickable="true"
@@ -22,51 +17,41 @@
         card_view:cardBackgroundColor="#8DFABD"
         card_view:cardCornerRadius="10dp"
         card_view:cardElevation="5dp"
-        card_view:cardUseCompatPadding="true">
+        card_view:cardUseCompatPadding="true"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintStart_toStartOf="parent"
+        card_view:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="360dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="35dp"
+                android:layout_width="135dp"
                 android:layout_height="82dp"
-                android:layout_margin="5dp"
-                android:layout_weight="1"
                 android:tag="image_tag"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="parent"
                 card_view:srcCompat="@drawable/ic_family" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="61dp"
-                android:layout_marginTop="12dp"
-                android:layout_weight="2"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/famName"
-                    android:layout_width="184dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="sans-serif-condensed-medium"
-                    android:text="Android Name"
-                    android:textAlignment="center"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="28sp" />
-
-            </LinearLayout>
-        </LinearLayout>
+            <TextView
+                android:id="@+id/famName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="Android Name"
+                android:textAlignment="textStart"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="28sp"
+                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintHorizontal_bias="0.333"
+                card_view:layout_constraintStart_toEndOf="@+id/imageView"
+                card_view:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
 
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="10dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="@color/common_google_signin_btn_text_dark_default" />
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
