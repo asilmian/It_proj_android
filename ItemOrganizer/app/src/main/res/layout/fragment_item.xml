@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:text="@string/search_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
@@ -79,14 +79,15 @@
         android:id="@+id/searchText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:autofillHints=""
         android:ems="10"
+        android:hint="@string/search_for_an_item"
         android:inputType="textPersonName"
-        android:hint="Search for an item ..."
         android:textColor="#77888888"
         android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/search_btn"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/search_btn"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/search_btn" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

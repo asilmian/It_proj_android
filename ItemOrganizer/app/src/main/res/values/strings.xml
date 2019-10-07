@@ -42,4 +42,5 @@
     <string name="suggest_tags">suggest tags</string>
     <string name="your_items">Your Items</string>
     <string name="new_user_sign_up">New User? Sign up!</string>
+    <string name="search_for_an_item">Search for an item ...</string>
 </resources>
