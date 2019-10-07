@@ -1,171 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_gravity="center_horizontal"
+    android:id="@+id/linearLayout4"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
     tools:context=".AddItem.AddItemActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <EditText
+        android:id="@+id/add_item_desc"
+        android:layout_width="0dp"
+        android:layout_height="39dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="@string/enter_item_description"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_item_name" />
 
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        android:onClick="getDesc"
+        android:text="@string/suggest_tags"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.889"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/PictureBtn" />
 
-        <ImageView
-            android:id="@+id/image"
-            android:layout_width="202dp"
-            android:layout_height="201dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <EditText
+        android:id="@+id/add_item_tags"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="@string/enter_item_tags"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        android:labelFor="@id/add_item_tags"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.86"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image" />
 
-        <Button
-            android:id="@+id/PictureBtn"
-            android:layout_width="200dp"
-            android:layout_height="202dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/take_picture"
-            app:layout_constraintEnd_toStartOf="@+id/add_item_tags"
-            app:layout_constraintHorizontal_bias="0.181"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_green_light"
+        android:text="@string/select_privacy_setings"
+        android:textAlignment="center"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_item_desc" />
 
-        <EditText
-            android:id="@+id/add_item_tags"
-            android:layout_width="158dp"
-            android:layout_height="51dp"
-            android:layout_marginTop="32dp"
-            android:ems="10"
-            android:hint="@string/enter_item_tags"
-            android:importantForAutofill="no"
-            android:inputType="textPersonName"
-            android:labelFor="@id/add_item_tags"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.428"
-            app:layout_constraintStart_toEndOf="@+id/image"
-            app:layout_constraintTop_toBottomOf="@+id/add_item_name" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/privacy_recycler"
+        android:layout_width="415dp"
+        android:layout_height="236dp"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7"
+        app:layout_constraintVertical_bias="0.0">
 
-        <EditText
-            android:id="@+id/add_item_desc"
-            android:layout_width="363dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="36dp"
-            android:ems="10"
-            android:gravity="start|top"
-            android:hint="@string/enter_item_description"
-            android:importantForAutofill="no"
-            android:inputType="textMultiLine"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/add_item_tags" />
+    </androidx.recyclerview.widget.RecyclerView>
 
-        <EditText
-            android:id="@+id/add_item_name"
-            android:layout_width="168dp"
-            android:layout_height="39dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="92dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/enter_item_name"
-            android:inputType="textPersonName"
-            android:labelFor="@id/add_item_name"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/image"
-            app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:id="@+id/submit_item_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_item"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addItemProgBar"
+        app:layout_constraintVertical_bias="0.931" />
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:onClick="getDesc"
-            android:text="@string/suggest_tags"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.87"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <EditText
+        android:id="@+id/add_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_marginTop="16dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/enter_item_name"
+        android:inputType="textPersonName"
+        android:labelFor="@id/add_item_name"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/add_item_tags"
+        app:layout_constraintHorizontal_bias="0.277"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image" />
 
-        <ProgressBar
-            android:id="@+id/addItemProgBar"
-            android:layout_width="392dp"
-            android:layout_height="182dp"
-            android:layout_marginTop="180dp"
-            android:gravity="center"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <ProgressBar
+        android:id="@+id/addItemProgBar"
+        android:layout_width="232dp"
+        android:layout_height="194dp"
+        android:gravity="center"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.478" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="384dp"
-            android:layout_height="265dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="8dp"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.54"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/add_item_desc">
+    <Button
+        android:id="@+id/PictureBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="@string/take_picture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.886"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/holo_green_light"
-                android:text="@string/select_privacy_setings"
-                android:textAlignment="center"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textSize="14sp" />
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="231dp"
+        android:layout_height="225dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.068"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-            <View
-                android:id="@+id/divider3"
-                android:layout_width="match_parent"
-                android:layout_height="15dp"
-                android:background="#FFFFFF" />
+    <ProgressBar
+        android:id="@+id/addItemSecondarBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/submit_item_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/privacy_recycler"
-                android:layout_width="330dp"
-                android:layout_height="228dp"
-                android:layout_gravity="center"
-                android:scrollbars="vertical">
-
-            </androidx.recyclerview.widget.RecyclerView>
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/submit_item_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="@string/add_item"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-        <ProgressBar
-            android:id="@+id/addItemSecondarBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="41dp"
-            android:layout_height="36dp"
-            android:layout_marginStart="184dp"
-            app:layout_constraintBottom_toTopOf="@+id/submit_item_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.043"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            app:layout_constraintVertical_bias="1.0" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
