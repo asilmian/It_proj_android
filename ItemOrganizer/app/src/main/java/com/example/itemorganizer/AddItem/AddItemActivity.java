@@ -82,13 +82,13 @@ public class AddItemActivity extends AppCompatActivity {
     private static final String GET_IMAGE_REF = "item/add/ref/";
     private final static String MEMBERS_URL = "family/info/members/";
     private final static String DETECTION = "detection/";
-  
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_add_item);
-        imageView =  findViewById(R.id.image);
+        imageView = findViewById(R.id.image);
         requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
 
         pictureBtn = findViewById(R.id.PictureBtn);
@@ -111,7 +111,7 @@ public class AddItemActivity extends AppCompatActivity {
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 submitItemCheck(view);
+                submitItemCheck(view);
             }
         });
         //initializes recycler view
@@ -122,7 +122,7 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
 
         //initialize firestore
@@ -135,10 +135,8 @@ public class AddItemActivity extends AppCompatActivity {
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-
-  
     // Code for Privacy Settings
-    private void initRecyclerView(View view){
+    private void initRecyclerView(View view) {
         recyclerView = view.findViewById(R.id.privacy_recycler);
 
         recyclerView.setHasFixedSize(true);
@@ -150,25 +148,25 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
     //returns all members in users current family
-    private void showMembers(){
+    private void showMembers() {
         BackendItem backendItem = new BackendItem(UserSingleton.IP + MEMBERS_URL, BackendItem.GET);
         backendItem.setHeaders(new HashMap<String, String>());
 
-        try{
+        try {
             new GetMembersTask().execute(backendItem);
-        }catch (Exception e){
-            Log.e(TAG, "showMembers: ",e);
+        } catch (Exception e) {
+            Log.e(TAG, "showMembers: ", e);
         }
     }
 
     //gets a new reference (item image name) from the backend
-    private void setRef(){
+    private void setRef() {
         BackendItem item = new BackendItem(UserSingleton.IP + GET_IMAGE_REF, BackendItem.GET);
         item.setHeaders(new HashMap<String, String>());
 
-        try{
+        try {
             new GetReferenceTask().execute(item);
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, "setRef: ", e);
         }
 
@@ -177,8 +175,8 @@ public class AddItemActivity extends AppCompatActivity {
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     //functions to access the backedn ML object recognition model
-    public void getDesc(View view){
-        if (image == null){
+    public void getDesc(View view) {
+        if (image == null) {
             return;
         }
         spinner.setVisibility(View.VISIBLE);
@@ -197,15 +195,15 @@ public class AddItemActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.accumulate("image", ref);
                     item.setBody(jsonObject.toString());
-                }catch (JSONException e){
+                } catch (JSONException e) {
                     Log.e(TAG, e.toString());
                 }
                 Log.d(TAG, item.getBody());
 
-                try{
+                try {
                     new GetSuggestionsTask().execute(item);
-                }catch (Exception e){
-                    Log.e(TAG, "onSuccess: ",e);
+                } catch (Exception e) {
+                    Log.e(TAG, "onSuccess: ", e);
                 }
 
             }
@@ -220,38 +218,36 @@ public class AddItemActivity extends AppCompatActivity {
         String desc = item_desc.getText().toString();
         String tags = item_tags.getText().toString();
 
-        if( !name.equals("") && !desc.equals("") && !tags.equals("") && (image != null)
-        && mAdapter.getCheckedItems().size()>0 && !ref.equals("")){
+        if (!name.equals("") && !desc.equals("") && !tags.equals("") && (image != null)
+                && mAdapter.getCheckedItems().size() > 0 && !ref.equals("")) {
             submitItem();
-        }
-        else{
+        } else {
             Toast toast = Toast.makeText(AddItemActivity.this, "Please complete all fields",
                     Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
             toast.show();
         }
     }
 
 
     //submits an item to the backend.
-    private void submitItem(){
+    private void submitItem() {
         spinner.setVisibility(View.VISIBLE);
         //give time to set spinner visible
-        try{
+        try {
             Thread.sleep(100);
-        }catch (Exception e){
-            Log.e(TAG, "submitItem: ",e);
+        } catch (Exception e) {
+            Log.e(TAG, "submitItem: ", e);
         }
 
         //get new refernce in firebase storage
-        if(BuildConfig.DEBUG && ref.equals("")){
+        if (BuildConfig.DEBUG && ref.equals("")) {
             throw new AssertionError();
         }
 
-        if(uploadedPic){
+        if (uploadedPic) {
             sendItemInfo();
-        }
-        else{
+        } else {
             final StorageReference newRef = storageRef.child(ref);
             Uri file = Uri.fromFile(image);
 
@@ -266,12 +262,12 @@ public class AddItemActivity extends AppCompatActivity {
 
                 }
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                        @Override
-                                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                            //send info to backend
-                                            sendItemInfo();
-                                        }
-                                        });
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    //send info to backend
+                    sendItemInfo();
+                }
+            });
         }
 
         // code to implement progress bar.
@@ -292,7 +288,7 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
     //send item add information to the backend
-    private void sendItemInfo(){
+    private void sendItemInfo() {
 
         //get needed info
         String name = item_name.getText().toString();
@@ -313,25 +309,23 @@ public class AddItemActivity extends AppCompatActivity {
             jsonObject.accumulate("image", ref);
             jsonObject.accumulate("visibility", UtilityFunctions.convert(mAdapter.getCheckedItems()));
             backendItem.setBody(jsonObject.toString());
-        }catch (JSONException e){
-            Log.e(TAG, "sendItemInfo: ",e);
+        } catch (JSONException e) {
+            Log.e(TAG, "sendItemInfo: ", e);
         }
 
         Log.d(TAG, backendItem.getBody());
 
         BackendReq.send_req(backendItem);
 
-        if (backendItem.getResponse_code() == 200){
+        if (backendItem.getResponse_code() == 200) {
             goToHomePage();
-        }
-        else{
+        } else {
             Toast toast = Toast.makeText(AddItemActivity.this, "Connection to backend failed",
                     Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
             toast.show();
         }
     }
-
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -340,17 +334,15 @@ public class AddItemActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK)
-        {
-            if (requestCode == 1)
-            {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 1) {
                 Bitmap bitmap = BitmapFactory.decodeFile(pathToFile);
                 imageView.setImageBitmap(bitmap);
             }
         }
     }
 
-    private void takePhoto(){
+    private void takePhoto() {
         //Call Intent
         Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         //Ensure that there is an app that can handle our intent
@@ -358,36 +350,33 @@ public class AddItemActivity extends AppCompatActivity {
             File photo = null;
             photo = getPhotoFile();
             this.image = photo;
-            if (photo != null)
-            {
+            if (photo != null) {
                 pathToFile = photo.getAbsolutePath();
-                Uri photoURI = FileProvider.getUriForFile( AddItemActivity.this, "com.example.itemorganizer.fileprovider", photo);
+                Uri photoURI = FileProvider.getUriForFile(AddItemActivity.this, "com.example.itemorganizer.fileprovider", photo);
                 takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePicture,1);
+                startActivityForResult(takePicture, 1);
 
             }
         }
     }
 
-    private File getPhotoFile(){
+    private File getPhotoFile() {
 
-        String name = new SimpleDateFormat( "yyyyMMdd_HHmmss").format(new Date());
+        String name = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         // GetExternalStoragePublicDirectory function taken from
         // https://developer.android.com/training/camera/photobasics
         File storageDir = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         File image = null;
         try {
             image = File.createTempFile(name, ".jpg", storageDir);
-        }
-        catch (IOException e)
-        {
-            Log.d("Test","Exception: " + e.toString());
+        } catch (IOException e) {
+            Log.d("Test", "Exception: " + e.toString());
         }
         return image;
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    private void goToHomePage(){
+    private void goToHomePage() {
         Intent intent = new Intent(this, HomePage.class);
         startActivity(intent);
     }
@@ -420,25 +409,25 @@ public class AddItemActivity extends AppCompatActivity {
 
 
     //returns all members in users current family from response body
-    private HashMap<String,String> getMembers(String responseBody){
-        HashMap<String,String> id_names = new HashMap<>();
+    private HashMap<String, String> getMembers(String responseBody) {
+        HashMap<String, String> id_names = new HashMap<>();
 
-        try{
+        try {
             JSONObject raw_data = new JSONObject(responseBody);
-            JSONArray keys  = raw_data.names();
+            JSONArray keys = raw_data.names();
 
-            for (int i=0; i<keys.length(); i++){
+            for (int i = 0; i < keys.length(); i++) {
                 String key = keys.getString(i);
                 id_names.put(key, raw_data.getJSONObject(key).getString("name"));
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
         return id_names;
     }
 
     //sets members to recycler view along with global option
-    private void setMembersToRecycler(HashMap<String, String> id_names){
+    private void setMembersToRecycler(HashMap<String, String> id_names) {
         // add global
         ArrayList<String> global = new ArrayList<>();
         global.add("global");
@@ -449,7 +438,7 @@ public class AddItemActivity extends AppCompatActivity {
         ArrayList<String> member_ids = new ArrayList<>(id_names.keySet());
 
         //put add names
-        for (String id : member_ids){
+        for (String id : member_ids) {
             ArrayList<String> tempMember = new ArrayList<>();
             tempMember.add(id);                 //ID as position [0]
             tempMember.add(id_names.get(id)); // Name as position [1] in array
@@ -467,7 +456,7 @@ public class AddItemActivity extends AppCompatActivity {
             try {
                 BackendReq.httpReq(items[0]);
             } catch (IOException e) {
-                Log.e(TAG, "doInBackground: ",e);
+                Log.e(TAG, "doInBackground: ", e);
                 items[0].setResponse_code(777);
                 items[0].setResponse("Connection failed to backend or request is invalid");
             }
@@ -484,15 +473,15 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
 
-    private void setSuggestedTags(String response){
+    private void setSuggestedTags(String response) {
         String tagStr = "";
 
         //get tags from response
-        try{
+        try {
             JSONObject raw_data = new JSONObject(response);
-            JSONArray tags  = raw_data.getJSONArray("tags");
+            JSONArray tags = raw_data.getJSONArray("tags");
             tagStr = UtilityFunctions.convertTags(tags);
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
 
@@ -500,6 +489,7 @@ public class AddItemActivity extends AppCompatActivity {
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
+
     /***
      * Task to get a new reference from the backend to store the image
      * in firebase storage
@@ -528,16 +518,16 @@ public class AddItemActivity extends AppCompatActivity {
         }
     }
 
-    private void updateReference(String raw_data){
+    private void updateReference(String raw_data) {
         String result = "";
-        try{
+        try {
             JSONObject jsonObject = new JSONObject(raw_data);
-            JSONArray keys  = jsonObject.names();
+            JSONArray keys = jsonObject.names();
             String key = keys.getString(0);
             String number = jsonObject.getString(key);
             result = key + "/" + number + ".jpg";
 
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, e.toString());
             Log.e(TAG, "Reference not returned");
         }

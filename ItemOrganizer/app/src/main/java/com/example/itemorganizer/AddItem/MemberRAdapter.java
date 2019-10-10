@@ -24,21 +24,22 @@ public class MemberRAdapter extends RecyclerView.Adapter<MemberRAdapter.MemberVi
 
     private ArrayList<ArrayList<String>> members;
 
-    public static class MemberViewHolder extends RecyclerView.ViewHolder{
+    public static class MemberViewHolder extends RecyclerView.ViewHolder {
         public ToggleButton text;
-        public MemberViewHolder(View v){
+
+        public MemberViewHolder(View v) {
             super(v);
             text = v.findViewById(R.id.memberName);
         }
     }
 
-    public MemberRAdapter(ArrayList<ArrayList<String>> members){
+    public MemberRAdapter(ArrayList<ArrayList<String>> members) {
         this.members = members;
     }
 
     @Override
     public MemberRAdapter.MemberViewHolder onCreateViewHolder(ViewGroup parent,
-                                                           int viewType) {
+                                                              int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.member_card_view, parent, false);
@@ -80,7 +81,7 @@ public class MemberRAdapter extends RecyclerView.Adapter<MemberRAdapter.MemberVi
         ArrayList<String> checkedItems = new ArrayList<>();
         for (int i = 0; i < getItemCount(); i++) {
             ArrayList<String> member = members.get(i);
-            if (member.size() > 2 && member.get(2).equals("true")){
+            if (member.size() > 2 && member.get(2).equals("true")) {
                 checkedItems.add(member.get(0));
             }
         }
@@ -91,7 +92,7 @@ public class MemberRAdapter extends RecyclerView.Adapter<MemberRAdapter.MemberVi
     /*
      *   Public exposed functionality
      */
-    public void addAndNotify(ArrayList<String> added){
+    public void addAndNotify(ArrayList<String> added) {
         members.add(members.size(), added);
         notifyItemInserted(members.size());
     }

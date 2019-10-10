@@ -19,8 +19,10 @@ public class BackendItem {
     public static final String POST = "POST";
 
 
-    public BackendItem(String url, String method){
-        this.url = url; this.method = method; this.body = null;
+    public BackendItem(String url, String method) {
+        this.url = url;
+        this.method = method;
+        this.body = null;
     }
 
     //getters and setters

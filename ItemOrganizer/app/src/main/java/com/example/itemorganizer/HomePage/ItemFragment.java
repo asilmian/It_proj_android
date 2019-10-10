@@ -52,7 +52,7 @@ public class ItemFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item, container, false);
-        if(UserSingleton.getInstance().getUserToken() == null){
+        if (UserSingleton.getInstance().getUserToken() == null) {
             Intent intent = new Intent(view.getContext(), AccountLogin.class);
             startActivity(intent);
         }
@@ -74,7 +74,7 @@ public class ItemFragment extends Fragment {
         return view;
     }
 
-    private void initRecyclerView(View view){
+    private void initRecyclerView(View view) {
         recyclerView = view.findViewById(R.id.item_recycler);
 
         recyclerView.setHasFixedSize(true);
@@ -84,17 +84,17 @@ public class ItemFragment extends Fragment {
         recyclerView.setAdapter(mAdapter);
     }
 
-    private void showItems(){
+    private void showItems() {
         spinner.setVisibility(View.VISIBLE);
         BackendItem get_req = new BackendItem(UserSingleton.IP + ITEM_URL, BackendItem.GET);
         get_req.setHeaders(new HashMap<String, String>());
-        Log.d(TAG,get_req.getHeaders().toString());
+        Log.d(TAG, get_req.getHeaders().toString());
 
 
-        try{
+        try {
             new GetItemInfoTask().execute(get_req);
-        } catch (Exception e){
-            Log.e(TAG, "showItems: ",e);
+        } catch (Exception e) {
+            Log.e(TAG, "showItems: ", e);
         }
     }
 
@@ -118,7 +118,7 @@ public class ItemFragment extends Fragment {
             super.onPostExecute(item);
             ArrayList<ArrayList<String>> viewItems = getItemData(item.getResponse());
             //put items on display
-            for (ArrayList<String> viewItem : viewItems){
+            for (ArrayList<String> viewItem : viewItems) {
                 mAdapter.addAndNotify(viewItem);
             }
 
@@ -127,15 +127,15 @@ public class ItemFragment extends Fragment {
     }
 
     //uses response to get item data
-    private ArrayList<ArrayList<String>> getItemData(String data){
+    private ArrayList<ArrayList<String>> getItemData(String data) {
         //Array of Data
         ArrayList<ArrayList<String>> result = new ArrayList<>();
 
-        try{
+        try {
             JSONObject raw_data = new JSONObject(data);
-            JSONArray keys  = raw_data.names();
+            JSONArray keys = raw_data.names();
 
-            for (int i=0; i<keys.length(); i++){
+            for (int i = 0; i < keys.length(); i++) {
                 String key = keys.getString(i);
                 ArrayList<String> tempData = new ArrayList<>();
 
@@ -146,7 +146,7 @@ public class ItemFragment extends Fragment {
 
                 result.add(tempData);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
         return result;

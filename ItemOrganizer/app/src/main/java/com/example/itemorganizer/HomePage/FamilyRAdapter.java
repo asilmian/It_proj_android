@@ -22,23 +22,24 @@ public class FamilyRAdapter extends RecyclerView.Adapter<FamilyRAdapter.FamViewH
 
     private ArrayList<String> families;
 
-    public static class FamViewHolder extends RecyclerView.ViewHolder{
+    public static class FamViewHolder extends RecyclerView.ViewHolder {
         public TextView tx;
         public CardView cardView;
-        public FamViewHolder(View v){
+
+        public FamViewHolder(View v) {
             super(v);
             tx = v.findViewById(R.id.famName);
             cardView = v.findViewById(R.id.itemViewCardView);
         }
     }
 
-    public FamilyRAdapter(ArrayList<String> families){
+    public FamilyRAdapter(ArrayList<String> families) {
         this.families = families;
     }
 
     @Override
     public FamilyRAdapter.FamViewHolder onCreateViewHolder(ViewGroup parent,
-                                                     int viewType) {
+                                                           int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fam_card_view, parent, false);
@@ -75,7 +76,7 @@ public class FamilyRAdapter extends RecyclerView.Adapter<FamilyRAdapter.FamViewH
     /*
      *   Public exposed functionality
      */
-    public void addAndNotify(String added){
+    public void addAndNotify(String added) {
         families.add(families.size(), added);
         notifyItemInserted(families.size());
     }

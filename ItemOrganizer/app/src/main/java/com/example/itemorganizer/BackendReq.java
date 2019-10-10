@@ -24,16 +24,16 @@ public class BackendReq {
     private static final String TAG = "BackendReq";
 
 
-    public  static BackendItem send_req(BackendItem item){
+    public static BackendItem send_req(BackendItem item) {
         try {
             return new HTTPAsyncTask().execute(item).get();
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, "send_req: ", e);
             return item;
         }
     }
 
-    public static void httpReq(BackendItem item) throws IOException{
+    public static void httpReq(BackendItem item) throws IOException {
         URL url = new URL(item.getUrl());
 
         //create HttpURLConnection
@@ -42,14 +42,14 @@ public class BackendReq {
 
         try {
             conn.setRequestMethod(item.getMethod());
-        }catch (ProtocolException e){
-            Log.e(TAG, "httpReq: ",e);
+        } catch (ProtocolException e) {
+            Log.e(TAG, "httpReq: ", e);
         }
 
         conn.setConnectTimeout(10000); //set timeout to 10 secs
 
         //set the headers
-        for (Map.Entry<String, String> entry : item.getHeaders().entrySet()){
+        for (Map.Entry<String, String> entry : item.getHeaders().entrySet()) {
             conn.setRequestProperty(entry.getKey(), entry.getValue());
         }
 
@@ -58,8 +58,8 @@ public class BackendReq {
         if (item.getBody() != null) {
             try {
                 setPostRequestContent(conn, item.getBody());
-            }catch (Exception e){
-                Log.e(TAG, "unable to write to body   "+ e.toString());
+            } catch (Exception e) {
+                Log.e(TAG, "unable to write to body   " + e.toString());
             }
             Log.d("post body:", item.getBody());
             Log.d("conn", conn.getOutputStream().toString());
@@ -70,10 +70,9 @@ public class BackendReq {
         conn.connect();
 
         item.setResponse_code(conn.getResponseCode());
-        if(item.getResponse_code() >= 400){
+        if (item.getResponse_code() >= 400) {
             item.setResponse("No response");
-        }
-        else {
+        } else {
             item.setResponse(readInputStream(conn.getInputStream()));
         }
         conn.disconnect();
@@ -82,7 +81,7 @@ public class BackendReq {
 
 
     //throws protcol exception sometimes, debug with johno
-    private static String readInputStream(InputStream response){
+    private static String readInputStream(InputStream response) {
         String result = "";
         String tmp;
         BufferedReader br = new BufferedReader(new InputStreamReader(response));
@@ -92,8 +91,8 @@ public class BackendReq {
             }
             br.close();
             return result;
-        } catch (Exception e){
-            Log.e(TAG, "readInputStream: ",e);
+        } catch (Exception e) {
+            Log.e(TAG, "readInputStream: ", e);
         }
         return result;
     }

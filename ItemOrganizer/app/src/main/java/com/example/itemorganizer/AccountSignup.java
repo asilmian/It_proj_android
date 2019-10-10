@@ -1,6 +1,7 @@
 package com.example.itemorganizer;
 
 import android.content.Intent;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -38,7 +39,7 @@ public class AccountSignup extends AppCompatActivity {
     private EditText eConfPass;
     private EditText eEmail;
     private ProgressBar spinner;
-    private final String url =  UserSingleton.IP + "user/signup/";
+    private final String url = UserSingleton.IP + "user/signup/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,7 @@ public class AccountSignup extends AppCompatActivity {
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
 
         //make sure not logged in
@@ -102,7 +103,7 @@ public class AccountSignup extends AppCompatActivity {
 
 
     //sends new user to backend, if backend connection fails, deletes user from firebase
-    private void sendToServer(){
+    private void sendToServer() {
 
         //get user Id Token
         mAuth.getCurrentUser().getIdToken(true)
@@ -111,7 +112,7 @@ public class AccountSignup extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             String idToken = task.getResult().getToken();
                             UtilityFunctions.setUserToken(idToken);
-                                sendBackendSignup();
+                            sendBackendSignup();
 
                         } else {
                             Exception e = task.getException();
@@ -123,27 +124,26 @@ public class AccountSignup extends AppCompatActivity {
 
 
     //returns true if successfully connected to backend
-    private void sendBackendSignup(){
+    private void sendBackendSignup() {
         BackendItem backendItem = new BackendItem(this.url, BackendItem.POST);
 
         //create headers
-        HashMap<String,String> headers = new HashMap<>();
+        HashMap<String, String> headers = new HashMap<>();
         backendItem.setHeaders(headers);
 
         //make body
         makeSignUpBody(backendItem);
 
-        try{
+        try {
             backendItem = new AccountSignUpTask().execute(backendItem).get();
 
-            if (backendItem.getResponse_code().equals(200)){
+            if (backendItem.getResponse_code().equals(200)) {
                 openFamilyPage();
-            }
-            else{
-                Log.d(TAG, "signUp response: "+ backendItem.getResponse());
+            } else {
+                Log.d(TAG, "signUp response: " + backendItem.getResponse());
                 deleteUserFailure();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
 
@@ -151,13 +151,13 @@ public class AccountSignup extends AppCompatActivity {
 
 
     //create post request body and send store in backendItem
-    private void makeSignUpBody(BackendItem backendItem){
+    private void makeSignUpBody(BackendItem backendItem) {
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.accumulate("name", eName.getText().toString());
             jsonObject.accumulate("email", eEmail.getText().toString());
             backendItem.setBody(jsonObject.toString());
-        }catch (JSONException e){
+        } catch (JSONException e) {
             Log.e(TAG, e.toString());
         }
     }
@@ -189,18 +189,17 @@ public class AccountSignup extends AppCompatActivity {
 
 
     //deletes user in case of failure
-    public void deleteUserFailure(){
+    public void deleteUserFailure() {
 
         mAuth.getCurrentUser().delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task_inner) {
-                if (task_inner.isSuccessful()){
+                if (task_inner.isSuccessful()) {
                     Toast toast = Toast.makeText(AccountSignup.this, "Connection to backend failed",
                             Toast.LENGTH_SHORT);
-                    toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+                    toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
                     toast.show();
-                }
-                else{
+                } else {
                     Exception e = task_inner.getException();
                     Log.e(TAG, e.toString());
                 }
@@ -208,7 +207,7 @@ public class AccountSignup extends AppCompatActivity {
         });
     }
 
-    private void openFamilyPage(){
+    private void openFamilyPage() {
 
         Intent intent = new Intent(this, FamilyLogIn.class);
         startActivity(intent);

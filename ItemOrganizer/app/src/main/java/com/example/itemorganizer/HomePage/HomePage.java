@@ -52,7 +52,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser() == null) {
+                if (firebaseAuth.getCurrentUser() == null) {
                     Log_out();
                 }
             }
@@ -60,7 +60,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     }
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         //Begin Authentication listener
         mAuth.addAuthStateListener(mAuthListener);
@@ -104,17 +104,14 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     //    Code for the menu toggle button on the top left
     @Override
     public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START))
-        {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }
-        else
-        {
+        } else {
             super.onBackPressed();
         }
     }
 
-    private void Log_out(){
+    private void Log_out() {
         //Log out from
         Intent intent = new Intent(this, AccountLogin.class);
         startActivity(intent);

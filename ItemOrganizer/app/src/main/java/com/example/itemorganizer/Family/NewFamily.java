@@ -30,7 +30,7 @@ public class NewFamily extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private EditText eFname;
     private final static String TAG = NewFamily.class.toString();
-    private final static String URL = UserSingleton.IP +  "family/create/" ;
+    private final static String URL = UserSingleton.IP + "family/create/";
     private ProgressBar spinner;
 
     @Override
@@ -45,15 +45,14 @@ public class NewFamily extends AppCompatActivity {
     }
 
     //create family
-    public void createFamily(View view){
+    public void createFamily(View view) {
         spinner.setVisibility(View.VISIBLE);
-        if(sendBackend()){
+        if (sendBackend()) {
             goToHomePage();
-        }
-        else{
+        } else {
             Toast toast = Toast.makeText(NewFamily.this, "Connection to backend failed",
                     Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
             toast.show();
         }
 
@@ -61,38 +60,37 @@ public class NewFamily extends AppCompatActivity {
     }
 
 
-    private boolean sendBackend(){
+    private boolean sendBackend() {
         BackendItem backendItem = new BackendItem(URL, BackendItem.POST);
 
-        HashMap<String,String> headers = new HashMap<>();
+        HashMap<String, String> headers = new HashMap<>();
         headers.putIfAbsent("Content-Type", "application/json");
         backendItem.setHeaders(headers);
 
         //make body
         makeSignUpBody(backendItem);
 
-        try{
+        try {
             backendItem = new NewFamilyTask().execute(backendItem).get();
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
 
-        if (backendItem.getResponse_code().equals(200)){
+        if (backendItem.getResponse_code().equals(200)) {
             return true;
-        }
-        else{
-            Log.d(TAG, "new_family_response: "+ backendItem.getResponse());
+        } else {
+            Log.d(TAG, "new_family_response: " + backendItem.getResponse());
             return false;
         }
     }
 
 
-    private void makeSignUpBody(BackendItem backendItem){
+    private void makeSignUpBody(BackendItem backendItem) {
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.accumulate("name", eFname.getText().toString());
             backendItem.setBody(jsonObject.toString());
-        }catch (JSONException e){
+        } catch (JSONException e) {
             Log.e(TAG, e.toString());
         }
     }
@@ -117,7 +115,7 @@ public class NewFamily extends AppCompatActivity {
         }
     }
 
-    private void goToHomePage(){
+    private void goToHomePage() {
         Intent intent = new Intent(this, HomePage.class);
         startActivity(intent);
     }

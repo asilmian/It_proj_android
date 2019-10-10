@@ -26,12 +26,13 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
     private static final String TAG = "ItemRAdapater";
     private ArrayList<ArrayList<String>> items;
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder{
+    public static class ItemViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
         public TextView tags;
         public ImageView image;
         public CardView cardView;
-        public ItemViewHolder(View v){
+
+        public ItemViewHolder(View v) {
             super(v);
             name = v.findViewById(R.id.itemViewName);
             tags = v.findViewById(R.id.itemViewTags);
@@ -40,14 +41,14 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
         }
     }
 
-    public ItemRAdapter(ArrayList<ArrayList<String>>  items){
+    public ItemRAdapter(ArrayList<ArrayList<String>> items) {
         this.items = items;
         storageReference = FirebaseStorage.getInstance().getReference();
     }
 
     @Override
     public ItemRAdapter.ItemViewHolder onCreateViewHolder(ViewGroup parent,
-                                                           int viewType) {
+                                                          int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_card_view, parent, false);
@@ -91,7 +92,7 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
     /*
      *   Public exposed functionality
      */
-    public void addAndNotify(ArrayList<String> added){
+    public void addAndNotify(ArrayList<String> added) {
         items.add(items.size(), added);
         notifyItemInserted(items.size());
     }

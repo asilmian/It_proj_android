@@ -61,7 +61,7 @@ public class FamilyFragment extends Fragment {
         return view;
     }
 
-    private void initRecyclerView(View view){
+    private void initRecyclerView(View view) {
         recyclerView = view.findViewById(R.id.privacy_recycler);
 
         recyclerView.setHasFixedSize(true);
@@ -71,32 +71,31 @@ public class FamilyFragment extends Fragment {
         recyclerView.setAdapter(mAdapter);
     }
 
-    private void showUserFams(){
+    private void showUserFams() {
         //get fams
         BackendItem get_req = new BackendItem(URL, BackendItem.GET);
         get_req.setHeaders(new HashMap<String, String>());
-        Log.d(TAG,get_req.getHeaders().toString());
+        Log.d(TAG, get_req.getHeaders().toString());
 
-        try{
+        try {
             new GetFamilyMembers().execute(get_req);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
     }
 
 
-    private ArrayList<String> getFamNames(BackendItem req){
+    private ArrayList<String> getFamNames(BackendItem req) {
         ArrayList<String> result = new ArrayList<>();
-        try{
+        try {
             JSONObject raw_data = new JSONObject(req.getResponse());
-            JSONArray keys  = raw_data.names();
+            JSONArray keys = raw_data.names();
 
-            for (int i=0; i<keys.length(); i++){
+            for (int i = 0; i < keys.length(); i++) {
                 String key = keys.getString(i);
                 result.add(raw_data.getJSONObject(key).getString("name"));
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, e.toString());
         }
         return result;

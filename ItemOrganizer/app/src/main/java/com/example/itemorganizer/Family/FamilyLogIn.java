@@ -40,7 +40,7 @@ public class FamilyLogIn extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_family_log_in);
-        eToken= findViewById(R.id.familyToken);
+        eToken = findViewById(R.id.familyToken);
         spinner = findViewById(R.id.famLogInProg);
 
         mAuth = FirebaseAuth.getInstance();
@@ -53,18 +53,17 @@ public class FamilyLogIn extends AppCompatActivity {
     }
 
     //send family Token to verify
-    public void sendToken(View view){
+    public void sendToken(View view) {
         spinner.setVisibility(View.VISIBLE);
         int result = sendBackend();
         spinner.setVisibility(View.GONE);
 
-        if(result == 1){
+        if (result == 1) {
             goToHomePage();
-        }
-        else if (result == 0){
+        } else if (result == 0) {
             Toast toast = Toast.makeText(FamilyLogIn.this, "Connection to backend failed",
                     Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
             toast.show();
         }
 
@@ -72,39 +71,38 @@ public class FamilyLogIn extends AppCompatActivity {
 
 
     //send details to join family
-    private int sendBackend(){
+    private int sendBackend() {
         BackendItem backendItem = new BackendItem(URL, BackendItem.POST);
 
         //add required headers
-        HashMap<String,String> headers = new HashMap<>();
+        HashMap<String, String> headers = new HashMap<>();
         headers.putIfAbsent("Content-Type", "application/json");
         backendItem.setHeaders(headers);
 
         //make body
         makeSignUpBody(backendItem);
-        try{
+        try {
 
             backendItem = new FamilyLoginTask().execute(backendItem).get();
 
 
-            if (backendItem.getResponse_code().equals(200)){
+            if (backendItem.getResponse_code().equals(200)) {
                 return 1;
             }
 
             //if token is invalid
-            else if (backendItem.getResponse_code().equals((404))){
+            else if (backendItem.getResponse_code().equals((404))) {
                 Toast toast = Toast.makeText(FamilyLogIn.this, "Invalid Token",
                         Toast.LENGTH_SHORT);
-                toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL,0,0);
+                toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
                 toast.show();
-                Log.d(TAG, "new_family_response: "+ backendItem.getResponse());
+                Log.d(TAG, "new_family_response: " + backendItem.getResponse());
                 return 2;
-            }
-            else {
+            } else {
                 Log.d(TAG, backendItem.getResponse_code().toString());
                 return 0;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.e(FamilyLogIn.TAG, e.toString());
         }
         return 0;
@@ -131,18 +129,18 @@ public class FamilyLogIn extends AppCompatActivity {
 
 
     //make join family body
-    private void makeSignUpBody(BackendItem backendItem){
+    private void makeSignUpBody(BackendItem backendItem) {
         try {
             JSONObject jsonObject = new JSONObject();
             jsonObject.accumulate("family_token", eToken.getText().toString());
             backendItem.setBody(jsonObject.toString());
-        }catch (JSONException e){
+        } catch (JSONException e) {
             Log.e(TAG, e.toString());
         }
     }
 
 
-    private void goToHomePage(){
+    private void goToHomePage() {
         Intent intent = new Intent(this, HomePage.class);
         startActivity(intent);
     }

@@ -4,6 +4,7 @@ import android.content.Intent;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -38,23 +39,23 @@ public class AccountLogin extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null){
+        if (currentUser != null) {
             setUserToken();
         }
 
     }
 
-    public void openSignup(View view){
+    public void openSignup(View view) {
 
         Intent intent = new Intent(this, AccountSignup.class);
         startActivity(intent);
     }
 
 
-    public void openHomepage(View view){
+    public void openHomepage(View view) {
 
         //get password and email from screen
         String password = ePass.getText().toString();
@@ -87,13 +88,13 @@ public class AccountLogin extends AppCompatActivity {
     }
 
     //go to main page
-    private void goToHomePage(){
+    private void goToHomePage() {
         Intent intent = new Intent(this, HomePage.class);
         startActivity(intent);
     }
 
     //initializes User singleton and sets/refreshes the user token.
-    private void setUserToken(){
+    private void setUserToken() {
         mAuth.getCurrentUser().getIdToken(true)
                 .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                     public void onComplete(@NonNull Task<GetTokenResult> task) {
