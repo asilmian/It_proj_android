@@ -1,6 +1,7 @@
 package com.example.itemorganizer.AddItem;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -46,6 +47,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -59,6 +61,7 @@ public class AddItemActivity extends AppCompatActivity {
     ImageView imageView;
     String pathToFile;
     Button pictureBtn;
+    Button galleryBtn;
     Button addbtn;
     EditText item_name;
     EditText item_desc;
@@ -82,7 +85,8 @@ public class AddItemActivity extends AppCompatActivity {
     private static final String GET_IMAGE_REF = "item/add/ref/";
     private final static String MEMBERS_URL = "family/info/members/";
     private final static String DETECTION = "detection/";
-  
+    public static final int GET_FROM_GALLERY = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,6 +96,7 @@ public class AddItemActivity extends AppCompatActivity {
         requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
 
         pictureBtn = findViewById(R.id.PictureBtn);
+        galleryBtn = findViewById(R.id.GalleryBtn);
         addbtn = findViewById(R.id.submit_item_button);
 
         item_name = findViewById(R.id.add_item_name);
@@ -108,6 +113,13 @@ public class AddItemActivity extends AppCompatActivity {
                 takePhoto();
             }
         });
+        //Gallery
+        galleryBtn.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View view) {
+                  startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY);
+                                               }
+          });
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -342,10 +354,28 @@ public class AddItemActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK)
         {
+            /* Requestcode 1: Call Camera Activity. */
             if (requestCode == 1)
             {
                 Bitmap bitmap = BitmapFactory.decodeFile(pathToFile);
                 imageView.setImageBitmap(bitmap);
+            }
+
+            /* Requestcode 3: Get Photo from Gallery, NOT Camera. */
+            if(requestCode==GET_FROM_GALLERY && resultCode == Activity.RESULT_OK) {
+                Uri selectedImage = data.getData();
+                Bitmap bitmap = null;
+                try {
+                    bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                    //Set Bitmap
+                    imageView.setImageBitmap(bitmap);
+                } catch (FileNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
         }
     }
