@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
+        app:layout_constraintTop_toBottomOf="@+id/new_family_view" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/privacy_recycler"
@@ -56,7 +56,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/view2"
+        android:id="@+id/new_family_view"
         android:layout_width="116dp"
         android:layout_height="121dp"
         android:layout_centerHorizontal="true"
