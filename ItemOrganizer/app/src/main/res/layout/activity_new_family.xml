@@ -7,32 +7,32 @@
     android:background="@color/colorBackground"
     tools:context=".Family.NewFamily">
 
+    <TextView
+        android:id="@+id/famNameView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="TextView"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/new_family_view"
+        tools:text="@string/famname" />
+
     <EditText
         android:id="@+id/familyName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:ems="10"
         android:inputType="textShortMessage|textPersonName"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.039" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="117dp"
-        android:layout_height="37dp"
-        android:layout_marginTop="32dp"
-        android:text="@string/famname"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view2" />
+        app:layout_constraintTop_toBottomOf="@+id/famNameView"
+        app:layout_constraintVertical_bias="0.135" />
 
     <Button
         android:id="@+id/createFamily"
@@ -47,17 +47,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/familyName" />
+        app:layout_constraintTop_toBottomOf="@+id/familyName"
+        app:layout_constraintVertical_bias="0.643" />
 
     <ProgressBar
         android:id="@+id/newFamilyProgressBar"
         style="?android:attr/progressBarStyleLarge"
-        android:layout_width="160dp"
-        android:layout_height="130dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/createFamily"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.518"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/familyName" />
 
     <TextView
         android:id="@+id/textView54"
@@ -69,7 +72,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/view2"
+        android:id="@+id/new_family_view"
         android:layout_width="111dp"
         android:layout_height="120dp"
         android:layout_centerHorizontal="true"

@@ -31,6 +31,7 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
         public TextView tags;
         public ImageView image;
         public CardView cardView;
+        public String imageRef;
 
         public ItemViewHolder(View v) {
             super(v);
@@ -69,9 +70,10 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
 
         //use glideapp to display image from fire storage
         GlideApp.with(viewHolder.image)
-                .load(storageReference.child(items.get(i).get(3)))
+                .load(storageReference.child(items.get(i).get(3))) //imageReference
                 .into(viewHolder.image);
 
+        viewHolder.imageRef = items.get(i).get(3);
 
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
