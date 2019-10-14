@@ -61,7 +61,7 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
 
     // called each time a new item is added to the RecyclerView container
     @Override
-    public void onBindViewHolder(@NonNull ItemViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final ItemViewHolder viewHolder, int i) {
 
         Log.d(TAG, "onBindViewHolder: called with i: " + i);
 
