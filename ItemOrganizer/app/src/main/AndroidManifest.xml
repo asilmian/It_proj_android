@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.itemorganizer">
 
-
-    <uses-permission android:name = "android.permission.CAMERA"/>
-    <uses-permission android:name = "android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".AddItem.AddItemActivity"></activity>
+        <activity android:name=".HomePage.SingleItemView"></activity>
+        <activity android:name=".AddItem.AddItemActivity" />
         <activity android:name=".AccountSignup" />
         <activity android:name=".AccountLogin" />
         <activity android:name=".Family.NewFamily" />
@@ -30,12 +31,13 @@
         </activity>
 
         <provider
-            android:name = "androidx.core.content.FileProvider"
-            android:authorities = "com.example.itemorganizer.fileprovider"
-            android:exported = "false"
-            android:grantUriPermissions= "true">
-            <meta-data android:name = "android.support.FILE_PROVIDER_PATHS"
-                android:resource = "@xml/file_paths"></meta-data>
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.itemorganizer.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
         </provider>
     </application>
 

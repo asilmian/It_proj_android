@@ -31,8 +31,9 @@
 
             <ImageView
                 android:id="@+id/itemViewImage"
-                android:layout_width="327dp"
-                android:layout_height="182dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                card_view:layout_constraintBottom_toTopOf="@+id/itemViewName"
                 card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent"
@@ -45,10 +46,9 @@
                 android:textSize="20sp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintHorizontal_bias="0.502"
                 card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent"
-                card_view:layout_constraintVertical_bias="0.722" />
+                card_view:layout_constraintVertical_bias="0.845" />
 
             <TextView
                 android:id="@+id/itemViewTags"
@@ -56,10 +56,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:textSize="16sp"
+                card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintHorizontal_bias="0.501"
                 card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toBottomOf="@+id/itemViewName" />
+                card_view:layout_constraintTop_toBottomOf="@+id/itemViewName"
+                card_view:layout_constraintVertical_bias="0.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>

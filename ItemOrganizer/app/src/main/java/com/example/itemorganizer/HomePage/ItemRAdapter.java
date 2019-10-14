@@ -1,5 +1,7 @@
 package com.example.itemorganizer.HomePage;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.Toast;
 
 import com.example.itemorganizer.GlideApp;
 import com.example.itemorganizer.R;
+import com.example.itemorganizer.UserSingleton;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -25,13 +28,14 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
     private StorageReference storageReference;
     private static final String TAG = "ItemRAdapater";
     private ArrayList<ArrayList<String>> items;
+    private Context context;
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
         public TextView tags;
         public ImageView image;
         public CardView cardView;
-        public String imageRef;
+        public String itemToken;
 
         public ItemViewHolder(View v) {
             super(v);
@@ -42,8 +46,9 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
         }
     }
 
-    public ItemRAdapter(ArrayList<ArrayList<String>> items) {
+    public ItemRAdapter(ArrayList<ArrayList<String>> items, Context context) {
         this.items = items;
+        this.context = context;
         storageReference = FirebaseStorage.getInstance().getReference();
     }
 
@@ -71,14 +76,15 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
         //use glideapp to display image from fire storage
         GlideApp.with(viewHolder.image)
                 .load(storageReference.child(items.get(i).get(3))) //imageReference
+                .centerCrop()
                 .into(viewHolder.image);
 
-        viewHolder.imageRef = items.get(i).get(3);
+        viewHolder.itemToken = items.get(i).get(4);// token
 
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Waddup", Toast.LENGTH_SHORT).show();
+                viewItem(viewHolder.itemToken);
             }
         });
 
@@ -90,6 +96,11 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
         return items.size();
     }
 
+    public void viewItem(String itemToken){
+        Intent intent = new Intent(this.context, SingleItemView.class);
+        intent.putExtra("token", itemToken);
+        this.context.startActivity(intent);
+    }
 
     /*
      *   Public exposed functionality

@@ -59,7 +59,8 @@ public class ItemFragment extends Fragment {
 
         searchButton = view.findViewById(R.id.search_btn);
         eSearchT = view.findViewById(R.id.searchText);
-        spinner = view.findViewById(R.id.itemViewProgBar);
+        spinner = view.findViewById(R.id.item_frag_loading_bar);
+        spinner.setVisibility(View.VISIBLE);
 
         FloatingActionButton fab = view.findViewById(R.id.add_new_item);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +81,7 @@ public class ItemFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        this.mAdapter = new ItemRAdapter(new ArrayList<ArrayList<String>>());
+        this.mAdapter = new ItemRAdapter(new ArrayList<ArrayList<String>>(), this.getContext());
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -142,7 +143,8 @@ public class ItemFragment extends Fragment {
                 tempData.add(raw_data.getJSONObject(key).getString("name")); // First element
                 tempData.add(raw_data.getJSONObject(key).getString("description")); // Second Element
                 tempData.add(UtilityFunctions.convertTags(raw_data.getJSONObject(key).getJSONArray("tags"))); // Third Element
-                tempData.add(raw_data.getJSONObject(key).getString("image")); // Fourth Element
+                tempData.add(raw_data.getJSONObject(key).getString("image"));// Fourth Element
+                tempData.add(key);
 
                 result.add(tempData);
             }
