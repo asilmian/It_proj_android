@@ -18,7 +18,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.is;
+
+/**
+ * Test for adding family activity
+ */
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -64,7 +67,8 @@ public class AddFamilyTest {
 
         ViewInteraction famCode = onView(
                 allOf(withId(R.id.famNameView),
-                isDisplayed()));
+                isDisplayed(),
+                        withText("Family Name:")));
         famCode.check((matches(withText("Family Name:"))));
 
         ViewInteraction namefield = onView(
@@ -75,8 +79,8 @@ public class AddFamilyTest {
         ViewInteraction createButton = onView(
                 allOf(withId(R.id.createFamily),
                         isDisplayed(),
-                        withText("create family")));
-        createButton.check(matches(withText("create family")));
+                        withText("Create Family")));
+        createButton.check(matches(withText("Create Family")));
 
     }
 }

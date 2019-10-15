@@ -43,4 +43,7 @@
     <string name="your_items">Your Items</string>
     <string name="new_user_sign_up">New User? Sign up!</string>
     <string name="search_for_an_item">Search for an item ...</string>
+    <string name="description">Description:</string>
+    <string name="delete">Delete</string>
+    <string name="change_privacy">Change Privacy</string>
 </resources>
