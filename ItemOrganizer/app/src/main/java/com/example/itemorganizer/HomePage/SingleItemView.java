@@ -27,8 +27,14 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.HashMap;
 
+/**
+ * Activity for viewing a single item
+ * Should never be able to get to this activity with user already logged in
+ *
+ */
 public class SingleItemView extends AppCompatActivity {
 
+    //all the views and buttons
     private ImageView image;
     private TextView name;
     private TextView desc;
@@ -71,7 +77,7 @@ public class SingleItemView extends AppCompatActivity {
     }
 
 
-
+    //send the request to get item information
     private void sendItemReq(){
         BackendItem item = new BackendItem(UserSingleton.IP + URL, BackendItem.POST);
         item.setHeaders(new HashMap<String, String>());
@@ -84,6 +90,8 @@ public class SingleItemView extends AppCompatActivity {
 
     }
 
+    //creates response body
+    //includes item_token and token of selected
     private void createBody(BackendItem item){
         JSONObject object = new JSONObject();
         try{
@@ -94,6 +102,7 @@ public class SingleItemView extends AppCompatActivity {
         item.setBody(object.toString());
     }
 
+    //sets information in the views based on the response it gets
     private void onRecieve(String response){
         try{
             JSONObject object = new JSONObject(response);
@@ -115,13 +124,14 @@ public class SingleItemView extends AppCompatActivity {
     }
 
 
+
+    //http task for making a request.
     private class GetItemView extends AsyncTask<BackendItem, Void, BackendItem> {
 
         //set progress onPrexecute
 
         @Override
         protected BackendItem doInBackground(BackendItem... items) {
-            // params comes from the execute() call: params[0] is the url.
             try {
                 BackendReq.httpReq(items[0]);
             } catch (IOException e) {
