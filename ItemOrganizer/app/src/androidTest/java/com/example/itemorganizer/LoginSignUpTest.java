@@ -17,6 +17,13 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
+
+/***
+ * This class test the login and sign up page using android espresso
+ * Uses assertions to check that all views and text views are there
+ */
+
+
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class LoginSignUpTest {
