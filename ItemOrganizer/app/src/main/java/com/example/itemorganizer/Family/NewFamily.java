@@ -55,11 +55,10 @@ public class NewFamily extends AppCompatActivity {
             toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
             toast.show();
         }
-
-        //send details to create new family
     }
 
 
+    //send update to backend
     private boolean sendBackend() {
         BackendItem backendItem = new BackendItem(URL, BackendItem.POST);
 
