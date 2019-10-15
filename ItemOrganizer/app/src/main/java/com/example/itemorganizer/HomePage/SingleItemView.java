@@ -67,6 +67,7 @@ public class SingleItemView extends AppCompatActivity {
         spinner.setVisibility(View.VISIBLE);
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
+        sendItemReq();
     }
 
 
@@ -134,6 +135,7 @@ public class SingleItemView extends AppCompatActivity {
         @Override
         protected void onPostExecute(BackendItem item) {
             super.onPostExecute(item);
+            Log.d(TAG, item.getResponse());
             onRecieve(item.getResponse());
         }
     }

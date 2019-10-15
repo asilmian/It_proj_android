@@ -35,7 +35,7 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
         public TextView tags;
         public ImageView image;
         public CardView cardView;
-        public String itemToken;
+        public String itemToken; // store token to pass on
 
         public ItemViewHolder(View v) {
             super(v);
