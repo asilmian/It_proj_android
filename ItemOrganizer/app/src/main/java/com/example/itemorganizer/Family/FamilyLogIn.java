@@ -107,7 +107,7 @@ public class FamilyLogIn extends AppCompatActivity {
         return 0;
     }
 
-    private class FamilyLoginTask extends AsyncTask<BackendItem, Void, BackendItem> {
+    private static class FamilyLoginTask extends AsyncTask<BackendItem, Void, BackendItem> {
         @Override
         protected BackendItem doInBackground(BackendItem... items) {
             // params comes from the execute() call: params[0] is the url.

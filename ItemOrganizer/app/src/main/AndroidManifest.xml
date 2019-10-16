@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".HomePage.SingleItemView"></activity>
+        <activity android:name=".Family.SingleFamilyView"></activity>
+        <activity android:name=".HomePage.SingleItemView" />
         <activity android:name=".AddItem.AddItemActivity" />
         <activity android:name=".AccountSignup" />
         <activity android:name=".AccountLogin" />
