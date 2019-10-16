@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.example.itemorganizer.AddItem.MemberRAdapter;
 import com.example.itemorganizer.BackendItem;
 import com.example.itemorganizer.BackendReq;
+import com.example.itemorganizer.HomePage.HomePage;
 import com.example.itemorganizer.R;
 import com.example.itemorganizer.UserSingleton;
 
@@ -41,8 +42,12 @@ public class SingleFamilyView extends AppCompatActivity {
     private Button current;
     private RecyclerView members;
     private ProgressBar spinner;
+    private ProgressBar secondarySpinner;
     private FamilyMemRAdapter mAdapter;
-    private static final String URL = "";
+
+    private String family_token;
+    private static final String URL = "family/info/"; // careful this not working
+    private static final String MembersURL = "family/info/members";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +66,8 @@ public class SingleFamilyView extends AppCompatActivity {
 
         spinner = findViewById(R.id.single_family_view_spinner);
         spinner.setVisibility(View.VISIBLE);
+        secondarySpinner = findViewById(R.id.single_family_view_second_spinner);
+        secondarySpinner.setVisibility(View.GONE);
 
         //set listener on change current family button
         current = findViewById(R.id.single_family_view_current);
@@ -72,19 +79,21 @@ public class SingleFamilyView extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-        String family_token = intent.getStringExtra("family_token");
+        family_token = intent.getStringExtra("family_token");
         getFamilyInformation(family_token);
     }
 
-
+    //switch family.
     private void changeCurrentFamily() {
         //if token.equals(UserSingleton.getinstance().getCurrFamily(){
         // return
-        Intent intent = new Intent(getApplicationContext(), FamilyLogIn.class);
+        //else send request to do this shit
+        Intent intent = new Intent(getApplicationContext(), HomePage.class);
         startActivity(intent);
     }
 
 
+    //gets family information except member information.
     private void getFamilyInformation(String family_token){
         BackendItem item = new BackendItem(UserSingleton.IP + URL, BackendItem.POST);
 
@@ -93,12 +102,14 @@ public class SingleFamilyView extends AppCompatActivity {
         createBody(item, family_token);
 
         try {
-            new ViewFamilyTask().execute(item);
+            item = new ViewFamilyTask().execute(item).get();
+            showInformation(item.getResponse());
         } catch (Exception e){
             Log.e(TAG, "getFamilyInformation: ",e);
         }
     }
 
+    //creates a body with "family_token": token
     private void createBody(BackendItem item, String family_token){
         JSONObject object = new JSONObject();
         try{
@@ -109,8 +120,8 @@ public class SingleFamilyView extends AppCompatActivity {
         }
     }
 
-
-    private class ViewFamilyTask extends AsyncTask<BackendItem, Void, BackendItem> {
+    //task to get family information (not members)
+    private static class ViewFamilyTask extends AsyncTask<BackendItem, Void, BackendItem> {
         @Override
         protected BackendItem doInBackground(BackendItem... items) {
             // params comes from the execute() call: params[0] is the url.
@@ -125,28 +136,85 @@ public class SingleFamilyView extends AppCompatActivity {
         @Override
         protected void onPostExecute(BackendItem item) {
             super.onPostExecute(item);
-            showInformation(item.getResponse());
 
         }
     }
 
+
+    //shows partial family information and then send request for
+    // member information
     private void showInformation(String response){
         try{
             JSONObject object = new JSONObject(response);
             name.setText(object.getString("name"));
             inviteCode.setText(object.getString("invite_code"));
-
-            JSONArray array = object.getJSONArray("members");
-            
-
         } catch (JSONException e){
             Log.e(TAG, "showInformation: ",e);
         }
 
-
-
-
+        BackendItem item = new BackendItem(UserSingleton.IP + MembersURL, BackendItem.POST);
+        item.setHeaders(new HashMap<String, String>());
+        createBody(item, family_token);
 
         spinner.setVisibility(View.GONE);
+
+        secondarySpinner.setVisibility(View.VISIBLE);
+
+        try {
+            new ViewMembersTask().execute(item);
+        }catch (Exception e){
+            Log.e(TAG, "showInformation: ",e);
+        }
+
+    }
+
+    //task to send a request to get Members to
+    private class ViewMembersTask extends AsyncTask<BackendItem, Void, BackendItem> {
+        @Override
+        protected BackendItem doInBackground(BackendItem... items) {
+            // params comes from the execute() call: params[0] is the url.
+            try {
+                BackendReq.httpReq(items[0]);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            return items[0];
+        }
+
+        @Override
+        protected void onPostExecute(BackendItem item) {
+            super.onPostExecute(item);
+            showMembers(item.getResponse());
+        }
+    }
+
+    //puts family member names on the recycler view
+    private void showMembers(String response){
+        ArrayList<String> memberNames = extractMemberNames(response);
+
+        for (String name: memberNames){
+            mAdapter.addAndNotify(name);
+        }
+
+        secondarySpinner.setVisibility(View.GONE);
+    }
+
+    //extracts the names of the family members from the response and returns
+    // an array list with the names
+    private ArrayList<String> extractMemberNames(String responseBody) {
+        ArrayList<String> memberNames = new ArrayList<>();
+
+        try {
+            JSONObject raw_data = new JSONObject(responseBody);
+            JSONArray keys = raw_data.names();
+
+            for (int i = 0; i < keys.length(); i++) {
+                String key = keys.getString(i);
+                memberNames.add(raw_data.getJSONObject(key).getString("name"));
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "extractMemberNames: ",e);
+        }
+        return memberNames;
     }
 }
