@@ -38,6 +38,8 @@ import com.example.itemorganizer.UtilityFunctions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -72,6 +74,7 @@ public class AddItemActivity extends AppCompatActivity {
     private MemberRAdapter mAdapter;
     ProgressBar spinner;
     ProgressBar secondarySpinner;
+    ProgressBar picUpload;
 
     private Boolean uploadedPic;
 
@@ -99,6 +102,8 @@ public class AddItemActivity extends AppCompatActivity {
         item_tags = findViewById(R.id.add_item_tags);
         spinner = findViewById(R.id.addItemProgBar);
         secondarySpinner = findViewById(R.id.addItemSecondarBar);
+        picUpload = findViewById(R.id.add_item_pic_upload_bar);
+        picUpload.setVisibility(View.GONE);
         uploadedPic = false;
 
 
@@ -174,12 +179,12 @@ public class AddItemActivity extends AppCompatActivity {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    //functions to access the backedn ML object recognition model
+    //functions to access the backend ML object recognition model
     public void getDesc(View view) {
         if (image == null) {
             return;
         }
-        spinner.setVisibility(View.VISIBLE);
+        picUpload.setVisibility(View.VISIBLE);
         StorageReference newRef = storageRef.child(ref);
         Uri file = Uri.fromFile(image);
         UploadTask uploadTask = newRef.putFile(file);
@@ -206,6 +211,21 @@ public class AddItemActivity extends AppCompatActivity {
                     Log.e(TAG, "onSuccess: ", e);
                 }
 
+            }
+        });
+        //code to implement progress bar.
+        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                System.out.println("Upload is " + progress + "% done");
+                int currentProgress = (int) progress;
+                picUpload.setProgress(currentProgress);
+            }
+        }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+                System.out.println("Upload is paused");
             }
         });
     }
@@ -250,7 +270,7 @@ public class AddItemActivity extends AppCompatActivity {
         } else {
             final StorageReference newRef = storageRef.child(ref);
             Uri file = Uri.fromFile(image);
-
+            picUpload.setVisibility(View.VISIBLE);
             //upload file to storage
             UploadTask uploadTask = newRef.putFile(file);
             // Register observers to listen for when the download is done or if it fails
@@ -259,32 +279,35 @@ public class AddItemActivity extends AppCompatActivity {
                 public void onFailure(@NonNull Exception exception) {
                     // Handle unsuccessful uploads
                     Log.e(TAG, "upload failed   " + exception.toString());
+                    picUpload.setVisibility(View.GONE);
+                    spinner.setVisibility(View.GONE);
 
                 }
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    picUpload.setVisibility(View.GONE);
                     //send info to backend
                     sendItemInfo();
                 }
             });
+            //code to implement progress bar.
+            uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress = (100.0 *taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                    System.out.println("Upload is " + progress + "% done");
+                    int currentprogress = (int) progress;
+                    picUpload.setProgress(currentprogress);
+                }
+            }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+                    System.out.println("Upload is paused");
+                }
+            });
         }
 
-        // code to implement progress bar.
-//        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-//                double progress = 100.0 * (taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-//                System.out.println("Upload is " + progress + "% done");
-//                int currentprogress = (int) progress;
-//                progressBar.setProgress(currentprogress);
-//            }
-//        }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
-//                System.out.println("Upload is paused");
-//            }
-//        });
     }
 
     //send item add information to the backend
@@ -467,7 +490,7 @@ public class AddItemActivity extends AppCompatActivity {
         protected void onPostExecute(BackendItem backendItem) {
             super.onPostExecute(backendItem);
             setSuggestedTags(backendItem.getResponse());
-            spinner.setVisibility(View.GONE);
+            picUpload.setVisibility(View.GONE);
 
         }
     }
