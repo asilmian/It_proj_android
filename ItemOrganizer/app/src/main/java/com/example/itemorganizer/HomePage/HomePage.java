@@ -82,6 +82,9 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         if(UserSingleton.getInstance().getName() == null){
             setUserInfo();
         }
+        else {
+            name.setText(UserSingleton.getInstance().getName());
+        }
     }
 
     @Override
@@ -156,7 +159,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
             String userName = object.getString("name");
             UserSingleton.getInstance().setName(userName);
             name.setText(userName);
-            UserSingleton.getInstance().setCurrToken(object.getString("currentfamily"));
+            UserSingleton.getInstance().setFamilyToken(object.getString("currentfamily"));
         } catch (JSONException e){
             Log.e(TAG, "setUserInfo: ",e);
         }

@@ -25,7 +25,7 @@ public class UserSingleton {
     public void setUserToken(String token) {
         userToken = token;
     }
-    public void setCurrToken(String t){ currToken = t;}
+    public void setFamilyToken(String t){ currToken = t;}
 
     public String getUserToken() {
         return userToken;

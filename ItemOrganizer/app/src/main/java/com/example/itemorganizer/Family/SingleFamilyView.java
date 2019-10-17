@@ -7,14 +7,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.JsonReader;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.itemorganizer.AddItem.MemberRAdapter;
 import com.example.itemorganizer.BackendItem;
 import com.example.itemorganizer.BackendReq;
 import com.example.itemorganizer.HomePage.HomePage;
@@ -92,8 +92,7 @@ public class SingleFamilyView extends AppCompatActivity {
         createBody(item, family_token);
 
         try {
-            item = BackendReq.send_req(item);
-            showInformation(item.getResponse());
+            new ViewFamilyTask().execute(item);
         } catch (Exception e){
             Log.e(TAG, "getFamilyInformation: ",e);
             Log.e(TAG, item.getResponse_code().toString());
@@ -111,13 +110,33 @@ public class SingleFamilyView extends AppCompatActivity {
         }
     }
 
+
+    private class ViewFamilyTask extends AsyncTask<BackendItem, Void, BackendItem> {
+        @Override
+        protected BackendItem doInBackground(BackendItem... items) {
+            // params comes from the execute() call: params[0] is the url.
+            try {
+                BackendReq.httpReq(items[0]);
+            } catch (Exception e) {
+                Log.e(TAG, e.toString());
+            }
+            return items[0];
+        }
+
+        @Override
+        protected void onPostExecute(BackendItem item) {
+            super.onPostExecute(item);
+            showInformation(item.getResponse());
+        }
+    }
+
     //show complete family information.
     private void showInformation(String response){
 
         try{
             JSONObject object = new JSONObject(response);
             name.setText(object.getString("name"));
-            inviteCode.setText(object.getString("invite_code"));
+            inviteCode.setText(object.getString("token"));
 
             //show members
             JSONArray memjson = object.getJSONArray("members");
@@ -139,12 +158,23 @@ public class SingleFamilyView extends AppCompatActivity {
 
         BackendItem item = new BackendItem(UserSingleton.IP + SWITCH, BackendItem.POST);
         item.setHeaders(new HashMap<String, String>());
-        createBody(item, family_token);
+        createSwitchBody(item, family_token);
+        Log.d(TAG, item.getBody());
         try {
             new SwitchFamilyTask().execute(item);
         } catch (Exception e){
             Log.e(TAG, "changeCurrentFamily: ",e);
             Log.e(TAG, item.getResponse_code().toString());
+        }
+    }
+
+    private void createSwitchBody(BackendItem item, String family_token){
+        JSONObject object = new JSONObject();
+        try{
+            object.accumulate("family", family_token);
+            item.setBody(object.toString());
+        } catch (JSONException e){
+            Log.e(TAG, "createBody: ",e);
         }
     }
 
@@ -164,13 +194,23 @@ public class SingleFamilyView extends AppCompatActivity {
         @Override
         protected void onPostExecute(BackendItem item) {
             super.onPostExecute(item);
-            goToHomePage();
+            goToHomePage(item.getResponse_code());
         }
     }
 
-    //intent to go to homePage
-    private void goToHomePage(){
-        Intent intent = new Intent(getApplicationContext(), HomePage.class);
-        startActivity(intent);
+    //intent to go to homePage if response was successful.
+    private void goToHomePage(int response_code){
+        if(response_code != 200){
+            Toast toast = Toast.makeText(SingleFamilyView.this, "Please try again",
+                    Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
+            toast.show();
+            secondarySpinner.setVisibility(View.INVISIBLE);
+        }
+        else {
+            UserSingleton.getInstance().setFamilyToken(family_token);
+            Intent intent = new Intent(getApplicationContext(), HomePage.class);
+            startActivity(intent);
+        }
     }
 }
