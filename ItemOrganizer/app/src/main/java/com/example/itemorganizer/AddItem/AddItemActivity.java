@@ -79,11 +79,10 @@ public class AddItemActivity extends AppCompatActivity {
     private Boolean uploadedPic;
 
     private final static String TAG = AddItemActivity.class.toString();
-    private HashMap<String, String> id_names;
 
     private static final String ADD_URL = "item/add/";
     private static final String GET_IMAGE_REF = "item/add/ref/";
-    private final static String MEMBERS_URL = "family/info/members/";
+    private final static String MEMBERS_URL = "family/curr/members/";
     private final static String DETECTION = "detection/";
 
     @Override
@@ -255,7 +254,7 @@ public class AddItemActivity extends AppCompatActivity {
         spinner.setVisibility(View.VISIBLE);
         //give time to set spinner visible
         try {
-            Thread.sleep(100);
+            Thread.sleep(1000);
         } catch (Exception e) {
             Log.e(TAG, "submitItem: ", e);
         }

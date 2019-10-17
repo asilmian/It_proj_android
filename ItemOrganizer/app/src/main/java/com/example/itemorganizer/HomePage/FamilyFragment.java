@@ -67,7 +67,7 @@ public class FamilyFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        this.mAdapter = new FamilyRAdapter(new ArrayList<String>());
+        this.mAdapter = new FamilyRAdapter(new ArrayList<ArrayList<String>>(), getContext());
         recyclerView.setAdapter(mAdapter);
     }
 
@@ -85,15 +85,18 @@ public class FamilyFragment extends Fragment {
     }
 
 
-    private ArrayList<String> getFamNames(BackendItem req) {
-        ArrayList<String> result = new ArrayList<>();
+    private ArrayList<ArrayList<String>> getFamNames(BackendItem req) {
+        ArrayList<ArrayList<String>> result = new ArrayList<>();
         try {
             JSONObject raw_data = new JSONObject(req.getResponse());
             JSONArray keys = raw_data.names();
 
             for (int i = 0; i < keys.length(); i++) {
                 String key = keys.getString(i);
-                result.add(raw_data.getJSONObject(key).getString("name"));
+                ArrayList<String> family = new ArrayList<>();
+                family.add(raw_data.getJSONObject(key).getString("name")); //store name in pos1
+                family.add(raw_data.getJSONObject(key).getString("token")); //store token in pos1
+                result.add(family);
             }
         } catch (Exception e) {
             Log.e(TAG, e.toString());
@@ -118,9 +121,9 @@ public class FamilyFragment extends Fragment {
         @Override
         protected void onPostExecute(BackendItem item) {
             super.onPostExecute(item);
-            ArrayList<String> famNames = getFamNames(item);
-            for (String names : famNames) {
-                mAdapter.addAndNotify(names);
+            ArrayList<ArrayList<String>> famNames = getFamNames(item);
+            for (ArrayList<String> family : famNames) {
+                mAdapter.addAndNotify(family);
             }
             spinner.setVisibility(View.GONE);
         }

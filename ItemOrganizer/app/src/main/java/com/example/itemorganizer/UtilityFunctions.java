@@ -56,5 +56,12 @@ public class UtilityFunctions {
         return result.substring(0, result.length() - 1);
     }
 
+    public static void clearUser(){
+        UserSingleton user = UserSingleton.getInstance();
+        user.setFamilyToken(null);
+        user.setName(null);
+        user.setUserToken(null);
+    }
+
 
 }

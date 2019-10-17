@@ -10,17 +10,35 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.itemorganizer.AccountLogin;
+import com.example.itemorganizer.BackendItem;
+import com.example.itemorganizer.BackendReq;
 import com.example.itemorganizer.R;
+import com.example.itemorganizer.UserSingleton;
+import com.example.itemorganizer.UtilityFunctions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 public class HomePage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+
+    private TextView name;
+
+    private final static String USERURL = "user/info/";
+
+    private final static String TAG = "HomePage";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +53,8 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         //Set navigation button listeners.
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View v = navigationView.getHeaderView(0);
+        name = v.findViewById(R.id.nav_user_name);
 
         //Action Bar (Navbar) Init
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
@@ -57,6 +77,14 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                 }
             }
         };
+
+        //set user name
+        if(UserSingleton.getInstance().getName() == null){
+            setUserInfo();
+        }
+        else {
+            name.setText(UserSingleton.getInstance().getName());
+        }
     }
 
     @Override
@@ -113,7 +141,29 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
 
     private void Log_out() {
         //Log out from
+        UtilityFunctions.clearUser();
         Intent intent = new Intent(this, AccountLogin.class);
         startActivity(intent);
+    }
+
+    private void setUserInfo(){
+        BackendItem item = new BackendItem(UserSingleton.IP + USERURL, BackendItem.GET);
+        item.setHeaders(new HashMap<String, String>());
+
+        item = BackendReq.send_req(item);
+
+        try{
+            JSONObject object = new JSONObject(item.getResponse());
+
+            //display user name
+            String userName = object.getString("name");
+            UserSingleton.getInstance().setName(userName);
+            name.setText(userName);
+            UserSingleton.getInstance().setFamilyToken(object.getString("currentfamily"));
+        } catch (JSONException e){
+            Log.e(TAG, "setUserInfo: ",e);
+        }
+
+
     }
 }
