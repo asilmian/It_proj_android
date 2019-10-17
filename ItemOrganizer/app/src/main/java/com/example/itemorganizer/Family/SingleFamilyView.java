@@ -47,7 +47,7 @@ public class SingleFamilyView extends AppCompatActivity {
 
     private String family_token;
     private static final String URL = "family/info/"; // careful this not working
-    private static final String MembersURL = "family/info/members";
+    private static final String SWITCH = "family/switch/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,16 +83,6 @@ public class SingleFamilyView extends AppCompatActivity {
         getFamilyInformation(family_token);
     }
 
-    //switch family.
-    private void changeCurrentFamily() {
-        //if token.equals(UserSingleton.getinstance().getCurrFamily(){
-        // return
-        //else send request to do this shit
-        Intent intent = new Intent(getApplicationContext(), HomePage.class);
-        startActivity(intent);
-    }
-
-
     //gets family information except member information.
     private void getFamilyInformation(String family_token){
         BackendItem item = new BackendItem(UserSingleton.IP + URL, BackendItem.POST);
@@ -102,74 +92,64 @@ public class SingleFamilyView extends AppCompatActivity {
         createBody(item, family_token);
 
         try {
-            item = new ViewFamilyTask().execute(item).get();
+            item = BackendReq.send_req(item);
             showInformation(item.getResponse());
         } catch (Exception e){
             Log.e(TAG, "getFamilyInformation: ",e);
+            Log.e(TAG, item.getResponse_code().toString());
         }
     }
 
-    //creates a body with "family_token": token
+    //creates a body with "token": token
     private void createBody(BackendItem item, String family_token){
         JSONObject object = new JSONObject();
         try{
-            object.accumulate("family_token", family_token);
+            object.accumulate("token", family_token);
             item.setBody(object.toString());
         } catch (JSONException e){
             Log.e(TAG, "createBody: ",e);
         }
     }
 
-    //task to get family information (not members)
-    private static class ViewFamilyTask extends AsyncTask<BackendItem, Void, BackendItem> {
-        @Override
-        protected BackendItem doInBackground(BackendItem... items) {
-            // params comes from the execute() call: params[0] is the url.
-            try {
-                BackendReq.httpReq(items[0]);
-            } catch (Exception e) {
-                Log.e(TAG, e.toString());
-            }
-            return items[0];
-        }
-
-        @Override
-        protected void onPostExecute(BackendItem item) {
-            super.onPostExecute(item);
-
-        }
-    }
-
-
-    //shows partial family information and then send request for
-    // member information
+    //show complete family information.
     private void showInformation(String response){
+
         try{
             JSONObject object = new JSONObject(response);
             name.setText(object.getString("name"));
             inviteCode.setText(object.getString("invite_code"));
+
+            //show members
+            JSONArray memjson = object.getJSONArray("members");
+            for(int i=0; i <memjson.length(); i++){
+                mAdapter.addAndNotify(memjson.getString(i));
+            }
         } catch (JSONException e){
             Log.e(TAG, "showInformation: ",e);
         }
 
-        BackendItem item = new BackendItem(UserSingleton.IP + MembersURL, BackendItem.POST);
-        item.setHeaders(new HashMap<String, String>());
-        createBody(item, family_token);
-
         spinner.setVisibility(View.GONE);
-
-        secondarySpinner.setVisibility(View.VISIBLE);
-
-        try {
-            new ViewMembersTask().execute(item);
-        }catch (Exception e){
-            Log.e(TAG, "showInformation: ",e);
-        }
-
     }
 
-    //task to send a request to get Members to
-    private class ViewMembersTask extends AsyncTask<BackendItem, Void, BackendItem> {
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+    //switch family.
+    private void changeCurrentFamily() {
+        secondarySpinner.setVisibility(View.VISIBLE);
+
+        BackendItem item = new BackendItem(UserSingleton.IP + SWITCH, BackendItem.POST);
+        item.setHeaders(new HashMap<String, String>());
+        createBody(item, family_token);
+        try {
+            new SwitchFamilyTask().execute(item);
+        } catch (Exception e){
+            Log.e(TAG, "changeCurrentFamily: ",e);
+            Log.e(TAG, item.getResponse_code().toString());
+        }
+    }
+
+    //switches users current family to family looking at on screen.
+    private class SwitchFamilyTask extends AsyncTask<BackendItem, Void, BackendItem> {
         @Override
         protected BackendItem doInBackground(BackendItem... items) {
             // params comes from the execute() call: params[0] is the url.
@@ -184,37 +164,13 @@ public class SingleFamilyView extends AppCompatActivity {
         @Override
         protected void onPostExecute(BackendItem item) {
             super.onPostExecute(item);
-            showMembers(item.getResponse());
+            goToHomePage();
         }
     }
 
-    //puts family member names on the recycler view
-    private void showMembers(String response){
-        ArrayList<String> memberNames = extractMemberNames(response);
-
-        for (String name: memberNames){
-            mAdapter.addAndNotify(name);
-        }
-
-        secondarySpinner.setVisibility(View.GONE);
-    }
-
-    //extracts the names of the family members from the response and returns
-    // an array list with the names
-    private ArrayList<String> extractMemberNames(String responseBody) {
-        ArrayList<String> memberNames = new ArrayList<>();
-
-        try {
-            JSONObject raw_data = new JSONObject(responseBody);
-            JSONArray keys = raw_data.names();
-
-            for (int i = 0; i < keys.length(); i++) {
-                String key = keys.getString(i);
-                memberNames.add(raw_data.getJSONObject(key).getString("name"));
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "extractMemberNames: ",e);
-        }
-        return memberNames;
+    //intent to go to homePage
+    private void goToHomePage(){
+        Intent intent = new Intent(getApplicationContext(), HomePage.class);
+        startActivity(intent);
     }
 }

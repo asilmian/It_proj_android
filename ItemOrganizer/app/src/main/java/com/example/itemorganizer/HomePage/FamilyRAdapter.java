@@ -1,30 +1,33 @@
 package com.example.itemorganizer.HomePage;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
+import com.example.itemorganizer.Family.SingleFamilyView;
 import com.example.itemorganizer.R;
-
-
 import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class FamilyRAdapter extends RecyclerView.Adapter<FamilyRAdapter.FamViewHolder> {
 
+    //adapter variables
     private static final String TAG = "FamilyRAdapter";
+    private ArrayList<ArrayList<String>> families;
+    private Context context;
 
-    private ArrayList<String> families;
-
+    //holder class
     public static class FamViewHolder extends RecyclerView.ViewHolder {
+
+        //holder variables
         public TextView tx;
         public CardView cardView;
+        public String token;
 
         public FamViewHolder(View v) {
             super(v);
@@ -33,8 +36,10 @@ public class FamilyRAdapter extends RecyclerView.Adapter<FamilyRAdapter.FamViewH
         }
     }
 
-    public FamilyRAdapter(ArrayList<String> families) {
+    //constructor
+    public FamilyRAdapter(ArrayList<ArrayList<String>> families, Context context) {
         this.families = families;
+        this.context = context;
     }
 
     @Override
@@ -51,19 +56,21 @@ public class FamilyRAdapter extends RecyclerView.Adapter<FamilyRAdapter.FamViewH
 
     // called each time a new item is added to the RecyclerView container
     @Override
-    public void onBindViewHolder(@NonNull FamViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final FamViewHolder viewHolder, int i) {
 
         Log.d(TAG, "onBindViewHolder: called with i: " + i);
 
-        viewHolder.tx.setText(families.get(i));
+        viewHolder.tx.setText(families.get(i).get(0)); //set name on card
+        viewHolder.token = families.get(i).get(1); //set
 
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Waddup", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, SingleFamilyView.class);
+                intent.putExtra("family_token", viewHolder.token);
+                context.startActivity(intent);
             }
         });
-
     }
 
     @Override
@@ -76,7 +83,7 @@ public class FamilyRAdapter extends RecyclerView.Adapter<FamilyRAdapter.FamViewH
     /*
      *   Public exposed functionality
      */
-    public void addAndNotify(String added) {
+    public void addAndNotify(ArrayList<String> added) {
         families.add(families.size(), added);
         notifyItemInserted(families.size());
     }

@@ -10,17 +10,33 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.itemorganizer.AccountLogin;
+import com.example.itemorganizer.BackendItem;
+import com.example.itemorganizer.BackendReq;
 import com.example.itemorganizer.R;
+import com.example.itemorganizer.UserSingleton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
 
 public class HomePage extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+
+    private TextView name;
+
+    private final static String USERURL = "user/info/";
+
+    private final static String TAG = "HomePage";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +47,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.draw_layout);
+        name = findViewById(R.id.nav_user_name);
 
         //Set navigation button listeners.
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -57,6 +74,11 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                 }
             }
         };
+
+        //set user name
+        if(UserSingleton.getInstance().getName() == null){
+            setUserInfo();
+        }
     }
 
     @Override
@@ -115,5 +137,26 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         //Log out from
         Intent intent = new Intent(this, AccountLogin.class);
         startActivity(intent);
+    }
+
+    private void setUserInfo(){
+        BackendItem item = new BackendItem(UserSingleton.IP + USERURL, BackendItem.GET);
+        item.setHeaders(new HashMap<String, String>());
+
+        item = BackendReq.send_req(item);
+
+        try{
+            JSONObject object = new JSONObject(item.getResponse());
+
+            //display user name
+            String userName = object.getString("name");
+            UserSingleton.getInstance().setName(userName);
+            name.setText(userName);
+            UserSingleton.getInstance().setCurrToken(object.getString("currentFamily"));
+        } catch (JSONException e){
+            Log.e(TAG, "setUserInfo: ",e);
+        }
+
+
     }
 }
