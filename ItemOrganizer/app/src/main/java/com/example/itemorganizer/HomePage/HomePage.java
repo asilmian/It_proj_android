@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.itemorganizer.AccountLogin;
@@ -19,6 +20,7 @@ import com.example.itemorganizer.BackendItem;
 import com.example.itemorganizer.BackendReq;
 import com.example.itemorganizer.R;
 import com.example.itemorganizer.UserSingleton;
+import com.example.itemorganizer.UtilityFunctions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -47,11 +49,12 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.draw_layout);
-        name = findViewById(R.id.nav_user_name);
 
         //Set navigation button listeners.
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View v = navigationView.getHeaderView(0);
+        name = v.findViewById(R.id.nav_user_name);
 
         //Action Bar (Navbar) Init
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
@@ -135,6 +138,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
 
     private void Log_out() {
         //Log out from
+        UtilityFunctions.clearUser();
         Intent intent = new Intent(this, AccountLogin.class);
         startActivity(intent);
     }
@@ -152,7 +156,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
             String userName = object.getString("name");
             UserSingleton.getInstance().setName(userName);
             name.setText(userName);
-            UserSingleton.getInstance().setCurrToken(object.getString("currentFamily"));
+            UserSingleton.getInstance().setCurrToken(object.getString("currentfamily"));
         } catch (JSONException e){
             Log.e(TAG, "setUserInfo: ",e);
         }
