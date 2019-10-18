@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ItemOrganizer</string>
+    <string name="app_name">Keepr</string>
     <string name="new_fam">New Family</string>
     <string name="join_fam">Join Family</string>
     <string name="fam_token">Family Code:</string>
