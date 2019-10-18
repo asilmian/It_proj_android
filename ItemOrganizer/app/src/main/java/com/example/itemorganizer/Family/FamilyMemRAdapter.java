@@ -1,5 +1,6 @@
 package com.example.itemorganizer.Family;
 
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,10 +8,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.itemorganizer.R;
+import com.example.itemorganizer.UserSingleton;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class FamilyMemRAdapter  extends RecyclerView.Adapter<FamilyMemRAdapter.FamilyMemHolder> {
@@ -20,9 +24,11 @@ public class FamilyMemRAdapter  extends RecyclerView.Adapter<FamilyMemRAdapter.F
 
     public class FamilyMemHolder extends RecyclerView.ViewHolder{
         public TextView name;
+        public CardView card;
         public FamilyMemHolder(View v) {
             super(v);
             name = v.findViewById(R.id.memberName);
+            card = v.findViewById(R.id.itemViewCardView);
         }
     }
 
@@ -46,8 +52,14 @@ public class FamilyMemRAdapter  extends RecyclerView.Adapter<FamilyMemRAdapter.F
         final String member = members.get(position);
 
         Log.d(TAG, "onBindViewHolder: called with i: " + position);
-
+        //Set Color
+        int activeColor = Color.parseColor("FF3094FF");
         holder.name.setText(member);
+        if (member.equals(UserSingleton.getInstance().getFamilyToken()))
+        {
+            //Change color
+            holder.card.setCardBackgroundColor(activeColor);
+        }
     }
 
     @Override

@@ -4,6 +4,10 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="colorBackground">#FFFFFF</color>
+    <color name="colorCardAccent">#4175A8</color>
     <color name="colorCard">#AAD6FF</color>
     <color name="colorBtn">#77C7FF</color>
+    <color name="colorFamilyCardInactive">#8393AA</color>
+    <color name="colorFamilyCardActive">#FF3094FF</color>
+    <color name="common_border_color">#000</color>
 </resources>

@@ -47,4 +47,5 @@
     <string name="delete">Delete</string>
     <string name="change_privacy">Change Privacy</string>
     <string name="transfer_item">Transfer Item</string>
+    <string name="family_list">Family List</string>
 </resources>
