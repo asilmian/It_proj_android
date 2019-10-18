@@ -6,21 +6,20 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="201dp"
-        android:layout_marginBottom="511dp"
-        android:text="Account Page"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-    <TextView
         android:id="@+id/textView54"
         android:layout_width="420dp"
         android:layout_height="90dp"
+        android:background="@color/colorBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="403dp"
+        android:layout_height="478dp"
+        android:layout_marginTop="320dp"
         android:background="@color/colorBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,29 +27,62 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/new_family_view"
-        android:layout_width="111dp"
-        android:layout_height="120dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="52dp"
         android:elevation="12dp"
         android:innerRadius="0dp"
         android:shape="ring"
         android:thicknessRatio="1.9"
-        app:cardCornerRadius="60dp"
+        app:cardCornerRadius="150dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/textView54">
 
         <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="0dp"
-            android:scaleType="centerCrop"
-            android:tint="@color/colorBtn"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/imageView3"
+            android:layout_width="218dp"
+            android:layout_height="192dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="45dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_account" />
+            app:layout_constraintTop_toBottomOf="@+id/textView54"
+            tools:srcCompat="@tools:sample/avatars" />
     </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/uplo"
+        android:layout_width="143dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="8dp"
+        android:text="Upload Profile Picture"
+        android:textColor="#005EAD"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/account_fragment_email" />
+
+    <TextView
+        android:id="@+id/account_fragment_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Firstname Lastname"
+        android:textSize="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/new_family_view" />
+
+    <TextView
+        android:id="@+id/account_fragment_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="email@email.com"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/account_fragment_name" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

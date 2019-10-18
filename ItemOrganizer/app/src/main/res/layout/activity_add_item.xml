@@ -125,7 +125,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView7"
+                    android:id="@+id/family_fragment_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:background="#ABC9EE"
