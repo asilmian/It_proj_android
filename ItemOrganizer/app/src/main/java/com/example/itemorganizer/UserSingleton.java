@@ -30,7 +30,7 @@ public class UserSingleton {
     public String getUserToken() {
         return userToken;
     }
-    public String getCurrToken(){ return currToken; }
+    public String getFamilyToken(){ return currToken; }
 
     public String getName() {
         return name;

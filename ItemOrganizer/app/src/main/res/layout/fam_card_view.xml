@@ -14,7 +14,7 @@
         android:animationCache="false"
         android:clickable="true"
         android:focusable="true"
-        card_view:cardBackgroundColor="#8DFABD"
+        card_view:cardBackgroundColor="@color/colorFamilyCardInactive"
         card_view:cardCornerRadius="10dp"
         card_view:cardElevation="5dp"
         card_view:cardUseCompatPadding="true"
