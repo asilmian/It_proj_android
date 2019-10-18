@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,12 +25,55 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHolder> {
+public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHolder> implements Filterable {
 
     private StorageReference storageReference;
     private static final String TAG = "ItemRAdapater";
     private ArrayList<ArrayList<String>> items;
+    private ArrayList<ArrayList<String>> allItems;
     private Context context;
+
+    private ItemFilter mfilter;
+
+
+    //filter
+    public class ItemFilter extends Filter {
+        public ItemRAdapter itemRAdapter;
+        public ItemFilter(ItemRAdapter itemRAdapter){
+            super();
+            this.itemRAdapter = itemRAdapter;
+        }
+
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence){
+            items.clear();
+            final FilterResults results = new FilterResults();
+            if (charSequence.length() == 0){
+                items.addAll(allItems);
+            }else{
+                final String filterPattern = charSequence.toString().toLowerCase();
+                for (ArrayList<String> item : allItems){
+                    String itemName = item.get(0).toLowerCase();
+                    String itemTags = item.get(2).toLowerCase();
+
+                    if (itemName.startsWith(filterPattern)){
+                        items.add(item);
+                    }
+                    else if(itemTags.contains(filterPattern)){
+                        items.add(item);
+                    }
+                }
+            }
+            results.values = items;
+            results.count = items.size();
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            this.itemRAdapter.notifyDataSetChanged();
+        }
+    }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
@@ -49,6 +94,9 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
     public ItemRAdapter(ArrayList<ArrayList<String>> items, Context context) {
         this.items = items;
         this.context = context;
+        this.mfilter = new ItemFilter(this);
+        this.allItems = new ArrayList<>();
+        allItems.addAll(items);
         storageReference = FirebaseStorage.getInstance().getReference();
     }
 
@@ -96,6 +144,11 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
         return items.size();
     }
 
+    @Override
+    public Filter getFilter(){
+        return mfilter;
+    }
+
     public void viewItem(String itemToken){
         Intent intent = new Intent(this.context, SingleItemView.class);
         intent.putExtra("token", itemToken);
@@ -106,7 +159,8 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
      *   Public exposed functionality
      */
     public void addAndNotify(ArrayList<String> added) {
-        items.add(items.size(), added);
+        items.add(items.size(),added);
+        allItems.add(allItems.size(), added);
         notifyItemInserted(items.size());
     }
 }

@@ -48,16 +48,6 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <Button
-        android:id="@+id/search_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/search_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
-
     <TextView
         android:id="@+id/family_fragment_name"
         android:layout_width="match_parent"
@@ -83,10 +73,9 @@
         android:inputType="textPersonName"
         android:textColor="#77888888"
         android:textStyle="italic"
-        app:layout_constraintEnd_toStartOf="@+id/search_btn"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/search_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/family_fragment_name" />
 
     <TextView
         android:id="@+id/textView54"

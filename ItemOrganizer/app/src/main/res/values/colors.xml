@@ -6,4 +6,5 @@
     <color name="colorBackground">#FFFFFF</color>
     <color name="colorCard">#AAD6FF</color>
     <color name="colorBtn">#77C7FF</color>
+    <color name="common_border_color">#000000</color>
 </resources>
