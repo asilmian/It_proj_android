@@ -9,5 +9,5 @@
     <color name="colorBtn">#77C7FF</color>
     <color name="colorFamilyCardInactive">#8393AA</color>
     <color name="colorFamilyCardActive">#FF3094FF</color>
-    <color name="common_border_color">#000</color>
+    <color name="common_border_color">#000000</color>
 </resources>
