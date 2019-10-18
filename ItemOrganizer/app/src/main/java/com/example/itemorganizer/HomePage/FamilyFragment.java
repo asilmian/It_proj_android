@@ -15,13 +15,16 @@ import com.example.itemorganizer.Family.FamilyLogIn;
 import com.example.itemorganizer.R;
 import com.example.itemorganizer.UserSingleton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.auth.User;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +39,8 @@ public class FamilyFragment extends Fragment {
     private RecyclerView recyclerView;
     private FamilyRAdapter mAdapter;
     private ProgressBar spinner;
+
+    private final static String USERINFO = UserSingleton.IP + "user/info/";
 
     private final static String URL = UserSingleton.IP + "user/info/families/";
 
@@ -57,7 +62,7 @@ public class FamilyFragment extends Fragment {
         spinner = view.findViewById(R.id.family_frag_prog_bar);
         spinner.setVisibility(View.VISIBLE);
         initRecyclerView(view);
-        showUserFams();
+        updateCurrFamily();
         return view;
     }
 
@@ -69,6 +74,49 @@ public class FamilyFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         this.mAdapter = new FamilyRAdapter(new ArrayList<ArrayList<String>>(), getContext());
         recyclerView.setAdapter(mAdapter);
+    }
+
+    private void updateCurrFamily(){
+        BackendItem item = new BackendItem(USERINFO, BackendItem.GET);
+        item.setHeaders(new HashMap<String, String>());
+
+        try{
+            new SetCurrFamily().execute(item);
+        } catch (Exception e){
+            Log.e(TAG, "updateCurrFamily: ",e);
+        }
+    }
+
+    private class SetCurrFamily extends AsyncTask<BackendItem, Void, BackendItem> {
+        @Override
+        protected BackendItem doInBackground(BackendItem... items) {
+            // params comes from the execute() call: params[0] is the url.
+            try {
+                BackendReq.httpReq(items[0]);
+            } catch (IOException e) {
+                Log.e(BackendReq.class.toString(), e.toString());
+                items[0].setResponse_code(777);
+                items[0].setResponse("Connection failed to backend or request is invalid");
+            }
+            return items[0];
+        }
+
+        @Override
+        protected void onPostExecute(BackendItem item) {
+            super.onPostExecute(item);
+            setCurrFamily(item.getResponse());
+        }
+    }
+
+    private void setCurrFamily(String response){
+            try{
+                JSONObject object = new JSONObject(response);
+                String family_token = object.getString("currentfamily");
+                UserSingleton.getInstance().setFamilyToken(family_token);
+            }catch (JSONException e){
+                Log.e(TAG, "setCurrFamily: ",e);
+            }
+            showUserFams();
     }
 
     private void showUserFams() {

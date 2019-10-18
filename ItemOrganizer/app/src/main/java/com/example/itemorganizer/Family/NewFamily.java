@@ -116,7 +116,7 @@ public class NewFamily extends AppCompatActivity {
     }
 
     private void goToHomePage() {
-        UtilityFunctions.clearUser();
+        UserSingleton.getInstance().setFamilyToken(null);
         Intent intent = new Intent(this, HomePage.class);
         startActivity(intent);
     }

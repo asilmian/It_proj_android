@@ -219,7 +219,7 @@
         android:indeterminate="false"
         android:indeterminateTint="#32F307"
         android:progress="@android:integer/config_mediumAnimTime"
-        android:progressTint="@color/colorAccent"
+        android:progressTint="@color/colorPrimaryDark"
         app:layout_constraintBottom_toTopOf="@+id/new_family_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
