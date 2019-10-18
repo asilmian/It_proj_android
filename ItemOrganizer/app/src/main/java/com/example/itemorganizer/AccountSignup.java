@@ -53,6 +53,7 @@ public class AccountSignup extends AppCompatActivity {
         ePass = findViewById(R.id.password_login);
         eConfPass = findViewById(R.id.confirm_pass);
         spinner = findViewById(R.id.signup_prog);
+        UtilityFunctions.clearView(eName, eEmail, ePass, eConfPass);
     }
 
     @Override

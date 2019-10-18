@@ -17,6 +17,7 @@ import com.example.itemorganizer.BackendReq;
 import com.example.itemorganizer.HomePage.HomePage;
 import com.example.itemorganizer.R;
 import com.example.itemorganizer.UserSingleton;
+import com.example.itemorganizer.UtilityFunctions;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONException;
@@ -40,8 +41,8 @@ public class NewFamily extends AppCompatActivity {
         eFname = findViewById(R.id.familyName);
         spinner = findViewById(R.id.newFamilyProgressBar);
         spinner.setVisibility(View.GONE);
-
         mAuth = FirebaseAuth.getInstance();
+        UtilityFunctions.clearView(eFname);
     }
 
     //create family
@@ -115,6 +116,7 @@ public class NewFamily extends AppCompatActivity {
     }
 
     private void goToHomePage() {
+        UtilityFunctions.clearUser();
         Intent intent = new Intent(this, HomePage.class);
         startActivity(intent);
     }

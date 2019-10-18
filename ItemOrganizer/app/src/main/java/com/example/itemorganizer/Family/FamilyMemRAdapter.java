@@ -52,14 +52,7 @@ public class FamilyMemRAdapter  extends RecyclerView.Adapter<FamilyMemRAdapter.F
         final String member = members.get(position);
 
         Log.d(TAG, "onBindViewHolder: called with i: " + position);
-        //Set Color
-        int activeColor = Color.parseColor("FF3094FF");
         holder.name.setText(member);
-        if (member.equals(UserSingleton.getInstance().getFamilyToken()))
-        {
-            //Change color
-            holder.card.setCardBackgroundColor(activeColor);
-        }
     }
 
     @Override
