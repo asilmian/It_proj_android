@@ -18,7 +18,7 @@ Please have a compatible version of Android Studio installed
  - open android studio and choose open new project
  
  
- ## Installing the application ( APK not uploaded yet)
+ ## Installing the application ( Debug APK v1.1 uploaded)
  
  - download the APK
  - enable  third part app installations
