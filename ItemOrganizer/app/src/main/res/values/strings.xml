@@ -48,4 +48,6 @@
     <string name="change_privacy">Change Privacy</string>
     <string name="transfer_item">Transfer Item</string>
     <string name="family_list">Family List</string>
+    <string name="leave_family">Leave Family</string>
+    <string name="new_family">New Family</string>
 </resources>

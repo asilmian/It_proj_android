@@ -547,7 +547,7 @@ public class AddItemActivity extends AppCompatActivity {
             JSONArray keys = jsonObject.names();
             String key = keys.getString(0);
             String number = jsonObject.getString(key);
-            result = key + "/" + number + ".jpg";
+            result = number + ".jpg";
 
         } catch (Exception e) {
             Log.e(TAG, e.toString());

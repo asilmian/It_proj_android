@@ -10,11 +10,10 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.itemorganizer.GlideApp;
+import com.example.itemorganizer.Item.SingleItemView;
 import com.example.itemorganizer.R;
-import com.example.itemorganizer.UserSingleton;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
