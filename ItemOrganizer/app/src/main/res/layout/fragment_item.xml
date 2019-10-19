@@ -40,10 +40,10 @@
         android:id="@+id/item_recycler"
         android:layout_width="383dp"
         android:layout_height="575dp"
+        android:layout_marginTop="16dp"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.49"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchText">
 
@@ -57,12 +57,10 @@
         android:textAlignment="center"
         android:textColor="@color/common_google_signin_btn_text_dark_focused"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_family_view"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/new_family_view" />
 
     <EditText
         android:id="@+id/searchText"
@@ -72,7 +70,7 @@
         android:ems="10"
         android:hint="@string/search_for_an_item"
         android:inputType="textPersonName"
-        android:textColor="#77888888"
+        android:textColor="#77000000"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

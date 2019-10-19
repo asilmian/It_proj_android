@@ -9,23 +9,23 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/new_family_view"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
         android:elevation="12dp"
         android:innerRadius="0dp"
         android:shape="ring"
         android:thicknessRatio="1.9"
-        app:cardCornerRadius="150dp"
-        app:layout_constraintBottom_toTopOf="@+id/singleItemViewSpinner"
+        app:cardCornerRadius="125dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/singleItemViewFiller">
 
         <ImageView
             android:id="@+id/singleItemViewImage"
-            android:layout_width="312dp"
-            android:layout_height="356dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:contentDescription="TODO"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -49,38 +49,40 @@
 
     <TextView
         android:id="@+id/singleItemViewFiller4"
-        android:layout_width="500dp"
-        android:layout_height="112dp"
+        android:layout_width="543dp"
+        android:layout_height="251dp"
+        android:layout_marginTop="32dp"
         android:background="@color/colorBtn"
         android:textAlignment="center"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/singleItemViewDescription"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/singleItemViewDescription" />
 
     <TextView
         android:id="@+id/singleItemViewTagsHeader"
         android:layout_width="361dp"
         android:layout_height="30dp"
+        android:layout_marginTop="8dp"
         android:text="Tags:"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/singleItemViewSpinner" />
+        app:layout_constraintTop_toBottomOf="@+id/new_family_view" />
 
     <TextView
         android:id="@+id/singleItemViewName"
         android:layout_width="500dp"
         android:layout_height="71dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:background="@color/colorBtn"
+        android:fontFamily="sans-serif-black"
         android:text="@string/enter_item_name"
         android:textAlignment="center"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -88,51 +90,48 @@
         android:id="@+id/singleItemViewTags"
         android:layout_width="331dp"
         android:layout_height="30dp"
-        android:layout_marginTop="28dp"
         android:background="@drawable/rounded_corner"
         android:text="TextView"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/singleItemViewSpinner" />
+        app:layout_constraintTop_toBottomOf="@+id/singleItemViewTagsHeader" />
 
     <TextView
         android:id="@+id/singleItemViewDescription"
-        android:layout_width="331dp"
-        android:layout_height="151dp"
+        android:layout_width="325dp"
+        android:layout_height="100dp"
 
+        android:layout_marginTop="8dp"
         android:background="@drawable/rounded_corner"
         android:text="TextView"
         android:textAlignment="center"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/singleItemViewTags"
-        app:layout_constraintVertical_bias="0.23000002" />
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <TextView
         android:id="@+id/textView8"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:text="@string/description"
         android:textAlignment="center"
         android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/singleItemViewDescription"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/singleItemViewTags"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/singleItemViewTags" />
 
     <Button
         android:id="@+id/singleItemViewDelete"
         android:layout_width="88dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:drawableTop="@drawable/ic_delete"
         android:text="@string/delete"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/singleItemViewTransfer"
         app:layout_constraintHorizontal_bias="0.534"
         app:layout_constraintStart_toEndOf="@+id/singleItemViewcp"
@@ -142,9 +141,9 @@
         android:id="@+id/singleItemViewcp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:drawableTop="@drawable/ic_privacy"
         android:text="@string/change_privacy"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -154,9 +153,9 @@
         android:id="@+id/singleItemViewTransfer"
         android:layout_width="158dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:drawableTop="@drawable/ic_transfer"
         android:text="@string/transfer_item"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/singleItemViewDescription" />
 
