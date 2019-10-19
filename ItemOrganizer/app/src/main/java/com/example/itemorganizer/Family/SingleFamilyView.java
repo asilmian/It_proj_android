@@ -148,7 +148,7 @@ public class SingleFamilyView extends AppCompatActivity {
         try{
             JSONObject object = new JSONObject(response);
             name.setText(object.getString("name"));
-            inviteCode.setText(object.getString("token"));
+            inviteCode.setText(object.getString("family_token"));
 
             //show members
             JSONArray memjson = object.getJSONArray("members");

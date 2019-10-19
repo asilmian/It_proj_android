@@ -1,4 +1,4 @@
-package com.example.itemorganizer.HomePage;
+package com.example.itemorganizer.Item;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -42,6 +42,7 @@ public class SingleItemView extends AppCompatActivity {
 
     private Button delete;
     private Button changeP;
+    private Button transferItem;
 
     private final static String URL = "item/info/";
     private final static String TAG = "SingleItemView";
@@ -66,6 +67,14 @@ public class SingleItemView extends AppCompatActivity {
 
         delete = findViewById(R.id.singleItemViewDelete);
         changeP = findViewById(R.id.singleItemViewcp);
+        transferItem = findViewById(R.id.singleItemViewTransfer);
+        transferItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                transferItem();
+            }
+        });
+
         spinner = findViewById(R.id.singleItemViewSpinner);
 
         storageReference = FirebaseStorage.getInstance().getReference();
@@ -148,5 +157,12 @@ public class SingleItemView extends AppCompatActivity {
             Log.d(TAG, item.getResponse());
             onRecieve(item.getResponse());
         }
+    }
+
+    //transfer item activity
+    private void transferItem(){
+        Intent intent = new Intent(getApplicationContext(), TransferItem.class);
+        intent.putExtra("item_token", this.token);
+        startActivity(intent);
     }
 }
