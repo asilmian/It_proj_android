@@ -104,7 +104,7 @@
         android:innerRadius="0dp"
         android:shape="ring"
         android:thicknessRatio="0"
-        app:cardCornerRadius="60dp"
+        app:cardCornerRadius="45dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"

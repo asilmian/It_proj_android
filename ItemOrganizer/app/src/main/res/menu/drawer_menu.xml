@@ -13,19 +13,14 @@
             android:title="@string/navbar_items"></item>
 
 
+        <item android:id = "@+id/nav_family"
+            android:icon = "@drawable/ic_family"
+            android:title="@string/navbar_family"></item>
+
 
 
     </group>
 
-    <item android:title = "Family">
-
-        <menu>
-
-            <item android:id = "@+id/nav_family"
-                android:icon = "@drawable/ic_family"
-                android:title="@string/navbar_family"></item>
-        </menu>
-    </item>
 
     <item android:title = "Log Out">
 
