@@ -18,7 +18,7 @@
 
     <TextView
         android:id="@+id/textView9"
-        android:layout_width="403dp"
+        android:layout_width="500dp"
         android:layout_height="478dp"
         android:layout_marginTop="320dp"
         android:background="@color/colorBtn"
