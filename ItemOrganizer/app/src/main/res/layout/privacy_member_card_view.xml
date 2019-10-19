@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:tag="cards main container"
+    android:background = "@color/colorBtn"
+    android:padding="2dp"
+    android:paddingBottom="2dp">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/itemViewCardView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="20"
+        android:animationCache="false"
+        android:clickable="true"
+        android:focusable="true"
+        card_view:cardBackgroundColor="@color/colorCard"
+        card_view:cardCornerRadius="10dp"
+        card_view:cardElevation="5dp"
+        card_view:cardUseCompatPadding="true"
+        card_view:layout_constraintBottom_toBottomOf="parent"
+        card_view:layout_constraintEnd_toEndOf="parent"
+        card_view:layout_constraintStart_toStartOf="parent"
+        card_view:layout_constraintTop_toTopOf="parent">
+
+        <ToggleButton
+            android:id="@+id/memberName"
+            style="@style/Base.Theme.AppCompat"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/togglebutton_selector"
+            android:elevation="0dp"
+            android:gravity="center"
+            android:text="@string/togglebutton"
+            android:useDefaultMargins="true" />
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

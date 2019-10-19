@@ -3,10 +3,10 @@
     <color name="colorPrimary">#3E8FCE</color>
     <color name="colorPrimaryDark">#003157</color>
     <color name="colorAccent">#1B86D8</color>
-    <color name="colorBackground">#FFFFFF</color>
+    <color name="colorBackground">#D8D6C9</color>
     <color name="colorCardAccent">#4175A8</color>
-    <color name="colorCard">#AAD6FF</color>
-    <color name="colorBtn">#77C7FF</color>
+    <color name="colorCard">#3D5367</color>
+    <color name="colorBtn">#3D5367</color>
     <color name="colorFamilyCardInactive">#8393AA</color>
     <color name="colorFamilyCardActive">#FF3094FF</color>
     <color name="common_border_color">#000000</color>

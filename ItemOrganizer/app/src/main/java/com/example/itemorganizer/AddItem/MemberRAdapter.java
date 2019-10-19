@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.example.itemorganizer.R;
@@ -15,7 +13,6 @@ import com.example.itemorganizer.R;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MemberRAdapter extends RecyclerView.Adapter<MemberRAdapter.MemberViewHolder> {
@@ -42,7 +39,7 @@ public class MemberRAdapter extends RecyclerView.Adapter<MemberRAdapter.MemberVi
                                                               int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.member_card_view, parent, false);
+                .inflate(R.layout.privacy_member_card_view, parent, false);
 
         MemberViewHolder vh = new MemberViewHolder(v);
         return vh;

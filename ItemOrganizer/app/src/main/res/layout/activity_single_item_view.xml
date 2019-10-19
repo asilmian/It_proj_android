@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background = "@color/colorBackground"
     tools:context=".HomePage.SingleItemView">
 
     <androidx.cardview.widget.CardView
@@ -36,26 +37,25 @@
 
     <TextView
         android:id="@+id/singleItemViewFiller"
-        android:layout_width="393dp"
+        android:layout_width="500dp"
         android:layout_height="39dp"
         android:background="@color/colorBtn"
         android:textAlignment="center"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/singleItemViewFiller4"
-        android:layout_width="396dp"
+        android:layout_width="500dp"
         android:layout_height="112dp"
         android:background="@color/colorBtn"
         android:textAlignment="center"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/singleItemViewDescription"
         app:layout_constraintVertical_bias="1.0" />
@@ -73,7 +73,7 @@
 
     <TextView
         android:id="@+id/singleItemViewName"
-        android:layout_width="397dp"
+        android:layout_width="500dp"
         android:layout_height="71dp"
         android:layout_marginTop="16dp"
         android:background="@color/colorBtn"
@@ -81,7 +81,6 @@
         android:textAlignment="center"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

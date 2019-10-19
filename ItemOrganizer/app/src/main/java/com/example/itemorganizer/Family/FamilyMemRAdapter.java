@@ -1,6 +1,5 @@
 package com.example.itemorganizer.Family;
 
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,13 +7,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.itemorganizer.R;
-import com.example.itemorganizer.UserSingleton;
 
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class FamilyMemRAdapter  extends RecyclerView.Adapter<FamilyMemRAdapter.FamilyMemHolder> {
@@ -41,7 +38,7 @@ public class FamilyMemRAdapter  extends RecyclerView.Adapter<FamilyMemRAdapter.F
     public FamilyMemRAdapter.FamilyMemHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.member_card_view, parent, false);
+                .inflate(R.layout.privacy_member_card_view, parent, false);
 
         FamilyMemHolder vh = new FamilyMemHolder(v);
         return vh;
