@@ -111,9 +111,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
             //Items
             case R.id.nav_items:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ItemFragment()).commit();
-                break;
-
-
+                break; 
             //Log Out
             case R.id.nav_logout:
                 mAuth.signOut();
