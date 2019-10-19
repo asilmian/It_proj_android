@@ -48,6 +48,12 @@ public class NewFamily extends AppCompatActivity {
     //create family
     public void createFamily(View view) {
         spinner.setVisibility(View.VISIBLE);
+
+        try{
+            Thread.sleep(1000);
+        } catch (Exception e){
+            Log.e(TAG, "createFamily: ",e);
+        }
         if (sendBackend()) {
             goToHomePage();
         } else {

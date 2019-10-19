@@ -20,6 +20,7 @@ import com.example.itemorganizer.BackendReq;
 import com.example.itemorganizer.HomePage.HomePage;
 import com.example.itemorganizer.R;
 import com.example.itemorganizer.UserSingleton;
+import com.google.firebase.firestore.auth.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,14 +41,16 @@ public class SingleFamilyView extends AppCompatActivity {
     private TextView name;
     private TextView inviteCode;
     private Button current;
+    private Button leaveFamily;
     private RecyclerView members;
     private ProgressBar spinner;
     private ProgressBar secondarySpinner;
     private FamilyMemRAdapter mAdapter;
 
     private String family_token;
-    private static final String URL = "family/info/"; // careful this not working
-    private static final String SWITCH = "family/switch/";
+    private static final String URL = UserSingleton.IP + "family/info/";
+    private static final String SWITCH = UserSingleton.IP + "family/switch/";
+    private static final String LEAVE = UserSingleton.IP + "family/leave/" ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +81,15 @@ public class SingleFamilyView extends AppCompatActivity {
             }
         });
 
+        //set listener on leave family
+        leaveFamily = findViewById(R.id.single_family_view_leave);
+        leaveFamily.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                leaveFamily();
+            }
+        });
+
         Intent intent = getIntent();
         family_token = intent.getStringExtra("family_token");
         getFamilyInformation(family_token);
@@ -85,7 +97,7 @@ public class SingleFamilyView extends AppCompatActivity {
 
     //gets family information except member information.
     private void getFamilyInformation(String family_token){
-        BackendItem item = new BackendItem(UserSingleton.IP + URL, BackendItem.POST);
+        BackendItem item = new BackendItem(URL, BackendItem.POST);
 
         item.setHeaders(new HashMap<String, String>());
 
@@ -103,7 +115,7 @@ public class SingleFamilyView extends AppCompatActivity {
     private void createBody(BackendItem item, String family_token){
         JSONObject object = new JSONObject();
         try{
-            object.accumulate("token", family_token);
+            object.accumulate("family_token", family_token);
             item.setBody(object.toString());
         } catch (JSONException e){
             Log.e(TAG, "createBody: ",e);
@@ -156,25 +168,15 @@ public class SingleFamilyView extends AppCompatActivity {
     private void changeCurrentFamily() {
         secondarySpinner.setVisibility(View.VISIBLE);
 
-        BackendItem item = new BackendItem(UserSingleton.IP + SWITCH, BackendItem.POST);
+        BackendItem item = new BackendItem(SWITCH, BackendItem.POST);
         item.setHeaders(new HashMap<String, String>());
-        createSwitchBody(item, family_token);
+        createBody(item, family_token);
         Log.d(TAG, item.getBody());
         try {
             new SwitchFamilyTask().execute(item);
         } catch (Exception e){
             Log.e(TAG, "changeCurrentFamily: ",e);
             Log.e(TAG, item.getResponse_code().toString());
-        }
-    }
-
-    private void createSwitchBody(BackendItem item, String family_token){
-        JSONObject object = new JSONObject();
-        try{
-            object.accumulate("family", family_token);
-            item.setBody(object.toString());
-        } catch (JSONException e){
-            Log.e(TAG, "createBody: ",e);
         }
     }
 
@@ -211,6 +213,28 @@ public class SingleFamilyView extends AppCompatActivity {
             UserSingleton.getInstance().setFamilyToken(family_token);
             Intent intent = new Intent(getApplicationContext(), HomePage.class);
             startActivity(intent);
+        }
+    }
+
+
+
+    //leave family functionality
+    private void leaveFamily(){
+        secondarySpinner.setVisibility(View.VISIBLE);
+        try{
+            Thread.sleep(1000);
+        } catch (Exception e){
+            Log.e(TAG, "leaveFamily: ",e);
+        }
+
+        BackendItem item = new BackendItem(LEAVE, BackendItem.POST);
+        item.setHeaders(new HashMap<String, String>());
+        createBody(item, family_token);
+
+        try {
+            new SwitchFamilyTask().execute(item);
+        } catch (Exception e){
+            Log.e(TAG, "leaveFamily: ", e);
         }
     }
 }
