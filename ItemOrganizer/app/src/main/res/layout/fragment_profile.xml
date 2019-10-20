@@ -54,11 +54,13 @@
 
     <TextView
         android:id="@+id/uplo"
-        android:layout_width="143dp"
+        android:layout_width="wrap_content"
         android:layout_height="21dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="64dp"
+        android:clickable="true"
         android:text="Upload Profile Picture"
-        android:textColor="#005EAD"
+        android:textColor="#07C9F3"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/account_fragment_email" />
@@ -68,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Firstname Lastname"
-        android:textSize="30dp"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_family_view" />
@@ -79,7 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="email@email.com"
-        android:textSize="20dp"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"

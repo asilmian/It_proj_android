@@ -73,7 +73,7 @@
         android:textColor="#77000000"
         android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView13"
         app:layout_constraintTop_toBottomOf="@+id/family_fragment_name" />
 
     <TextView
@@ -130,5 +130,14 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:drawableLeft="@android:drawable/ic_menu_search"
+        app:layout_constraintBottom_toTopOf="@+id/item_recycler"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/family_fragment_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

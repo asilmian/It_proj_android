@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.itemorganizer.HomePage.HomePage;
@@ -27,6 +28,7 @@ public class AccountLogin extends AppCompatActivity {
 
     private EditText ePass;
     private EditText eEmail;
+    private ProgressBar spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,9 @@ public class AccountLogin extends AppCompatActivity {
 
         ePass = findViewById(R.id.password_login);
         eEmail = findViewById(R.id.email_login);
+        spinner = findViewById(R.id.login_progressBar);
+        spinner.setVisibility(View.INVISIBLE);
+
         //initialize firebase
         mAuth = FirebaseAuth.getInstance();
     }
@@ -43,6 +48,7 @@ public class AccountLogin extends AppCompatActivity {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
+            spinner.setVisibility(View.VISIBLE);
             setUserToken();
         }
 
@@ -60,10 +66,17 @@ public class AccountLogin extends AppCompatActivity {
         //get password and email from screen
         String password = ePass.getText().toString();
         String email = eEmail.getText().toString();
-
         //check if fields are empty
-        //not yet implemented
+        if (password.equals("") || email.equals("")){
 
+            Toast toast = Toast.makeText(AccountLogin.this, "Please complete all fields",
+                    Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
+            toast.show();
+            return;
+        }
+
+        spinner.setVisibility(View.VISIBLE);
         //create task to sign into firebase Auth
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -81,6 +94,7 @@ public class AccountLogin extends AppCompatActivity {
                             //issue: make toast appear on top
                             Toast.makeText(AccountLogin.this, "Login Failed",
                                     Toast.LENGTH_SHORT).show();
+                            spinner.setVisibility(View.INVISIBLE);
                         }
                     }
                 });
@@ -103,6 +117,7 @@ public class AccountLogin extends AppCompatActivity {
                             UtilityFunctions.setUserToken(idToken);
                             goToHomePage();
                         } else {
+                            spinner.setVisibility(View.INVISIBLE);
                             Toast toast = Toast.makeText(AccountLogin.this, "Connection to firebase failed",
                                     Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
