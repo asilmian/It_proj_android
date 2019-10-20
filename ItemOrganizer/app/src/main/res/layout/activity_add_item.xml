@@ -51,124 +51,110 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.748" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout5"
-        android:layout_width="match_parent"
+    <EditText
+        android:id="@+id/add_item_tags"
+        android:layout_width="262dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/PictureBtn"
-        tools:layout_editor_absoluteX="18dp">
+        android:layout_marginEnd="144dp"
+        android:ems="10"
+        android:hint="@string/enter_item_tags"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        android:labelFor="@id/add_item_tags"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/button2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_item_desc"
+        app:layout_constraintVertical_bias="0.51" />
 
-        <EditText
-            android:id="@+id/add_item_name"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:layout_marginTop="16dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/enter_item_name"
-            android:inputType="textPersonName"
-            android:labelFor="@id/add_item_name"
-            android:textSize="14sp" />
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="getDesc"
+        android:text="@string/suggest_tags"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/add_item_tags"
+        app:layout_constraintTop_toBottomOf="@+id/add_item_desc" />
 
-        <EditText
-            android:id="@+id/add_item_desc"
-            android:layout_width="match_parent"
-            android:layout_height="74dp"
-            android:layout_marginTop="0dp"
-            android:ems="10"
-            android:gravity="start|top"
-            android:hint="@string/enter_item_description"
-            android:importantForAutofill="no"
-            android:inputType="textMultiLine" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/privacy_recycler"
+        android:layout_width="0dp"
+        android:layout_height="187dp"
+        android:scrollbars="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/family_fragment_name">
 
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    </androidx.recyclerview.widget.RecyclerView>
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    <ProgressBar
+        android:id="@+id/addItemSecondarBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.65999997" />
 
-                <Button
-                    android:id="@+id/button2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:onClick="getDesc"
-                    android:text="@string/suggest_tags"
-                    android:textSize="12sp" />
+    <TextView
+        android:id="@+id/family_fragment_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:background="#ABC9EE"
+        android:text="@string/select_privacy_setings"
+        android:textAlignment="center"
+        android:textColor="@color/common_google_signin_btn_text_dark_focused"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button2" />
 
-                <EditText
-                    android:id="@+id/add_item_tags"
-                    android:layout_width="262dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
-                    android:ems="10"
-                    android:hint="@string/enter_item_tags"
-                    android:importantForAutofill="no"
-                    android:inputType="textPersonName"
-                    android:labelFor="@id/add_item_tags"
-                    android:textSize="14sp" />
+    <EditText
+        android:id="@+id/add_item_name"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:hint="@string/enter_item_name"
+        android:inputType="textPersonName"
+        android:labelFor="@id/add_item_name"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/PictureBtn" />
 
-            </TableRow>
-
-        </TableLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ProgressBar
-                android:id="@+id/addItemSecondarBar"
-                style="?android:attr/progressBarStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/privacy_recycler"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.498"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.685" />
-
-            <TextView
-                android:id="@+id/family_fragment_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="#ABC9EE"
-                android:text="@string/select_privacy_setings"
-                android:textAlignment="center"
-                android:textColor="@color/common_google_signin_btn_text_dark_focused"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/privacy_recycler"
-                android:layout_width="0dp"
-                android:layout_height="187dp"
-                android:scrollbars="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/family_fragment_name">
-
-            </androidx.recyclerview.widget.RecyclerView>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </LinearLayout>
+    <EditText
+        android:id="@+id/add_item_desc"
+        android:layout_width="match_parent"
+        android:layout_height="74dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="@string/enter_item_description"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_item_name" />
 
     <Button
         android:id="@+id/submit_item_button"
         android:layout_width="388dp"
         android:layout_height="53dp"
+        android:layout_marginTop="32dp"
         android:text="@string/add_item"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.54"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
+        app:layout_constraintTop_toBottomOf="@+id/privacy_recycler" />
 
     <Button
         android:id="@+id/PictureBtn"
