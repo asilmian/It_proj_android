@@ -45,7 +45,7 @@ public class SingleFamilyView extends AppCompatActivity {
     private RecyclerView members;
     private ProgressBar spinner;
     private ProgressBar secondarySpinner;
-    private FamilyMemRAdapter mAdapter;
+    private SingleFamilyMemRAdapter mAdapter;
 
     private String family_token;
     private static final String URL = UserSingleton.IP + "family/info/";
@@ -63,14 +63,15 @@ public class SingleFamilyView extends AppCompatActivity {
         //init recycler view
         members = findViewById(R.id.single_family_view_members);
         members.setHasFixedSize(true);
-        members.setLayoutManager(new GridLayoutManager(getApplicationContext(), 3));
-        mAdapter = new FamilyMemRAdapter(new ArrayList<String>());
+        members.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
+        mAdapter = new SingleFamilyMemRAdapter(new ArrayList<String>());
         members.setAdapter(mAdapter);
 
         spinner = findViewById(R.id.single_family_view_spinner);
         spinner.setVisibility(View.VISIBLE);
         secondarySpinner = findViewById(R.id.single_family_view_second_spinner);
-        secondarySpinner.setVisibility(View.GONE);
+        secondarySpinner.setVisibility(View.VISIBLE);
+        secondarySpinner.bringToFront();
 
         //set listener on change current family button
         current = findViewById(R.id.single_family_view_current);
@@ -167,6 +168,12 @@ public class SingleFamilyView extends AppCompatActivity {
     //switch family.
     private void changeCurrentFamily() {
         secondarySpinner.setVisibility(View.VISIBLE);
+
+        try{
+            Thread.sleep(2000);
+        } catch (Exception e){
+            Log.e(TAG, "changeCurrentFamily: ",e);
+        }
 
         BackendItem item = new BackendItem(SWITCH, BackendItem.POST);
         item.setHeaders(new HashMap<String, String>());
