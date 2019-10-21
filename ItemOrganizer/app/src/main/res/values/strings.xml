@@ -52,4 +52,6 @@
     <string name="new_family">New Family</string>
     <string name="family_members">Family Members:</string>
     <string name="textview">TextView</string>
+    <string name="invite_code">Invite Code:</string>
+    <string name="set_as_current">Set as Current</string>
 </resources>

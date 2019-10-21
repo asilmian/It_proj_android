@@ -41,8 +41,8 @@
 
     <ProgressBar
         android:id="@+id/addItemProgBar"
-        android:layout_width="232dp"
-        android:layout_height="194dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:gravity="center"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -54,20 +54,17 @@
 
     <EditText
         android:id="@+id/add_item_tags"
-        android:layout_width="262dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="144dp"
         android:ems="10"
         android:hint="@string/enter_item_tags"
         android:importantForAutofill="no"
         android:inputType="textPersonName"
         android:labelFor="@id/add_item_tags"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/button2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_item_desc"
-        app:layout_constraintVertical_bias="0.51" />
+        app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintStart_toStartOf="@+id/add_item_desc"
+        app:layout_constraintTop_toBottomOf="@+id/add_item_desc" />
 
     <Button
         android:id="@+id/button2"
@@ -76,19 +73,24 @@
         android:onClick="getDesc"
         android:text="@string/suggest_tags"
         android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/add_item_tags"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/add_item_tags"
-        app:layout_constraintTop_toBottomOf="@+id/add_item_desc" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_item_desc"
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/privacy_recycler"
         android:layout_width="0dp"
-        android:layout_height="187dp"
+        android:layout_height="0dp"
         android:scrollbars="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/submit_item_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/family_fragment_name">
+        app:layout_constraintTop_toBottomOf="@+id/family_fragment_name"
+        app:layout_constraintVertical_bias="0.0">
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -148,23 +150,24 @@
 
     <Button
         android:id="@+id/submit_item_button"
-        android:layout_width="388dp"
+        android:layout_width="0dp"
         android:layout_height="53dp"
-        android:layout_marginTop="32dp"
         android:text="@string/add_item"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.54"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/privacy_recycler" />
+        app:layout_constraintTop_toTopOf="@+id/new_family_view"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/PictureBtn"
         android:layout_width="124dp"
         android:layout_height="46dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="12dp"
         android:drawableTop="@drawable/ic_camera"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.062"
+        app:layout_constraintHorizontal_bias="0.055"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -172,13 +175,13 @@
 
         android:id="@+id/button3"
         android:layout_width="123dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="24dp"
+        android:layout_height="0dp"
         android:drawableTop="@drawable/ic_gallery"
+        app:layout_constraintBottom_toBottomOf="@+id/PictureBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.937"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toTopOf="@+id/PictureBtn" />
 
     <TextView
         android:id="@+id/textView4"
@@ -202,18 +205,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ProgressBar
-        android:id="@+id/addItemProgBar"
-        android:layout_width="232dp"
-        android:layout_height="194dp"
-        android:gravity="center"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.748" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

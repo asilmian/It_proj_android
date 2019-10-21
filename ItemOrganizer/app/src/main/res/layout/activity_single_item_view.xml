@@ -10,7 +10,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/new_family_view"
         android:layout_width="0dp"
-        android:layout_height="525dp"
+        android:layout_height="500dp"
         android:layout_centerHorizontal="true"
         android:elevation="12dp"
         android:innerRadius="0dp"
@@ -71,13 +71,12 @@
     <TextView
         android:id="@+id/singleItemViewFiller4"
         android:layout_width="0dp"
-        android:layout_height="52dp"
+        android:layout_height="49dp"
         android:background="@color/colorBtn"
         android:textAlignment="center"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/singleItemViewTags"
         app:layout_constraintVertical_bias="1.0" />
@@ -85,10 +84,9 @@
     <TextView
         android:id="@+id/singleItemViewName"
         android:layout_width="0dp"
-        android:layout_height="62dp"
+        android:layout_height="wrap_content"
         android:background="@color/colorBtn"
         android:fontFamily="sans-serif-black"
-        android:text="@string/enter_item_name"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="28sp"
@@ -101,6 +99,8 @@
         android:id="@+id/singleItemViewTags"
         android:layout_width="331dp"
         android:layout_height="30dp"
+        android:layout_marginTop="544dp"
+        android:layout_marginEnd="40dp"
         android:background="@drawable/rounded_corner"
         android:text="@string/textview"
         android:textAlignment="center"
@@ -108,53 +108,53 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_family_view"
-        app:layout_constraintVertical_bias="0.271" />
+        app:layout_constraintTop_toBottomOf="@+id/singleItemViewName"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/singleItemViewDelete"
-        android:layout_width="137dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:background="@color/colorBtn"
         android:drawableTop="@drawable/ic_delete"
         android:drawableTint="@android:color/white"
         android:text="@string/delete"
         android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/singleItemViewcp"
-        app:layout_constraintStart_toEndOf="@+id/singleItemViewcp"
-        app:layout_constraintTop_toTopOf="@+id/singleItemViewcp"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintBottom_toBottomOf="@+id/singleItemViewFiller4"
+        app:layout_constraintEnd_toEndOf="@+id/singleItemViewTags"
+        app:layout_constraintStart_toStartOf="@+id/singleItemViewTags"
+        app:layout_constraintTop_toTopOf="@+id/singleItemViewcp" />
 
     <Button
         android:id="@+id/singleItemViewcp"
-        android:layout_width="138dp"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:background="@color/colorBtn"
         android:drawableTop="@drawable/ic_privacy"
         android:drawableTint="@android:color/white"
         android:text="@string/change_privacy"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@+id/singleItemViewFiller4"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/singleItemViewDelete"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/singleItemViewFiller4"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="@+id/singleItemViewFiller4" />
 
     <Button
         android:id="@+id/singleItemViewTransfer"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:background="@color/colorBtn"
         android:drawableTop="@drawable/ic_transfer"
         android:drawableTint="@android:color/white"
         android:text="@string/transfer_item"
         android:textColor="@android:color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/singleItemViewcp"
+        app:layout_constraintBottom_toBottomOf="@+id/singleItemViewFiller4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/singleItemViewDelete"
-        app:layout_constraintTop_toTopOf="@+id/singleItemViewcp" />
+        app:layout_constraintTop_toTopOf="@+id/singleItemViewFiller4" />
 
     <ProgressBar
         android:id="@+id/singleItemViewSpinner"
