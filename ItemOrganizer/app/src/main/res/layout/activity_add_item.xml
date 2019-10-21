@@ -63,6 +63,7 @@
         android:labelFor="@id/add_item_tags"
         android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/add_item_desc"
         app:layout_constraintTop_toBottomOf="@+id/add_item_desc" />
 
@@ -73,12 +74,10 @@
         android:onClick="getDesc"
         android:text="@string/suggest_tags"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/add_item_tags"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_item_desc"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/add_item_desc" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/privacy_recycler"
@@ -89,8 +88,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/family_fragment_name"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/family_fragment_name">
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -101,9 +99,10 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.65999997" />
+        app:layout_constraintVertical_bias="0.636" />
 
     <TextView
         android:id="@+id/family_fragment_name"
@@ -145,6 +144,7 @@
         android:importantForAutofill="no"
         android:inputType="textMultiLine"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_item_name" />
 
@@ -152,13 +152,12 @@
         android:id="@+id/submit_item_button"
         android:layout_width="0dp"
         android:layout_height="53dp"
+        android:layout_marginTop="256dp"
         android:text="@string/add_item"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/new_family_view"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="@+id/family_fragment_name" />
 
     <Button
         android:id="@+id/PictureBtn"

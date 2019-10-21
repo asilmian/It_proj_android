@@ -19,7 +19,7 @@
         <activity android:name=".Family.SingleFamilyView" />
         <activity android:name=".Item.SingleItemView" />
         <activity android:name=".AddItem.AddItemActivity"
-            android:windowSoftInputMode="adjustNothing"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".AccountSignup" />
         <activity android:name=".AccountLogin" />
         <activity android:name=".Family.NewFamily" />
