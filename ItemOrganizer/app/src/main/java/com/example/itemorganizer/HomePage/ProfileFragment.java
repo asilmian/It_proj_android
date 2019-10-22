@@ -22,10 +22,13 @@ import android.widget.Toast;
 import com.example.itemorganizer.AddItem.AddItemActivity;
 import com.example.itemorganizer.BackendItem;
 import com.example.itemorganizer.BackendReq;
+import com.example.itemorganizer.GlideApp;
 import com.example.itemorganizer.R;
 import com.example.itemorganizer.UserSingleton;
 import com.example.itemorganizer.UtilityFunctions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,17 +56,20 @@ public class ProfileFragment extends Fragment {
     FirebaseAuth mAuth;
     String pathToFile;
     File image;
+    StorageReference storageReference;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        storageReference = FirebaseStorage.getInstance().getReference();
 
         name = v.findViewById(R.id.account_fragment_name);
         email = v.findViewById(R.id.account_fragment_email);
         mAuth = FirebaseAuth.getInstance();
         email.setText(mAuth.getCurrentUser().getEmail());
         name.setText(UserSingleton.getInstance().getName());
-        imageView = v.findViewById(R.id.image);
+        imageView = v.findViewById(R.id.profile_user_dp);
         requestPermissions(new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 2);
         TextView profile_upload = v.findViewById(R.id.profile_upload);
         profile_upload.setOnClickListener(new View.OnClickListener() {
@@ -72,6 +78,15 @@ public class ProfileFragment extends Fragment {
                 takePhoto();
             }
         });
+
+        if(UserSingleton.getInstance().getIsDp().equals("true")){
+            GlideApp.with(v.getContext())
+                    .load(storageReference.child(UserSingleton.getInstance().getEmail()+ ".jpg"))
+                    .centerCrop()
+                    .into(imageView);
+        }
+
+
         return  v;
 
     }

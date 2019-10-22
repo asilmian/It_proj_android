@@ -171,6 +171,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
 
             //load profile picture if applicable
             String isDp = object.getString("image");
+            UserSingleton.getInstance().setIsDp(isDp);
             if(isDp.equals("true")){
                 String imageRef = UserSingleton.getInstance().getEmail();
                 GlideApp.with(this.getApplicationContext())

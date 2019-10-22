@@ -7,6 +7,7 @@ public class UserSingleton {
     private static String familyToken = null;
     private static String name = null;
     private static String email = null;
+    private static String isDp = null;
 
     public final static String IP = "http://167.71.243.144:5000/";
 
@@ -43,5 +44,8 @@ public class UserSingleton {
 
     public String getEmail(){return email; }
     public void setEmail(String newEmail){email = newEmail;}
+
+    public String getIsDp(){return  isDp;}
+    public void setIsDp(String newIsDP){isDp = newIsDP;}
 
 }
