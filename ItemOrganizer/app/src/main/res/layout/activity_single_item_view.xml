@@ -27,8 +27,8 @@
 
             <ImageView
                 android:id="@+id/singleItemViewImage"
-                android:layout_width="409dp"
-                android:layout_height="499dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:contentDescription="TODO"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
