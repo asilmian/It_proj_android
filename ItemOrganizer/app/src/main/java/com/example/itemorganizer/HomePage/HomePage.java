@@ -7,22 +7,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import io.grpc.Context;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.itemorganizer.AccountLogin;
 import com.example.itemorganizer.BackendItem;
 import com.example.itemorganizer.BackendReq;
+import com.example.itemorganizer.GlideApp;
 import com.example.itemorganizer.R;
 import com.example.itemorganizer.UserSingleton;
 import com.example.itemorganizer.UtilityFunctions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,6 +40,8 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     private TextView name;
+    private ImageView dp;
+    private StorageReference storageReference;
 
     private final static String USERURL = "user/info/";
 
@@ -43,6 +50,8 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        storageReference = FirebaseStorage.getInstance().getReference();
 
         //Init
         setContentView(R.layout.activity_home_page);
@@ -55,6 +64,8 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         navigationView.setNavigationItemSelectedListener(this);
         View v = navigationView.getHeaderView(0);
         name = v.findViewById(R.id.nav_user_name);
+        dp = v.findViewById(R.id.nav_user_dp);
+
 
         //Action Bar (Navbar) Init
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
@@ -153,7 +164,21 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
             String userName = object.getString("name");
             UserSingleton.getInstance().setName(userName);
             name.setText(userName);
+
+            //store user information
             UserSingleton.getInstance().setFamilyToken(object.getString("currentfamily"));
+            UserSingleton.getInstance().setEmail(object.getString("email"));
+
+            //load profile picture if applicable
+            String isDp = object.getString("image");
+            if(isDp.equals("true")){
+                String imageRef = UserSingleton.getInstance().getEmail();
+                GlideApp.with(this.getApplicationContext())
+                        .load(storageReference.child(imageRef + ".jpg"))
+                        .centerCrop()
+                        .into(dp);
+
+            }
         } catch (JSONException e){
             Log.e(TAG, "setUserInfo: ",e);
         }

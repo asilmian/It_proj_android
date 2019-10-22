@@ -42,7 +42,7 @@
         app:layout_constraintTop_toTopOf="@+id/textView54">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/nav_user_dp"
             android:layout_width="218dp"
             android:layout_height="192dp"
             android:layout_marginStart="36dp"
