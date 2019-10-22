@@ -157,6 +157,7 @@ public class AccountSignup extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject();
             jsonObject.accumulate("name", eName.getText().toString());
             jsonObject.accumulate("email", eEmail.getText().toString());
+            jsonObject.accumulate("image", "false");
             backendItem.setBody(jsonObject.toString());
         } catch (JSONException e) {
             Log.e(TAG, e.toString());
