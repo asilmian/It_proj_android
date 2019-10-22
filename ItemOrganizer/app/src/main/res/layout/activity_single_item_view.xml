@@ -9,83 +9,89 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/new_family_view"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="411dp"
+        android:layout_height="543dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
         android:elevation="12dp"
         android:innerRadius="0dp"
         android:shape="ring"
         android:thicknessRatio="1.9"
-        app:cardCornerRadius="125dp"
+        app:cardCornerRadius="25dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/singleItemViewFiller">
+        app:layout_constraintTop_toBottomOf="@+id/singleItemViewName">
 
-        <ImageView
-            android:id="@+id/singleItemViewImage"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:contentDescription="TODO"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/singleItemViewFiller"
-            app:layout_constraintVertical_bias="0.048"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
-    </androidx.cardview.widget.CardView>
+            android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/singleItemViewFiller"
-        android:layout_width="500dp"
-        android:layout_height="39dp"
-        android:background="@color/colorBtn"
-        android:textAlignment="center"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/singleItemViewImage"
+                android:layout_width="409dp"
+                android:layout_height="499dp"
+                android:contentDescription="TODO"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+            <ImageView
+                android:id="@+id/imageView6"
+                android:layout_width="0dp"
+                android:layout_height="144dp"
+                android:elevation="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0"
+                app:srcCompat="@drawable/black_gradient" />
+
+            <TextView
+                android:id="@+id/singleItemViewDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="6dp"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/singleItemViewImage"
+                app:layout_constraintEnd_toEndOf="@+id/imageView6"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/imageView6"
+                app:layout_constraintTop_toTopOf="@+id/imageView6"
+                app:layout_constraintVertical_bias="1.0"
+                tools:text="@tools:sample/lorem" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/singleItemViewFiller4"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="32dp"
+        android:layout_height="49dp"
         android:background="@color/colorBtn"
         android:textAlignment="center"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/singleItemViewDescription" />
-
-    <TextView
-        android:id="@+id/singleItemViewTagsHeader"
-        android:layout_width="361dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="8dp"
-        android:text="Tags:"
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_family_view" />
+        app:layout_constraintTop_toBottomOf="@+id/singleItemViewTags"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/singleItemViewName"
-        android:layout_width="500dp"
-        android:layout_height="71dp"
-        android:layout_marginTop="24dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:background="@color/colorBtn"
         android:fontFamily="sans-serif-black"
-        android:text="@string/enter_item_name"
         android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textSize="30sp"
+        android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -93,61 +99,43 @@
         android:id="@+id/singleItemViewTags"
         android:layout_width="331dp"
         android:layout_height="30dp"
+        android:layout_marginEnd="40dp"
         android:background="@drawable/rounded_corner"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/singleItemViewTagsHeader" />
-
-    <TextView
-        android:id="@+id/singleItemViewDescription"
-        android:layout_width="314dp"
-        android:layout_height="148dp"
-
-        android:layout_marginTop="8dp"
-        android:background="@drawable/rounded_corner"
-        android:text="TextView"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
-
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/description"
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/singleItemViewTags" />
+        app:layout_constraintTop_toBottomOf="@+id/new_family_view"
+        app:layout_constraintVertical_bias="0.184" />
 
     <Button
         android:id="@+id/singleItemViewDelete"
-        android:layout_width="112dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:background="@color/colorBtn"
         android:drawableTop="@drawable/ic_delete"
+        android:drawableTint="@android:color/white"
         android:text="@string/delete"
-        app:layout_constraintBottom_toBottomOf="@+id/singleItemViewcp"
-        app:layout_constraintStart_toEndOf="@+id/singleItemViewcp"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/singleItemViewFiller4"
+        app:layout_constraintEnd_toEndOf="@+id/singleItemViewTags"
+        app:layout_constraintStart_toStartOf="@+id/singleItemViewTags"
         app:layout_constraintTop_toTopOf="@+id/singleItemViewcp" />
 
     <Button
         android:id="@+id/singleItemViewcp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableTop="@drawable/ic_privacy"
-        android:text="@string/change_privacy"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/colorBtn"
+        android:drawableTop="@drawable/ic_edit"
+        android:drawableTint="@android:color/white"
+        android:text="Edit Item"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/singleItemViewFiller4"
+        app:layout_constraintEnd_toStartOf="@+id/singleItemViewDelete"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/singleItemViewFiller4" />
@@ -155,25 +143,28 @@
     <Button
         android:id="@+id/singleItemViewTransfer"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:background="@color/colorBtn"
         android:drawableTop="@drawable/ic_transfer"
+        android:drawableTint="@android:color/white"
         android:text="@string/transfer_item"
-        app:layout_constraintBottom_toBottomOf="@+id/singleItemViewcp"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/singleItemViewFiller4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/singleItemViewDelete"
-        app:layout_constraintTop_toTopOf="@+id/singleItemViewcp" />
+        app:layout_constraintTop_toTopOf="@+id/singleItemViewFiller4" />
 
     <ProgressBar
         android:id="@+id/singleItemViewSpinner"
         style="?android:attr/progressBarStyle"
-        android:layout_width="166dp"
-        android:layout_height="149dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:elevation="50dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/singleItemViewTagsHeader"
-        app:layout_constraintVertical_bias="0.29000002" />
+        app:layout_constraintTop_toTopOf="@+id/singleItemViewName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

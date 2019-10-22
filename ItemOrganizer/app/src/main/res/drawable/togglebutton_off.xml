@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval">
+    android:shape="rectangle">
     <solid
-        android:color="#F0EAD6" /> // eggshell white
+        android:color="#F0EAD6"
+        android:textColor = "@color/cardview_shadow_start_color"/> // eggshell white
 </shape>

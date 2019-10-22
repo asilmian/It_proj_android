@@ -9,8 +9,8 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/itemViewCardView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="213dp"
         android:animationCache="false"
         android:clickable="true"
         android:focusable="true"
@@ -24,13 +24,13 @@
         card_view:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="338dp"
-            android:layout_height="117dp">
+            android:layout_width="395dp"
+            android:layout_height="191dp">
 
             <ImageView
                 android:id="@+id/itemViewImage"
-                android:layout_width="133dp"
-                android:layout_height="122dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintHorizontal_bias="0.0"
@@ -41,42 +41,29 @@
             <TextView
                 android:id="@+id/itemViewName"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_height="0dp"
+                android:elevation="4dp"
+                android:textAlignment="viewStart"
                 android:textColor="@color/colorBackground"
                 android:textSize="20sp"
-                card_view:layout_constraintBottom_toBottomOf="parent"
+                card_view:layout_constraintBottom_toBottomOf="@+id/itemViewImage"
                 card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintHorizontal_bias="0.5"
-                card_view:layout_constraintStart_toEndOf="@+id/itemViewImage"
+                card_view:layout_constraintHorizontal_bias="0.498"
+                card_view:layout_constraintStart_toStartOf="parent"
+                card_view:layout_constraintTop_toTopOf="@+id/imageView5" />
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:elevation="2dp"
+                card_view:layout_constraintBottom_toBottomOf="@+id/itemViewImage"
+                card_view:layout_constraintEnd_toEndOf="parent"
+                card_view:layout_constraintHorizontal_bias="0.0"
+                card_view:layout_constraintStart_toStartOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent"
-                card_view:layout_constraintVertical_bias="0.242" />
-
-            <TextView
-                android:id="@+id/itemViewTags"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:textColor="@color/colorBackground"
-                android:textSize="18sp"
-                card_view:layout_constraintBottom_toBottomOf="parent"
-                card_view:layout_constraintEnd_toEndOf="parent"
-                card_view:layout_constraintHorizontal_bias="0.045"
-                card_view:layout_constraintStart_toEndOf="@+id/itemViewImage"
-                card_view:layout_constraintTop_toBottomOf="@+id/textView13"
-                card_view:layout_constraintVertical_bias="0.0" />
-
-            <TextView
-                android:id="@+id/textView13"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:textColor="@color/colorBackground"
-                android:layout_marginTop="16dp"
-                android:text="Tags:"
-                card_view:layout_constraintStart_toEndOf="@+id/itemViewImage"
-                card_view:layout_constraintTop_toBottomOf="@+id/textView" />
+                card_view:layout_constraintVertical_bias="1.0"
+                card_view:srcCompat="@drawable/black_gradient_small" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

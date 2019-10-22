@@ -84,7 +84,6 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
         public ItemViewHolder(View v) {
             super(v);
             name = v.findViewById(R.id.itemViewName);
-            tags = v.findViewById(R.id.itemViewTags);
             image = v.findViewById(R.id.itemViewImage);
             cardView = v.findViewById(R.id.itemViewCardView);
         }
@@ -118,7 +117,6 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
         Log.d(TAG, "onBindViewHolder: called with i: " + i);
 
         viewHolder.name.setText(items.get(i).get(0)); //Name
-        viewHolder.tags.setText(items.get(i).get(2)); //Tags
 
         //use glideapp to display image from fire storage
         GlideApp.with(viewHolder.image)

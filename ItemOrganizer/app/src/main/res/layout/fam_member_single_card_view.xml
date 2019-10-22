@@ -13,7 +13,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/new_family_view"
-        android:layout_width="208dp"
+        android:layout_width="match_parent"
         android:layout_height="147dp"
         android:layout_centerHorizontal="false"
         android:elevation="1dp"
@@ -48,7 +48,7 @@
                 android:elevation="4dp"
                 android:text="TextView"
                 android:textAlignment="center"
-                android:textColor="@android:color/black"
+                android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
