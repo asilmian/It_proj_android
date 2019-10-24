@@ -19,33 +19,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.itemorganizer.AddItem.AddItemActivity;
-import com.example.itemorganizer.BackendItem;
-import com.example.itemorganizer.BackendReq;
 import com.example.itemorganizer.GlideApp;
 import com.example.itemorganizer.R;
 import com.example.itemorganizer.UserSingleton;
-import com.example.itemorganizer.UtilityFunctions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-
-import static android.os.Environment.getExternalStoragePublicDirectory;
 
 public class ProfileFragment extends Fragment {
 
@@ -57,6 +43,7 @@ public class ProfileFragment extends Fragment {
     String pathToFile;
     File image;
     StorageReference storageReference;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -79,20 +66,21 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        if(UserSingleton.getInstance().getIsDp().equals("true")){
+        if (UserSingleton.getInstance().getIsDp().equals("true")) {
             GlideApp.with(v.getContext())
-                    .load(storageReference.child(UserSingleton.getInstance().getEmail()+ ".jpg"))
+                    .load(storageReference.child(UserSingleton.getInstance().getEmail() + ".jpg"))
                     .centerCrop()
                     .into(imageView);
         }
 
 
-        return  v;
+        return v;
 
     }
+
     public void takePhoto() {
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        File photo = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
+        File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
         intent.putExtra(MediaStore.EXTRA_OUTPUT,
                 Uri.fromFile(photo));
         imageUri = Uri.fromFile(photo);

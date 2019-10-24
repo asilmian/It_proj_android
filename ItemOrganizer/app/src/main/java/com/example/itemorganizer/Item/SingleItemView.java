@@ -30,7 +30,6 @@ import java.util.HashMap;
 /**
  * Activity for viewing a single item
  * Should never be able to get to this activity with user already logged in
- *
  */
 public class SingleItemView extends AppCompatActivity {
 
@@ -49,7 +48,6 @@ public class SingleItemView extends AppCompatActivity {
 
     private String imageRef;
     private String token;
-
 
 
     private ProgressBar spinner;
@@ -87,43 +85,43 @@ public class SingleItemView extends AppCompatActivity {
 
 
     //send the request to get item information
-    private void sendItemReq(){
+    private void sendItemReq() {
         BackendItem item = new BackendItem(UserSingleton.IP + URL, BackendItem.POST);
         item.setHeaders(new HashMap<String, String>());
         createBody(item);
-        try{
+        try {
             new GetItemView().execute(item);
         } catch (Exception e) {
-            Log.e(TAG, "sendItemReq: ",e);
+            Log.e(TAG, "sendItemReq: ", e);
         }
 
     }
 
     //creates response body
     //includes item_token and token of selected
-    private void createBody(BackendItem item){
+    private void createBody(BackendItem item) {
         JSONObject object = new JSONObject();
-        try{
+        try {
             object.accumulate("item_token", this.token);
-        }catch (JSONException e){
-            Log.e(TAG, "createBody: ",e);
+        } catch (JSONException e) {
+            Log.e(TAG, "createBody: ", e);
         }
         item.setBody(object.toString());
     }
 
     //sets information in the views based on the response it gets
-    private void onRecieve(String response){
-        try{
+    private void onRecieve(String response) {
+        try {
             JSONObject object = new JSONObject(response);
             name.setText(object.getString("name"));
             desc.setText(object.getString("description"));
             tags.setText(UtilityFunctions.convertTags(object.getJSONArray("tags")));
             imageRef = object.getString("image");
-        }catch (JSONException e){
-            Log.e(TAG, "onRecieve: ",e);
+        } catch (JSONException e) {
+            Log.e(TAG, "onRecieve: ", e);
         }
 
-        if (imageRef != null){
+        if (imageRef != null) {
             GlideApp.with(this.getApplicationContext())
                     .load(storageReference.child(imageRef))
                     .centerCrop()
@@ -131,7 +129,6 @@ public class SingleItemView extends AppCompatActivity {
         }
         spinner.setVisibility(View.GONE);
     }
-
 
 
     //http task for making a request.
@@ -160,7 +157,7 @@ public class SingleItemView extends AppCompatActivity {
     }
 
     //transfer item activity
-    private void transferItem(){
+    private void transferItem() {
         Intent intent = new Intent(getApplicationContext(), TransferItem.class);
         intent.putExtra("item_token", this.token);
         startActivity(intent);

@@ -76,14 +76,14 @@ public class FamilyFragment extends Fragment {
         recyclerView.setAdapter(mAdapter);
     }
 
-    private void updateCurrFamily(){
+    private void updateCurrFamily() {
         BackendItem item = new BackendItem(USERINFO, BackendItem.GET);
         item.setHeaders(new HashMap<String, String>());
 
-        try{
+        try {
             new SetCurrFamily().execute(item);
-        } catch (Exception e){
-            Log.e(TAG, "updateCurrFamily: ",e);
+        } catch (Exception e) {
+            Log.e(TAG, "updateCurrFamily: ", e);
         }
     }
 
@@ -108,15 +108,15 @@ public class FamilyFragment extends Fragment {
         }
     }
 
-    private void setCurrFamily(String response){
-            try{
-                JSONObject object = new JSONObject(response);
-                String family_token = object.getString("currentfamily");
-                UserSingleton.getInstance().setFamilyToken(family_token);
-            }catch (JSONException e){
-                Log.e(TAG, "setCurrFamily: ",e);
-            }
-            showUserFams();
+    private void setCurrFamily(String response) {
+        try {
+            JSONObject object = new JSONObject(response);
+            String family_token = object.getString("currentfamily");
+            UserSingleton.getInstance().setFamilyToken(family_token);
+        } catch (JSONException e) {
+            Log.e(TAG, "setCurrFamily: ", e);
+        }
+        showUserFams();
     }
 
     private void showUserFams() {

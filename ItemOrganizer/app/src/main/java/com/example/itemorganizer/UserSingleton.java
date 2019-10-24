@@ -27,12 +27,18 @@ public class UserSingleton {
     public void setUserToken(String token) {
         userToken = token;
     }
-    public void setFamilyToken(String t){ familyToken = t;}
+
+    public void setFamilyToken(String t) {
+        familyToken = t;
+    }
 
     public String getUserToken() {
         return userToken;
     }
-    public String getFamilyToken(){ return familyToken; }
+
+    public String getFamilyToken() {
+        return familyToken;
+    }
 
     public String getName() {
         return name;
@@ -42,10 +48,20 @@ public class UserSingleton {
         name = newName;
     }
 
-    public String getEmail(){return email; }
-    public void setEmail(String newEmail){email = newEmail;}
+    public String getEmail() {
+        return email;
+    }
 
-    public String getIsDp(){return  isDp;}
-    public void setIsDp(String newIsDP){isDp = newIsDP;}
+    public void setEmail(String newEmail) {
+        email = newEmail;
+    }
+
+    public String getIsDp() {
+        return isDp;
+    }
+
+    public void setIsDp(String newIsDP) {
+        isDp = newIsDP;
+    }
 
 }

@@ -38,27 +38,27 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
     //filter
     public class ItemFilter extends Filter {
         public ItemRAdapter itemRAdapter;
-        public ItemFilter(ItemRAdapter itemRAdapter){
+
+        public ItemFilter(ItemRAdapter itemRAdapter) {
             super();
             this.itemRAdapter = itemRAdapter;
         }
 
         @Override
-        protected FilterResults performFiltering(CharSequence charSequence){
+        protected FilterResults performFiltering(CharSequence charSequence) {
             items.clear();
             final FilterResults results = new FilterResults();
-            if (charSequence.length() == 0){
+            if (charSequence.length() == 0) {
                 items.addAll(allItems);
-            }else{
+            } else {
                 final String filterPattern = charSequence.toString().toLowerCase();
-                for (ArrayList<String> item : allItems){
+                for (ArrayList<String> item : allItems) {
                     String itemName = item.get(0).toLowerCase();
                     String itemTags = item.get(2).toLowerCase();
 
-                    if (itemName.startsWith(filterPattern)){
+                    if (itemName.startsWith(filterPattern)) {
                         items.add(item);
-                    }
-                    else if(itemTags.contains(filterPattern)){
+                    } else if (itemTags.contains(filterPattern)) {
                         items.add(item);
                     }
                 }
@@ -142,11 +142,11 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
     }
 
     @Override
-    public Filter getFilter(){
+    public Filter getFilter() {
         return mfilter;
     }
 
-    public void viewItem(String itemToken){
+    public void viewItem(String itemToken) {
         Intent intent = new Intent(this.context, SingleItemView.class);
         intent.putExtra("token", itemToken);
         this.context.startActivity(intent);
@@ -156,7 +156,7 @@ public class ItemRAdapter extends RecyclerView.Adapter<ItemRAdapter.ItemViewHold
      *   Public exposed functionality
      */
     public void addAndNotify(ArrayList<String> added) {
-        items.add(items.size(),added);
+        items.add(items.size(), added);
         allItems.add(allItems.size(), added);
         notifyItemInserted(items.size());
     }

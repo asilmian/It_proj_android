@@ -50,7 +50,7 @@ public class SingleFamilyView extends AppCompatActivity {
     private String family_token;
     private static final String URL = UserSingleton.IP + "family/info/";
     private static final String SWITCH = UserSingleton.IP + "family/switch/";
-    private static final String LEAVE = UserSingleton.IP + "family/leave/" ;
+    private static final String LEAVE = UserSingleton.IP + "family/leave/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +97,7 @@ public class SingleFamilyView extends AppCompatActivity {
     }
 
     //gets family information except member information.
-    private void getFamilyInformation(String family_token){
+    private void getFamilyInformation(String family_token) {
         BackendItem item = new BackendItem(URL, BackendItem.POST);
 
         item.setHeaders(new HashMap<String, String>());
@@ -106,20 +106,20 @@ public class SingleFamilyView extends AppCompatActivity {
 
         try {
             new ViewFamilyTask().execute(item);
-        } catch (Exception e){
-            Log.e(TAG, "getFamilyInformation: ",e);
+        } catch (Exception e) {
+            Log.e(TAG, "getFamilyInformation: ", e);
             Log.e(TAG, item.getResponse_code().toString());
         }
     }
 
     //creates a body with "token": token
-    private void createBody(BackendItem item, String family_token){
+    private void createBody(BackendItem item, String family_token) {
         JSONObject object = new JSONObject();
-        try{
+        try {
             object.accumulate("family_token", family_token);
             item.setBody(object.toString());
-        } catch (JSONException e){
-            Log.e(TAG, "createBody: ",e);
+        } catch (JSONException e) {
+            Log.e(TAG, "createBody: ", e);
         }
     }
 
@@ -144,35 +144,35 @@ public class SingleFamilyView extends AppCompatActivity {
     }
 
     //show complete family information.
-    private void showInformation(String response){
+    private void showInformation(String response) {
 
-        try{
+        try {
             JSONObject object = new JSONObject(response);
             name.setText(object.getString("name"));
             inviteCode.setText(object.getString("family_token"));
 
             //show members
             JSONArray memjson = object.getJSONArray("members");
-            for(int i=0; i <memjson.length(); i++){
+            for (int i = 0; i < memjson.length(); i++) {
                 mAdapter.addAndNotify(memjson.getString(i));
             }
-        } catch (JSONException e){
-            Log.e(TAG, "showInformation: ",e);
+        } catch (JSONException e) {
+            Log.e(TAG, "showInformation: ", e);
         }
 
         spinner.setVisibility(View.GONE);
     }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
     //switch family.
     private void changeCurrentFamily() {
         secondarySpinner.setVisibility(View.VISIBLE);
 
-        try{
+        try {
             Thread.sleep(2000);
-        } catch (Exception e){
-            Log.e(TAG, "changeCurrentFamily: ",e);
+        } catch (Exception e) {
+            Log.e(TAG, "changeCurrentFamily: ", e);
         }
 
         BackendItem item = new BackendItem(SWITCH, BackendItem.POST);
@@ -181,8 +181,8 @@ public class SingleFamilyView extends AppCompatActivity {
         Log.d(TAG, item.getBody());
         try {
             new SwitchFamilyTask().execute(item);
-        } catch (Exception e){
-            Log.e(TAG, "changeCurrentFamily: ",e);
+        } catch (Exception e) {
+            Log.e(TAG, "changeCurrentFamily: ", e);
             Log.e(TAG, item.getResponse_code().toString());
         }
     }
@@ -208,15 +208,14 @@ public class SingleFamilyView extends AppCompatActivity {
     }
 
     //intent to go to homePage if response was successful.
-    private void goToHomePage(int response_code){
-        if(response_code != 200){
+    private void goToHomePage(int response_code) {
+        if (response_code != 200) {
             Toast toast = Toast.makeText(SingleFamilyView.this, "Please try again",
                     Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
             toast.show();
             secondarySpinner.setVisibility(View.INVISIBLE);
-        }
-        else {
+        } else {
             UserSingleton.getInstance().setFamilyToken(family_token);
             Intent intent = new Intent(getApplicationContext(), HomePage.class);
             startActivity(intent);
@@ -224,14 +223,13 @@ public class SingleFamilyView extends AppCompatActivity {
     }
 
 
-
     //leave family functionality
-    private void leaveFamily(){
+    private void leaveFamily() {
         secondarySpinner.setVisibility(View.VISIBLE);
-        try{
+        try {
             Thread.sleep(1000);
-        } catch (Exception e){
-            Log.e(TAG, "leaveFamily: ",e);
+        } catch (Exception e) {
+            Log.e(TAG, "leaveFamily: ", e);
         }
 
         BackendItem item = new BackendItem(LEAVE, BackendItem.POST);
@@ -240,7 +238,7 @@ public class SingleFamilyView extends AppCompatActivity {
 
         try {
             new SwitchFamilyTask().execute(item);
-        } catch (Exception e){
+        } catch (Exception e) {
             Log.e(TAG, "leaveFamily: ", e);
         }
     }

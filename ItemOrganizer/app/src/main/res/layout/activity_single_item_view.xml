@@ -132,7 +132,7 @@
         android:background="@color/colorBtn"
         android:drawableTop="@drawable/ic_edit"
         android:drawableTint="@android:color/white"
-        android:text="Edit Item"
+        android:text="@string/edit_item"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@+id/singleItemViewFiller4"
         app:layout_constraintEnd_toStartOf="@+id/singleItemViewDelete"

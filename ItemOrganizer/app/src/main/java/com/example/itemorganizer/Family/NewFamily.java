@@ -49,10 +49,10 @@ public class NewFamily extends AppCompatActivity {
     public void createFamily(View view) {
         spinner.setVisibility(View.VISIBLE);
 
-        try{
+        try {
             Thread.sleep(1000);
-        } catch (Exception e){
-            Log.e(TAG, "createFamily: ",e);
+        } catch (Exception e) {
+            Log.e(TAG, "createFamily: ", e);
         }
         if (sendBackend()) {
             goToHomePage();

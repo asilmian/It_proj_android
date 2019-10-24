@@ -67,7 +67,7 @@ public class AccountLogin extends AppCompatActivity {
         String password = ePass.getText().toString();
         String email = eEmail.getText().toString();
         //check if fields are empty
-        if (password.equals("") || email.equals("")){
+        if (password.equals("") || email.equals("")) {
 
             Toast toast = Toast.makeText(AccountLogin.this, "Please complete all fields",
                     Toast.LENGTH_SHORT);

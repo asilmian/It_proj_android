@@ -31,7 +31,6 @@ public class AddFamilyTest {
     public ActivityTestRule<FamilyLogIn> mActivityTestRule = new ActivityTestRule<>(FamilyLogIn.class);
 
 
-
     @Test
     public void addItemTest() {
         ViewInteraction appCompatButton = onView(
@@ -67,13 +66,13 @@ public class AddFamilyTest {
 
         ViewInteraction famCode = onView(
                 allOf(withId(R.id.famNameView),
-                isDisplayed(),
+                        isDisplayed(),
                         withText("Family Name:")));
         famCode.check((matches(withText("Family Name:"))));
 
         ViewInteraction namefield = onView(
                 allOf(withId(R.id.familyName),
-                isDisplayed()));
+                        isDisplayed()));
         namefield.check(matches(isDisplayed()));
 
         ViewInteraction createButton = onView(

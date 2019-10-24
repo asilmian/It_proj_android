@@ -60,7 +60,7 @@ public class TransferItemFamAdapter extends RecyclerView.Adapter<TransferItemFam
 
     @Override
     public TransferItemFamAdapter.TransViewHolder onCreateViewHolder(ViewGroup parent,
-                                                           int viewType) {
+                                                                     int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fam_card_view, parent, false);
@@ -104,7 +104,7 @@ public class TransferItemFamAdapter extends RecyclerView.Adapter<TransferItemFam
     }
 
 
-    private void transferItem(String family_token){
+    private void transferItem(String family_token) {
         spinner.setVisibility(View.VISIBLE);
 
         BackendItem item = new BackendItem(URL, BackendItem.POST);
@@ -114,27 +114,26 @@ public class TransferItemFamAdapter extends RecyclerView.Adapter<TransferItemFam
 
         BackendReq.send_req(item);
 
-        if (item.getResponse_code() == 200){
+        if (item.getResponse_code() == 200) {
             goToHomepage();
-        }
-        else{
+        } else {
             spinner.setVisibility(View.GONE);
         }
     }
 
-    private void createBody(BackendItem item, String family_token){
-        try{
+    private void createBody(BackendItem item, String family_token) {
+        try {
             JSONObject object = new JSONObject();
             object.accumulate("item_token", this.item_token);
             object.accumulate("family_token", family_token);
 
             item.setBody(object.toString());
-        } catch (Exception e){
-            Log.e(TAG, "createBody: ",e);
+        } catch (Exception e) {
+            Log.e(TAG, "createBody: ", e);
         }
     }
 
-    private void goToHomepage(){
+    private void goToHomepage() {
         Intent intent = new Intent(context, HomePage.class);
         context.startActivity(intent);
     }

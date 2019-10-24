@@ -8,11 +8,13 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View;
 import android.widget.TextView;
+
 import com.example.itemorganizer.Family.SingleFamilyView;
 import com.example.itemorganizer.R;
 import com.example.itemorganizer.UserSingleton;
 
 import java.util.ArrayList;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -67,13 +69,10 @@ public class FamilyRAdapter extends RecyclerView.Adapter<FamilyRAdapter.FamViewH
         viewHolder.token = families.get(i).get(1); //set
 
         int activeColor = Color.parseColor("#FF3094FF");
-        if (viewHolder.token.equals(UserSingleton.getInstance().getFamilyToken()))
-        {
+        if (viewHolder.token.equals(UserSingleton.getInstance().getFamilyToken())) {
             //Change color
             viewHolder.cardView.setCardBackgroundColor(activeColor);
-            Log.d("Hello","HELLOOOOO");
         }
-        Log.d("Hello","AFTER");
         viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -14,14 +14,15 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class FamilyMemRAdapter  extends RecyclerView.Adapter<FamilyMemRAdapter.FamilyMemHolder> {
+public class FamilyMemRAdapter extends RecyclerView.Adapter<FamilyMemRAdapter.FamilyMemHolder> {
     private static final String TAG = "MemberRAdapter";
 
     private ArrayList<String> members;
 
-    public class FamilyMemHolder extends RecyclerView.ViewHolder{
+    public class FamilyMemHolder extends RecyclerView.ViewHolder {
         public TextView name;
         public CardView card;
+
         public FamilyMemHolder(View v) {
             super(v);
             name = v.findViewById(R.id.memberName);

@@ -21,7 +21,6 @@ import static org.hamcrest.Matchers.allOf;
 
 
 /**
- *
  * Test for adding item activity
  */
 
@@ -37,7 +36,7 @@ public class AddItemTest {
         ViewInteraction appCompatButton = onView(
                 allOf(withId(R.id.PictureBtn),
                         isDisplayed()));
-        appCompatButton.check(matches(withText("Take Picture")));
+        appCompatButton.check(matches(isDisplayed()));
 
         ViewInteraction button = onView(
                 allOf(withId(R.id.button3),
@@ -55,7 +54,7 @@ public class AddItemTest {
         textView.check(matches(withText("Add Item")));
 
         ViewInteraction iteminfo = onView(
-                allOf(withId(R.id.scrollView4),
+                allOf(withId(R.id.family_fragment_name),
                         isDisplayed()));
         iteminfo.check(matches(isDisplayed()));
 

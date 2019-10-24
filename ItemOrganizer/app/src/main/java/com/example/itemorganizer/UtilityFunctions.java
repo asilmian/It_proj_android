@@ -57,7 +57,7 @@ public class UtilityFunctions {
     }
 
     //only use when logging out.
-    public static void clearUser(){
+    public static void clearUser() {
         UserSingleton user = UserSingleton.getInstance();
         user.setFamilyToken(null);
         user.setName(null);

@@ -90,10 +90,9 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         };
 
         //set user name
-        if(UserSingleton.getInstance().getName() == null){
+        if (UserSingleton.getInstance().getName() == null) {
             setUserInfo();
-        }
-        else {
+        } else {
             name.setText(UserSingleton.getInstance().getName());
         }
     }
@@ -122,7 +121,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
             //Items
             case R.id.nav_items:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ItemFragment()).commit();
-                break; 
+                break;
             //Log Out
             case R.id.nav_logout:
                 mAuth.signOut();
@@ -151,13 +150,13 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
         startActivity(intent);
     }
 
-    private void setUserInfo(){
+    private void setUserInfo() {
         BackendItem item = new BackendItem(UserSingleton.IP + USERURL, BackendItem.GET);
         item.setHeaders(new HashMap<String, String>());
 
         item = BackendReq.send_req(item);
 
-        try{
+        try {
             JSONObject object = new JSONObject(item.getResponse());
 
             //display user name
@@ -172,7 +171,7 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
             //load profile picture if applicable
             String isDp = object.getString("image");
             UserSingleton.getInstance().setIsDp(isDp);
-            if(isDp.equals("true")){
+            if (isDp.equals("true")) {
                 String imageRef = UserSingleton.getInstance().getEmail();
                 GlideApp.with(this.getApplicationContext())
                         .load(storageReference.child(imageRef + ".jpg"))
@@ -180,8 +179,8 @@ public class HomePage extends AppCompatActivity implements NavigationView.OnNavi
                         .into(dp);
 
             }
-        } catch (JSONException e){
-            Log.e(TAG, "setUserInfo: ",e);
+        } catch (JSONException e) {
+            Log.e(TAG, "setUserInfo: ", e);
         }
 
 

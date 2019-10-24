@@ -21,11 +21,11 @@ public class SingleFamilyMemRAdapter extends RecyclerView.Adapter<SingleFamilyMe
     private ArrayList<String> names;
 
     //holder class
-    public class SFMHolder extends RecyclerView.ViewHolder{
+    public class SFMHolder extends RecyclerView.ViewHolder {
         public TextView name;
         public ImageView avatar;
 
-        public SFMHolder(View v){
+        public SFMHolder(View v) {
             super(v);
             name = v.findViewById(R.id.famMemberSingleName);
             avatar = v.findViewById(R.id.famMemberSinglePic);
